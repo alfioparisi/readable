@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 
 import { addPost, deletePost, editPost, votePost } from './actions/posts';
+import { addComment, deleteComment, editComment, voteComment } from './actions/comments';
 
 store.dispatch(addPost(
   'test',
@@ -44,6 +45,26 @@ store.dispatch(votePost(
 store.dispatch(votePost(
   'test2222222',
   false
+));
+
+
+store.dispatch(addComment(
+  'testComment',
+  'test2222222',
+  'none',
+  'Test',
+  'imma a comment',
+  'random',
+  Date.now()
+));
+store.dispatch(addComment(
+  'commmeeeeeeeeeeeeeeeent',
+  'test2222222',
+  'some',
+  'Test2222222',
+  'imma a comment? or not?',
+  'random',
+  Date.now()
 ));
 
 ReactDOM.render(

@@ -1,4 +1,5 @@
 import { ADD_POST, DELETE_POST, EDIT_POST, VOTE_POST } from '../actions/posts';
+import { ADD_COMMENT, DELETE_COMMENT } from '../actions/comments';
 
 const post = (state = {}, action) => {
   switch(action.type) {
@@ -9,11 +10,13 @@ const post = (state = {}, action) => {
         body: action.body,
         author: action.author,
         timestamp: {
-          timeCreated: action.timeCreated, // will add timeDeleted and timeEdited
-          timeEdited: []
+          timeCreated: action.timeCreated,
+          timeEdited: [],
+          timeDeleted: null
         },
         voteScore: 0,
-        deleted: false
+        deleted: false,
+        comments: []
       };
     case DELETE_POST :
       return {
@@ -33,6 +36,16 @@ const post = (state = {}, action) => {
         ...state,
         voteScore: action.upvote ? state['voteScore']++ : state['voteScore']--
       };
+    case ADD_COMMENT :
+      return {
+        ...state,
+        comments: [...state['comments'], action.id]
+      };
+    case DELETE_COMMENT :
+      return {
+        ...state,
+        comments: state['comments'].filter(commentId => commentId !== action.id)
+      };
     default:
       return state;
   }
@@ -48,6 +61,10 @@ const posts = (state = {}, action) => {
       return {...state, [action.id]: post(state[action.id], action)};
     case VOTE_POST :
       return {...state, [action.id]: post(state[action.id], action)};
+    case ADD_COMMENT :
+      return {...state, [action.parentId]: post(state[action.parentId], action)};
+    case DELETE_COMMENT :
+      return {...state, [action.parentId]: post(state[action.parentId], action)};
     default :
       return state;
   }
