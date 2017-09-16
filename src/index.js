@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import App from './components/App';
-import registerServiceWorker from './registerServiceWorker';
+import { BrowserRouter } from 'react-router-dom';
 import store from './store';
+import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-  <App store={store} />,
+  <BrowserRouter>
+    <App store={store} />
+  </BrowserRouter>,
   document.getElementById('root')
 );
 registerServiceWorker();
