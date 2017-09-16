@@ -1,6 +1,9 @@
 import { ADD_POST, DELETE_POST, EDIT_POST, VOTE_POST } from '../actions/posts';
 import { ADD_COMMENT, DELETE_COMMENT } from '../actions/comments';
 
+/**
+  Handle a single post.
+*/
 const post = (state = {}, action) => {
   switch(action.type) {
     case ADD_POST :
@@ -51,6 +54,9 @@ const post = (state = {}, action) => {
   }
 };
 
+/**
+  Manage the `posts` branch of the state tree.
+*/
 const posts = (state = {}, action) => {
   switch(action.type) {
     case ADD_POST :

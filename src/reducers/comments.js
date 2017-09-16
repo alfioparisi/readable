@@ -1,5 +1,8 @@
 import { ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT, VOTE_COMMENT } from '../actions/comments';
 
+/**
+  Handle a single comment.
+*/
 const comment = (state = {}, action) => {
   switch(action.type) {
     case ADD_COMMENT :
@@ -40,6 +43,9 @@ const comment = (state = {}, action) => {
   }
 };
 
+/**
+  Manage the `comments` branch of the state tree.
+*/
 const comments = (state = {}, action) => {
   switch(action.type) {
     case ADD_COMMENT :
