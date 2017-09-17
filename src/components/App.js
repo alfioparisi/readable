@@ -8,6 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { logOut } from '../actions/users';
+import { addPost } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
@@ -22,6 +23,7 @@ class App extends Component {
     this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
     this.onLogIn = this.onLogIn.bind(this);
     this.onLogOut = this.onLogOut.bind(this);
+    this.handleNewPost = this.handleNewPost.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +70,11 @@ class App extends Component {
     return users.filter(user => user.isLoggedIn);
   }
 
+  handleNewPost(id, category, title, body, author, timeCreated) {
+    store.dispatch(addPost(id, category, title, body, author, timeCreated));
+    // find a way to wait for the dispatch and then update the state.
+  }
+
   render() {
     const { categories, posts, currentUser } = this.state;
     return (
@@ -79,11 +86,25 @@ class App extends Component {
         />
         <Route exact path="/" component={HomePage} />
         <Route exact path="/category"
-          render={() => <Category posts={posts} />}
+          render={() => (
+            <Category
+              posts={posts}
+              currentUser={currentUser}
+              categories={categories}
+              onClick={this.handleNewPost}
+            />
+          )}
         />
         {categories && categories.map(category => (
           <Route key={category.name} path={`/category/${category.path}`}
-            render={() => <Category name={category.name} />}
+            render={() => (
+              <Category
+                name={category.name}
+                currentUser={currentUser}
+                categories={categories}
+                onClick={this.handleNewPost}
+              />
+            )}
           />
         ))}
         <Route path="/signup" render={() => (

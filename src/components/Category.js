@@ -7,30 +7,37 @@ class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      posts: [],
+      writingPost: false,
+      category: ''
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     const { name, posts } = this.props;
     if (posts) {
-      this.setState({posts});
+      this.setState({posts, category: 'react'});
       return;
     };
     fetch(`http://localhost:3001/${name}/posts`, {
       headers: {'Authorization': 'access-denied'}
     })
     .then(res => res.json())
-    .then(posts => this.setState({posts}))
+    .then(posts => this.setState({posts, category: name}))
     .catch(err => {
       console.error(err);
-      window.alert('Cant fetch posts for this category.')
-    })
+      window.alert('Cant fetch posts for this category.');
+    });
+  }
+
+  handleChange(evt) {
+    this.setState({category: evt.target.value});
   }
 
   render() {
-    const { posts } = this.state;
-    const { name } = this.props;
+    const { posts, writingPost, category } = this.state;
+    const { name, currentUser, categories, onClick } = this.props;
     return (
       <main>
         <header>
@@ -55,8 +62,43 @@ class Category extends Component {
             )}
           />
         ))}
+        {writingPost && (
+          <form>
+            <label>Post title :
+              <input ref={title => this.title = title} />
+            </label>
+            <label>Category :
+              <select value={category} onChange={this.handleChange}>
+                {categories && categories.map(c => (
+                  <option key={c.name} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <textarea placeholder="Write your post here." ref={textarea => this.textarea = textarea} />
+            <input type="submit" value="Post"
+              onClick={evt => {
+                evt.preventDefault();
+                onClick(
+                  'somestringasid',
+                  category,
+                  this.title.value.trim(),
+                  this.textarea.value.trim(),
+                  currentUser || 'Anonymous',
+                  Date.now()
+                );
+                this.setState({writingPost: false});
+                this.textarea.value = '';
+              }}
+            />
+          </form>
+        )}
         <footer>
-          <p>Write a new post. (this footer is gonna be fixed and always on top)</p>
+          <button
+            onClick={() => this.setState({writingPost: true})}
+          >Write a new post</button>
+          <p>this footer is gonna be fixed and always on top</p>
         </footer>
       </main>
     );

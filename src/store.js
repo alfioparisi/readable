@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import logger from 'redux-logger';
+import ReduxThunk from 'redux-thunk';
 import posts from './reducers/posts';
 import comments from './reducers/comments';
 import users from './reducers/users';
@@ -15,7 +16,7 @@ const reducer = combineReducers({
 
 const store = createStore(
   reducer,
-  composeEnhancers(applyMiddleware(logger))
+  composeEnhancers(applyMiddleware(logger, ReduxThunk))
 );
 
 export default store;
