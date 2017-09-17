@@ -6,6 +6,8 @@ import Category from './Category';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
+import store from '../store';
+import { logOut } from '../actions/users';
 import '../css/App.css';
 
 class App extends Component {
@@ -13,8 +15,13 @@ class App extends Component {
     super(props);
     this.state = {
       categories: [],
-      posts: []
+      posts: [],
+      users: [],
+      currentUser: null
     };
+    this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
+    this.onLogIn = this.onLogIn.bind(this);
+    this.onLogOut = this.onLogOut.bind(this);
   }
 
   componentDidMount() {
@@ -37,14 +44,38 @@ class App extends Component {
       console.error(err);
       window.alert('Impossible to connect with the server.')
     });
+
+    const users = store.getState().users;
+    this.setState({
+      users: Object.keys(users).map(key => users[key])
+    });
+  }
+
+  onLogIn(name) {
+    this.setState({
+      users: store.getState().users,
+      currentUser: store.getState().users[name]
+    });
+  }
+
+  onLogOut(name) {
+    store.dispatch(logOut(name));
+    this.setState({currentUser: null})
+  }
+
+  getLoggedInUsers() {
+    const { users } = this.state;
+    return users.filter(user => user.isLoggedIn);
   }
 
   render() {
-    const { categories, posts } = this.state;
+    const { categories, posts, currentUser } = this.state;
     return (
       <div>
         <Header
           categories={categories}
+          currentUser={currentUser}
+          onClick={this.onLogOut}
         />
         <Route exact path="/" component={HomePage} />
         <Route exact path="/category"
@@ -55,8 +86,12 @@ class App extends Component {
             render={() => <Category name={category.name} />}
           />
         ))}
-        <Route path="/signup" component={SignUp} />
-        <Route path="/login" component={LogIn} />
+        <Route path="/signup" render={() => (
+          <SignUp onClick={this.onLogIn} />
+        )} />
+        <Route path="/login" render={() => (
+          <LogIn onClick={this.onLogIn} />
+        )} />
         <Footer />
       </div>
     );

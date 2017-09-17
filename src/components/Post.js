@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Comment from './Comment';
+import { Link } from 'react-router-dom';
 
 class Post extends Component {
   constructor(props) {
@@ -25,12 +26,14 @@ class Post extends Component {
   }
 
   render() {
-    const { category, title, body, author, timestamp, voteScore, showComments } = this.props;
+    const { id, category, title, body, author, timestamp, voteScore, showComments } = this.props;
     const { comments } = this.state;
     return (
       <article>
         <header>
-          <h3>{title}</h3>
+          <Link to={`/category/${category}/${id}`}>
+            <h3>{title}</h3>
+          </Link>
           <h5>Category: {category}</h5>
           <h5>Posted by: {author}</h5>
           <h5>Time posted: {timestamp.timeCreated}</h5>
