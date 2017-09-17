@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PostList from './PostList';
 import Post from './Post';
+import { Route } from 'react-router-dom';
 
 class Category extends Component {
   constructor(props) {
@@ -34,20 +36,25 @@ class Category extends Component {
         <header>
           <h2>{name || 'All Categories'}</h2>
         </header>
-        <ul>
-          {posts && posts.map(post => (
-            <li key={post.id}>
+        <Route exact path={`/category/${name || ''}`}
+          render={() => <PostList posts={posts} />}
+        />
+        {posts && posts.map(post => (
+          <Route key={post.id} path={`/category/${post.category}/${post.id}`}
+            render={() => (
               <Post
+                id={post.id}
                 category={post.category}
                 title={post.title}
                 body={post.body}
                 author={post.author}
                 timestamp={{timeCreated: post.timestamp}}
                 voteScore={post.voteScore}
+                showComments={true}
               />
-            </li>
-          ))}
-        </ul>
+            )}
+          />
+        ))}
         <footer>
           <p>Write a new post. (this footer is gonna be fixed and always on top)</p>
         </footer>
