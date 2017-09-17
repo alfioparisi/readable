@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Header = () => (
+const Header = ({ categories }) => (
   <header>
     <div>
       <button>Nav button</button>
@@ -15,6 +15,11 @@ const Header = () => (
         <li>
           <NavLink to="/category">Category</NavLink>
         </li>
+        {categories && categories.map(category => (
+          <li key={category.name}>
+            <NavLink to={`/category/${category.path}`}>{category.name}</NavLink>
+          </li>
+        ))}
         <li>
           <NavLink to="/signup">SignUp</NavLink>
         </li>

@@ -17,12 +17,6 @@ const Post = ({ category, title, body, author, timestamp, voteScore }) => (
         <button>Downvote</button>
       </div>
     </footer>
-    <Comment
-      body={'The first comment ever!'}
-      author={'Anonymous'}
-      timestamp={{timeCreated: '05/05/05'}}
-      voteScore={0}
-    />
   </article>
 );
 
