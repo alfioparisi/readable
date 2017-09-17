@@ -3,12 +3,11 @@ export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT';
 
-export const addComment = (id, parentId, category, title, body, author, timeCreated) => ({
+export const addComment = (id, parentId, category, body, author, timeCreated) => ({
   type: ADD_COMMENT,
   id,
   parentId,
   category,
-  title,
   body,
   author,
   timeCreated

@@ -17,6 +17,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "prop-types": "^15.5.10",
     "redux-logger": "^3.0.6"
   }
 }

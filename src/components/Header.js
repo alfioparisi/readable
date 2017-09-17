@@ -15,6 +15,12 @@ const Header = () => (
         <li>
           <NavLink to="/category">Category</NavLink>
         </li>
+        <li>
+          <NavLink to="/signup">SignUp</NavLink>
+        </li>
+        <li>
+          <NavLink to="/login">LogIn</NavLink>
+        </li>
       </ul>
     </nav>
   </header>

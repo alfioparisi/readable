@@ -10,6 +10,7 @@ const user = (state = {}, action) => {
     case SIGN_UP :
       return {
         name: action.name,
+        password: action.password,
         dateCreated: action.dateCreated,
         posts: [],
         comments: [],
@@ -38,6 +39,7 @@ const user = (state = {}, action) => {
 const initialState = {
   Anonymous: {
     name: 'Anonymous',
+    password: null,
     dateCreated: null,
     posts: [],
     comments: [],

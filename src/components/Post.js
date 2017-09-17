@@ -18,7 +18,6 @@ const Post = ({ category, title, body, author, timestamp, voteScore }) => (
       </div>
     </footer>
     <Comment
-      title={'You wont belive it.'}
       body={'The first comment ever!'}
       author={'Anonymous'}
       timestamp={{timeCreated: '05/05/05'}}

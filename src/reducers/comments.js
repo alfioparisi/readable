@@ -9,7 +9,6 @@ const comment = (state = {}, action) => {
       return {
         id: action.id,
         parentId: action.parentId,
-        title: action.title,
         body: action.body,
         author: action.author,
         timestamp: {
