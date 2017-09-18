@@ -8,7 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { logOut } from '../actions/users';
-import { addPost } from '../actions/posts';
+import { addPostOnServer, addPost } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
@@ -20,6 +20,7 @@ class App extends Component {
       users: [],
       currentUser: null
     };
+    this.getInitialPosts = this.getInitialPosts.bind(this);
     this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
     this.onLogIn = this.onLogIn.bind(this);
     this.onLogOut = this.onLogOut.bind(this);
@@ -37,20 +38,28 @@ class App extends Component {
       window.alert('Impossible to connect with the server.')
     });
 
-    fetch('http://localhost:3001/posts', {
-      headers: {'Authorization': 'let-me-in-please'}
-    })
-    .then(res => res.json())
-    .then(posts => this.setState({posts}))
-    .catch(err => {
-      console.error(err);
-      window.alert('Impossible to connect with the server.')
-    });
+    this.getInitialPosts();
 
     const users = store.getState().users;
     this.setState({
       users: Object.keys(users).map(key => users[key])
     });
+  }
+
+  getInitialPosts() {
+    fetch('http://localhost:3001/posts', {
+      headers: {
+        'Authorization': 'let-me-in-please',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(posts => {
+      posts.forEach(post => store.dispatch(addPost(post.id, post.category, post.title, post.body, post.author, post.timestamp)));
+      this.setState({posts});
+    })
+    .catch(err => console.error(err));
   }
 
   onLogIn(name) {
@@ -70,8 +79,13 @@ class App extends Component {
     return users.filter(user => user.isLoggedIn);
   }
 
+  filterPostsByCategory(category) {
+    const { posts } = this.state;
+    return posts.filter(posts => null);
+  }
+
   handleNewPost(id, category, title, body, author, timeCreated) {
-    store.dispatch(addPost(id, category, title, body, author, timeCreated));
+    store.dispatch(addPostOnServer(id, category, title, body, author, timeCreated));
     // find a way to wait for the dispatch and then update the state.
     fetch(`http://localhost:3001/posts/${id}`, {
       headers: {

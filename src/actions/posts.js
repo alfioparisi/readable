@@ -3,7 +3,7 @@ export const DELETE_POST = 'DELETE_POST';
 export const EDIT_POST = 'EDIT_POST';
 export const VOTE_POST = 'VOTE_POST';
 
-const dispatchAddPost = (id, category, title, body, author, timeCreated) => ({
+export const addPost = (id, category, title, body, author, timeCreated) => ({
   type: ADD_POST,
   id,
   category,
@@ -13,7 +13,7 @@ const dispatchAddPost = (id, category, title, body, author, timeCreated) => ({
   timeCreated
 });
 
-export const addPost = (id, category, title, body, author, timeCreated) => dispatch => {
+export const addPostOnServer = (id, category, title, body, author, timeCreated) => dispatch => {
   fetch('http://localhost:3001/posts', {
     method: 'POST',
     headers: {
@@ -30,7 +30,7 @@ export const addPost = (id, category, title, body, author, timeCreated) => dispa
       category
     })
   })
-  .then(res => dispatch(dispatchAddPost(id, category, title, body, author, timeCreated)))
+  .then(res => dispatch(addPost(id, category, title, body, author, timeCreated)))
   .catch(err => console.error(err));
 };
 

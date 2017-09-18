@@ -46,6 +46,29 @@ const initialState = {
     isLoggedIn: false
   }
 };
+
+const getInitialState = () => fetch('http://localhost:3001/posts', {
+  headers: {
+    'Authorization': 'let-me-in-please',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then(posts => posts.forEach(post => {
+  initialState[post.author] = {
+    name: post.author,
+    password: null,
+    dateCreated: null,
+    posts: [],
+    comments: [],
+    isLoggedIn: false
+  };
+}))
+.catch(err => console.error(err));
+
+getInitialState();
+
 const users = (state = initialState, action) => {
   switch(action.type) {
     case SIGN_UP :
