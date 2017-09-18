@@ -21,7 +21,7 @@ class Category extends Component {
       return;
     };
     fetch(`http://localhost:3001/${name}/posts`, {
-      headers: {'Authorization': 'access-denied'}
+      headers: {'Authorization': 'let-me-in-please'}
     })
     .then(res => res.json())
     .then(posts => this.setState({posts, category: name}))

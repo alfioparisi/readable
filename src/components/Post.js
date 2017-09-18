@@ -14,7 +14,7 @@ class Post extends Component {
     const { id, showComments } = this.props;
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
-        headers: {'Authorization': 'knock-knock'}
+        headers: {'Authorization': 'let-me-in-please'}
       })
       .then(res => res.json())
       .then(comments => this.setState({comments}))

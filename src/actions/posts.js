@@ -16,15 +16,19 @@ const dispatchAddPost = (id, category, title, body, author, timeCreated) => ({
 export const addPost = (id, category, title, body, author, timeCreated) => dispatch => {
   fetch('http://localhost:3001/posts', {
     method: 'POST',
-    body: {
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
       id,
       timestamp: timeCreated,
       title,
       body,
       author,
       category
-    },
-    headers: {'Authorization': 'dont-open-to-strangers'}
+    })
   })
   .then(res => dispatch(dispatchAddPost(id, category, title, body, author, timeCreated)))
   .catch(err => console.error(err));

@@ -73,6 +73,18 @@ class App extends Component {
   handleNewPost(id, category, title, body, author, timeCreated) {
     store.dispatch(addPost(id, category, title, body, author, timeCreated));
     // find a way to wait for the dispatch and then update the state.
+    fetch(`http://localhost:3001/posts/${id}`, {
+      headers: {
+        'Authorization': 'let-me-in-please',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(post => this.setState(prevState => ({
+      posts: [...prevState.posts, post]
+    })))
+    .catch(err => console.error(err));
   }
 
   render() {
