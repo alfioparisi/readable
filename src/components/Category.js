@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PostList from './PostList';
 import Post from './Post';
 import { Route } from 'react-router-dom';
+import uuidv1 from 'uuid';
 
 class Category extends Component {
   constructor(props) {
@@ -81,7 +82,7 @@ class Category extends Component {
               onClick={evt => {
                 evt.preventDefault();
                 onClick(
-                  'somestringasid',
+                  uuidv1(),
                   category,
                   this.title.value.trim(),
                   this.textarea.value.trim(),
