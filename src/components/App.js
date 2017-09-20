@@ -30,6 +30,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Fetch the categories and save them in this state.
     fetch('http://localhost:3001/categories', {
       headers: {'Authorization': 'let-me-in-please'}
     })
@@ -40,14 +41,18 @@ class App extends Component {
       window.alert('Impossible to connect with the server.')
     });
 
+    // If there is the 'user' object in the localStorage, populate the Redux state
+    // and this state off of it.
     if (localStorage.getItem('users')) {
       const users = JSON.parse(localStorage.getItem('users'));
       const usersArray = Object.keys(users).map(name => users[name]);
-      usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)))
+      usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
       this.setState({
         users: usersArray
       });
+    // If not, create the 'users' object by fetching the initial users from the server.
     } else {
+      // Make the 'Anonymous' user.
       const users = {
         Anonymous: {
           name: 'Anonymous',
@@ -58,6 +63,7 @@ class App extends Component {
           isLoggedIn: false
         }
       };
+      // Fetch initial posts from the server.
       fetch('http://localhost:3001/posts', {
         headers: {
           'Authorization': 'let-me-in-please',
@@ -66,6 +72,7 @@ class App extends Component {
         }
       })
       .then(res => res.json())
+      // For each post make a new user.
       .then(posts => posts.forEach(post => {
         users[post.author] = {
           name: post.author,
@@ -76,6 +83,8 @@ class App extends Component {
           isLoggedIn: false
         };
       }))
+      // Finally save the 'users' object on the localStorage, dispatch actions to
+      // add users to Redux, and set this state to be the array version of 'users'.
       .then(() => {
         localStorage.setItem('users', JSON.stringify(users));
         const usersArray = Object.keys(users).map(name => users[name]);
@@ -87,9 +96,11 @@ class App extends Component {
       .catch(err => console.error(err));
     }
 
+    // Fetch initial posts from the server.
     this.getInitialPosts();
   }
 
+  // Fetch posts from the server and add them to Redux.
   getInitialPosts() {
     fetch('http://localhost:3001/posts', {
       headers: {
@@ -106,6 +117,7 @@ class App extends Component {
     .catch(err => console.error(err));
   }
 
+  // On log in update Redux and this state. Set the 'currentUser'.
   onLogIn(name, password) {
     store.dispatch(logIn(name, password));
     const users = store.getState().users;
@@ -116,6 +128,7 @@ class App extends Component {
     });
   }
 
+  // Get the 'users' object from localStorage and update it with the new user.
   addUserToStorage(name, password, dateCreated) {
     const users = JSON.parse(localStorage.getItem('users'));
     users[name] = {
@@ -128,6 +141,7 @@ class App extends Component {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
+  // Update Redux, localStorage and this state.
   onSignUp(username, password, dateCreated) {
     this.addUserToStorage(username, password, dateCreated);
     store.dispatch(signUp(username, password, dateCreated));
