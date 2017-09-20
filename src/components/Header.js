@@ -39,7 +39,7 @@ class Header extends Component {
             {active && (
               <li>
                 <button
-                  onClick={() => onClick(currentUser)}
+                  onClick={() => onClick(currentUser.name)}
                 >LogOut</button>
               </li>
             )}

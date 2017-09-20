@@ -1,6 +1,5 @@
 import React from 'react';
 import store from '../store';
-import { logIn } from '../actions/users';
 
 const isUser = (users, name, password) => Object.keys(users).find(key => users[key].name === name && users[key].password === password);
 
@@ -19,8 +18,7 @@ const LogIn = ({ onClick }) => {
         onClick={evt => {
           evt.preventDefault();
           if (isUser(store.getState().users, name.value.trim(), password.value.trim())) {
-            store.dispatch(logIn(name.value.trim(), password.value.trim()));
-            onClick(name.value.trim());
+            onClick(name.value.trim(), password.value.trim());
           } else window.alert('No user found under those credentials.');
           name.value = '';
           password.value = '';

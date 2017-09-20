@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
-import { addInitialUser, signUp, logOut } from '../actions/users';
+import { addInitialUser, signUp, logIn, logOut } from '../actions/users';
 import { addPostOnServer, addPost } from '../actions/posts';
 import '../css/App.css';
 
@@ -106,9 +106,12 @@ class App extends Component {
     .catch(err => console.error(err));
   }
 
-  onLogIn(name) {
+  onLogIn(name, password) {
+    store.dispatch(logIn(name, password));
+    const users = store.getState().users;
+    const usersArray = Object.keys(users).map(name => users[name]);
     this.setState({
-      users: store.getState().users,
+      users: usersArray,
       currentUser: store.getState().users[name]
     });
   }
@@ -128,15 +131,22 @@ class App extends Component {
   onSignUp(username, password, dateCreated) {
     this.addUserToStorage(username, password, dateCreated);
     store.dispatch(signUp(username, password, dateCreated));
+    const users = store.getState().users;
+    const usersArray = Object.keys(users).map(name => users[name]);
     this.setState({
-      users: store.getState().users,
+      users: usersArray,
       currentUser: store.getState().users[username]
     });
   }
 
   onLogOut(name) {
     store.dispatch(logOut(name));
-    this.setState({currentUser: null})
+    const users = store.getState().users;
+    const usersArray = Object.keys(users).map(name => users[name]);
+    this.setState({
+      users: usersArray,
+      currentUser: null
+    });
   }
 
   getLoggedInUsers() {
