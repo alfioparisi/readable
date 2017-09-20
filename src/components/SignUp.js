@@ -1,6 +1,4 @@
 import React from 'react';
-import store from '../store';
-import { signUp } from '../actions/users';
 
 const SignUp = ({ onClick }) => {
   let name = null;
@@ -18,8 +16,7 @@ const SignUp = ({ onClick }) => {
           const username = name.value.trim();
           const pass = password.value.trim();
           evt.preventDefault();
-          store.dispatch(signUp(username, pass, Date.now()));
-          onClick(username);
+          onClick(username, pass, Date.now());
           name.value = '';
           password.value  = '';
         }}

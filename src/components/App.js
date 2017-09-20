@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
-import { logOut } from '../actions/users';
+import { addInitialUser, signUp, logOut } from '../actions/users';
 import { addPostOnServer, addPost } from '../actions/posts';
 import '../css/App.css';
 
@@ -23,6 +23,8 @@ class App extends Component {
     this.getInitialPosts = this.getInitialPosts.bind(this);
     this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
     this.onLogIn = this.onLogIn.bind(this);
+    this.onSignUp = this.onSignUp.bind(this);
+    this.addUserToStorage = this.addUserToStorage.bind(this);
     this.onLogOut = this.onLogOut.bind(this);
     this.handleNewPost = this.handleNewPost.bind(this);
   }
@@ -38,12 +40,54 @@ class App extends Component {
       window.alert('Impossible to connect with the server.')
     });
 
-    this.getInitialPosts();
+    if (localStorage.getItem('users')) {
+      const users = JSON.parse(localStorage.getItem('users'));
+      const usersArray = Object.keys(users).map(name => users[name]);
+      usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)))
+      this.setState({
+        users: usersArray
+      });
+    } else {
+      const users = {
+        Anonymous: {
+          name: 'Anonymous',
+          password: null,
+          dateCreated: null,
+          posts: [],
+          comments: [],
+          isLoggedIn: false
+        }
+      };
+      fetch('http://localhost:3001/posts', {
+        headers: {
+          'Authorization': 'let-me-in-please',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(posts => posts.forEach(post => {
+        users[post.author] = {
+          name: post.author,
+          password: null,
+          dateCreated: null,
+          posts: [],
+          comments: [],
+          isLoggedIn: false
+        };
+      }))
+      .then(() => {
+        localStorage.setItem('users', JSON.stringify(users));
+        const usersArray = Object.keys(users).map(name => users[name]);
+        usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
+        this.setState({
+          users: usersArray
+        });
+      })
+      .catch(err => console.error(err));
+    }
 
-    const users = store.getState().users;
-    this.setState({
-      users: Object.keys(users).map(key => users[key])
-    });
+    this.getInitialPosts();
   }
 
   getInitialPosts() {
@@ -66,6 +110,27 @@ class App extends Component {
     this.setState({
       users: store.getState().users,
       currentUser: store.getState().users[name]
+    });
+  }
+
+  addUserToStorage(name, password, dateCreated) {
+    const users = JSON.parse(localStorage.getItem('users'));
+    users[name] = {
+      name,
+      password,
+      dateCreated,
+      posts: [],
+      comments: []
+    };
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  onSignUp(username, password, dateCreated) {
+    this.addUserToStorage(username, password, dateCreated);
+    store.dispatch(signUp(username, password, dateCreated));
+    this.setState({
+      users: store.getState().users,
+      currentUser: store.getState().users[username]
     });
   }
 
@@ -134,7 +199,7 @@ class App extends Component {
           />
         ))}
         <Route path="/signup" render={() => (
-          <SignUp onClick={this.onLogIn} />
+          <SignUp onClick={this.onSignUp} />
         )} />
         <Route path="/login" render={() => (
           <LogIn onClick={this.onLogIn} />

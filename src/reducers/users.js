@@ -1,4 +1,4 @@
-import { SIGN_UP, LOG_IN, LOG_OUT } from '../actions/users';
+import { ADD_INITIAL_USER, SIGN_UP, LOG_IN, LOG_OUT } from '../actions/users';
 import { ADD_POST, EDIT_POST } from '../actions/posts';
 import { ADD_COMMENT, EDIT_COMMENT } from '../actions/comments';
 
@@ -7,6 +7,14 @@ import { ADD_COMMENT, EDIT_COMMENT } from '../actions/comments';
 */
 const user = (state = {}, action) => {
   switch(action.type) {
+    case ADD_INITIAL_USER :
+      return {
+        name: action.name,
+        password: action.password,
+        dateCreated: action.dateCreated,
+        posts: [],
+        comments: []
+      };
     case SIGN_UP :
       return {
         name: action.name,
@@ -36,41 +44,10 @@ const user = (state = {}, action) => {
 /**
   Manage the `users` branch of the state tree.
 */
-const initialState = {
-  Anonymous: {
-    name: 'Anonymous',
-    password: null,
-    dateCreated: null,
-    posts: [],
-    comments: [],
-    isLoggedIn: false
-  }
-};
-
-const getInitialState = () => fetch('http://localhost:3001/posts', {
-  headers: {
-    'Authorization': 'let-me-in-please',
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
-})
-.then(res => res.json())
-.then(posts => posts.forEach(post => {
-  initialState[post.author] = {
-    name: post.author,
-    password: null,
-    dateCreated: null,
-    posts: [],
-    comments: [],
-    isLoggedIn: false
-  };
-}))
-.catch(err => console.error(err));
-
-getInitialState();
-
-const users = (state = initialState, action) => {
+const users = (state = {}, action) => {
   switch(action.type) {
+    case ADD_INITIAL_USER :
+      return {...state, [action.name]: user(undefined, action)};
     case SIGN_UP :
       return {...state, [action.name]: user(undefined, action)};
     case LOG_IN :
