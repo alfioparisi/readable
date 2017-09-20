@@ -81,12 +81,13 @@ class Category extends Component {
             <input type="submit" value="Post"
               onClick={evt => {
                 evt.preventDefault();
+                const author = currentUser ? currentUser.name : 'Anonymous';
                 onClick(
                   uuidv1(),
                   category,
                   this.title.value.trim(),
                   this.textarea.value.trim(),
-                  currentUser || 'Anonymous',
+                  author,
                   Date.now()
                 );
                 this.setState({writingPost: false});
