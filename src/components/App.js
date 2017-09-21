@@ -170,7 +170,7 @@ class App extends Component {
 
   filterPostsByCategory(category) {
     const { posts } = this.state;
-    return posts.filter(posts => null);
+    return posts.filter(post => post.category === category);
   }
 
   handleNewPost(id, category, title, body, author, timeCreated) {
@@ -210,18 +210,22 @@ class App extends Component {
             />
           )}
         />
-        {categories && categories.map(category => (
-          <Route key={category.name} path={`/category/${category.path}`}
-            render={() => (
-              <Category
-                name={category.name}
-                currentUser={currentUser}
-                categories={categories}
-                onClick={this.handleNewPost}
-              />
-            )}
-          />
-        ))}
+        {categories && categories.map(category => {
+          const categoryPosts = this.filterPostsByCategory(category.name);
+          return (
+            <Route key={category.name} path={`/category/${category.path}`}
+              render={() => (
+                <Category
+                  name={category.name}
+                  posts={categoryPosts}
+                  currentUser={currentUser}
+                  categories={categories}
+                  onClick={this.handleNewPost}
+                />
+              )}
+            />
+          );
+        })}
         <Route path="/signup" render={() => (
           <SignUp onClick={this.onSignUp} />
         )} />
@@ -235,3 +239,9 @@ class App extends Component {
 }
 
 export default App;
+
+/**
+  TODO:
+  * pass filtered posts from App to Category    V
+  * use posts props within Category
+*/

@@ -17,19 +17,10 @@ class Category extends Component {
 
   componentDidMount() {
     const { name, posts } = this.props;
-    if (posts) {
-      this.setState({posts, category: 'react'});
-      return;
-    };
-    fetch(`http://localhost:3001/${name}/posts`, {
-      headers: {'Authorization': 'let-me-in-please'}
-    })
-    .then(res => res.json())
-    .then(posts => this.setState({posts, category: name}))
-    .catch(err => {
-      console.error(err);
-      window.alert('Cant fetch posts for this category.');
-    });
+    // Category showing all the posts doesn't receive a 'name' prop, so set 'react'
+    // as default.
+    if (name) this.setState({posts, category: name});
+    else this.setState({posts, category: 'react'});
   }
 
   handleChange(evt) {
