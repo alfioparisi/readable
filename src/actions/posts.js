@@ -13,7 +13,9 @@ export const addPost = (id, category, title, body, author, timeCreated) => ({
   timeCreated
 });
 
-export const addPostOnServer = (id, category, title, body, author, timeCreated) => dispatch => {
+// By returning the 'fetch()' call we'll be able to chain '.then()' when we'll call
+// 'store.dispatch(addPostOnServer())'
+export const addPostOnServer = (id, category, title, body, author, timeCreated) => dispatch => (
   fetch('http://localhost:3001/posts', {
     method: 'POST',
     headers: {
@@ -30,9 +32,12 @@ export const addPostOnServer = (id, category, title, body, author, timeCreated) 
       category
     })
   })
-  .then(res => dispatch(addPost(id, category, title, body, author, timeCreated)))
-  .catch(err => console.error(err));
-};
+  .then(post => {
+    dispatch(addPost(id, category, title, body, author, timeCreated));
+    return post;
+  })
+  .catch(err => console.error(err))
+);
 
 export const deletePost = (id, timeDeleted) => ({
   type: DELETE_POST,
