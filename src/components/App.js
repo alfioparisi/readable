@@ -231,10 +231,3 @@ class App extends Component {
 }
 
 export default App;
-
-/**
-  TODO:
-  * pass filtered posts from App to Category    V
-  * use posts props within Category   V
-  * update page when a new post is written
-*/

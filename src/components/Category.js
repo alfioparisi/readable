@@ -23,6 +23,10 @@ class Category extends Component {
     else this.setState({posts, category: 'react'});
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.posts) this.setState({posts: nextProps.posts});
+  }
+
   handleChange(evt) {
     this.setState({category: evt.target.value});
   }
