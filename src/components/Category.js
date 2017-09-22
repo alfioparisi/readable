@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PostList from './PostList';
 import Post from './Post';
+import PostingForm from './PostingForm';
 import { Route } from 'react-router-dom';
-import uuidv1 from 'uuid';
 
 class Category extends Component {
   constructor(props) {
@@ -61,37 +61,16 @@ class Category extends Component {
           />
         ))}
         {writingPost && (
-          <form>
-            <label>Post title :
-              <input ref={title => this.title = title} />
-            </label>
-            <label>Category :
-              <select value={category} onChange={this.handleChange}>
-                {categories && categories.map(c => (
-                  <option key={c.name} value={c.name}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <textarea placeholder="Write your post here." ref={textarea => this.textarea = textarea} />
-            <input type="submit" value="Post"
-              onClick={evt => {
-                evt.preventDefault();
-                const author = currentUser ? currentUser.name : 'Anonymous';
-                onClick(
-                  uuidv1(),
-                  category,
-                  this.title.value.trim(),
-                  this.textarea.value.trim(),
-                  author,
-                  Date.now()
-                );
-                this.setState({writingPost: false});
-                this.textarea.value = '';
-              }}
-            />
-          </form>
+          <PostingForm
+            category={category}
+            categories={categories}
+            currentUser={currentUser}
+            onChange={this.handleChange}
+            onClick={(id, category, title, body, author, timeCreated) => {
+              onClick(id, category, title, body, author, timeCreated);
+              this.setState({writingPost: false})
+            }}
+          />
         )}
         {!viewingPost && (
           <footer>
@@ -107,9 +86,3 @@ class Category extends Component {
 }
 
 export default Category;
-
-/*
-  TODO:
-  * The button to write a new post should not be on screen when looking at a single post.
-  Instead the write comment button should replace it.
-*/

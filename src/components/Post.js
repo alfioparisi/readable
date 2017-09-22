@@ -47,6 +47,9 @@ class Post extends Component {
             <button>Upvote</button>
             <button>Downvote</button>
           </div>
+          <div>
+            <button>Add a comment</button>
+          </div>
         </footer>
         {showComments && comments && comments.map(comment => (
           <Comment key={comment.id}
