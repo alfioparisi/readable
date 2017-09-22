@@ -10,6 +10,7 @@ class Category extends Component {
     this.state = {
       posts: [],
       writingPost: false,
+      viewingPost: false,
       category: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -32,7 +33,7 @@ class Category extends Component {
   }
 
   render() {
-    const { posts, writingPost, category } = this.state;
+    const { posts, writingPost, viewingPost, category } = this.state;
     const { name, currentUser, categories, onClick } = this.props;
     return (
       <main>
@@ -40,7 +41,7 @@ class Category extends Component {
           <h2>{name || 'All Categories'}</h2>
         </header>
         <Route exact path={`/category/${name || ''}`}
-          render={() => <PostList posts={posts} />}
+          render={() => <PostList posts={posts} isViewingPost={bool => this.setState({viewingPost: bool})} />}
         />
         {posts && posts.map(post => (
           <Route key={post.id} path={`/category/${post.category}/${post.id}`}
@@ -54,6 +55,7 @@ class Category extends Component {
                 timestamp={{timeCreated: post.timestamp}}
                 voteScore={post.voteScore}
                 showComments={true}
+                isViewingPost={bool => this.setState({viewingPost: bool})}
               />
             )}
           />
@@ -91,15 +93,23 @@ class Category extends Component {
             />
           </form>
         )}
-        <footer>
-          <button
-            onClick={() => this.setState({writingPost: true})}
-          >Write a new post</button>
-          <p>this footer is gonna be fixed and always on top</p>
-        </footer>
+        {!viewingPost && (
+          <footer>
+            <button
+              onClick={() => this.setState({writingPost: true})}
+            >Write a new post</button>
+            <p>this footer is gonna be fixed and always on top</p>
+          </footer>
+        )}
       </main>
     );
   }
 }
 
 export default Category;
+
+/*
+  TODO:
+  * The button to write a new post should not be on screen when looking at a single post.
+  Instead the write comment button should replace it.
+*/

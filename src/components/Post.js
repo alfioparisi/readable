@@ -11,7 +11,7 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { id, showComments } = this.props;
+    const { id, showComments, isViewingPost } = this.props;
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
         headers: {'Authorization': 'let-me-in-please'}
@@ -22,7 +22,9 @@ class Post extends Component {
         console.error(err);
         window.alert('Couldnt fetch comments for this post.');
       });
-    }
+
+      isViewingPost(true);
+    } else isViewingPost(false);
   }
 
   render() {
