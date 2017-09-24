@@ -16,7 +16,7 @@ const comment = (state = {}, action) => {
           timeEdited: [],
           timeDeleted: null
         },
-        voteScore: action.voteScore || 0,
+        voteScore: action.voteScore,
         deleted: false
       };
     case DELETE_COMMENT :

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import Comment from './Comment';
+import CommentForm from './CommentForm';
 import { Link } from 'react-router-dom';
 import store from '../store';
-import { addComment } from '../actions/comments';
+import { addComment, addCommentOnServer } from '../actions/comments';
 
 class Post extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: []
+      comments: [],
+      writingComment: false
     };
+    this.handleNewComment = this.handleNewComment.bind(this);
   }
 
   componentDidMount() {
@@ -39,9 +42,19 @@ class Post extends Component {
     } else isViewingPost(false);
   }
 
+  handleNewComment(id, body, timeCreated) {
+    const { id: parentId, currentUser } = this.props;
+    const author = currentUser ? currentUser.name : 'Anonymous';
+    store.dispatch(addCommentOnServer(id, parentId, body, author, timeCreated))
+    .then(comment => this.setState(prevState => ({
+      comments: [...prevState.comments, comment],
+      writingComment: false
+    })));
+  }
+
   render() {
     const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
-    const { comments } = this.state;
+    const { comments, writingComment } = this.state;
     return (
       <article>
         <header>
@@ -59,10 +72,15 @@ class Post extends Component {
             <button>Upvote</button>
             <button>Downvote</button>
           </div>
+          {writingComment && (
+            <CommentForm
+              onClick={this.handleNewComment}
+            />
+          )}
           {viewingPost && (
             <div>
               <button
-                onClick={() => console.log('click')}
+                onClick={() => this.setState({writingComment: true})}
               >Add a comment</button>
             </div>
           )}
@@ -81,10 +99,3 @@ class Post extends Component {
 }
 
 export default Post;
-
-/*
-  TODO:
-  * save comments into Redux.   V
-  * show addComment button only when in Post view.    V
-  * add a new comment both on Redux and the server.
-*/

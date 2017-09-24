@@ -44,6 +44,7 @@ class Category extends Component {
             posts={posts}
             isViewingPost={bool => this.setState({viewingPost: bool})}
             viewingPost={viewingPost}
+            currentUser={currentUser}
           />}
         />
         {posts && posts.map(post => (
@@ -60,6 +61,7 @@ class Category extends Component {
                 showComments={true}
                 isViewingPost={bool => this.setState({viewingPost: bool})}
                 viewingPost={viewingPost}
+                currentUser={currentUser}
               />
             )}
           />
