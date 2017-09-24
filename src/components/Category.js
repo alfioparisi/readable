@@ -20,16 +20,15 @@ class Category extends Component {
     const { name, posts } = this.props;
     // Category showing all the posts doesn't receive a 'name' prop, so set 'react'
     // as default.
-    if (name) this.setState({posts, category: name});
-    else this.setState({posts, category: 'react'});
+    this.setState({posts, category: name || 'react'});
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.posts) this.setState({posts: nextProps.posts});
   }
 
-  handleChange(evt) {
-    this.setState({category: evt.target.value});
+  handleChange(category) {
+    this.setState({category});
   }
 
   render() {
