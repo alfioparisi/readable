@@ -8,7 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { addInitialUser, signUp, logIn, logOut } from '../actions/users';
-import { addPostOnServer, addPost } from '../actions/posts';
+import { addPostOnServer, addPost, editPostOnServer } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
@@ -27,6 +27,7 @@ class App extends Component {
     this.addUserToStorage = this.addUserToStorage.bind(this);
     this.onLogOut = this.onLogOut.bind(this);
     this.handleNewPost = this.handleNewPost.bind(this);
+    this.onPostEdit = this.onPostEdit.bind(this);
   }
 
   componentDidMount() {
@@ -182,6 +183,19 @@ class App extends Component {
     })));
   }
 
+  onPostEdit(id, body, timeEdited) {
+    const { currentUser } = this.state;
+    const author = currentUser ? currentUser.name : 'Anonymous';
+    store.dispatch(editPostOnServer(id, body, author, timeEdited))
+    .then(post => this.setState(prevState => ({
+      posts: [...prevState.posts.filter(post => post.id !== id), post]
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt edit the post correctly.');
+    })
+  }
+
   render() {
     const { categories, posts, currentUser } = this.state;
     return (
@@ -199,6 +213,7 @@ class App extends Component {
               currentUser={currentUser}
               categories={categories}
               onClick={this.handleNewPost}
+              onPostEdit={this.onPostEdit}
             />
           )}
         />
@@ -213,6 +228,7 @@ class App extends Component {
                   currentUser={currentUser}
                   categories={categories}
                   onClick={this.handleNewPost}
+                  onPostEdit={this.onPostEdit}
                 />
               )}
             />
@@ -231,3 +247,9 @@ class App extends Component {
 }
 
 export default App;
+
+/*
+  TODO:
+  * edit post and comment
+  * delete them
+*/

@@ -45,13 +45,36 @@ export const deletePost = (id, timeDeleted) => ({
   timeDeleted
 });
 
-export const editPost = (id, body, author, timeEdited) => ({
+const editPost = (id, body, author, timeEdited) => ({
   type: EDIT_POST,
   id,
   body,
   author,
   timeEdited
 });
+
+export const editPostOnServer = (id, body, author, timeEdited) => dispatch => (
+  fetch(`http://localhost:3001/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id,
+      body,
+      author,
+      timestamp: timeEdited
+    })
+  })
+  .then(res => res.json())
+  .then(post => {
+    dispatch(editPost(id, body, author, timeEdited));
+    return post;
+  })
+  .catch(err => console.error(err))
+);
 
 export const votePost = (id, upvote) => ({
   type: VOTE_POST,

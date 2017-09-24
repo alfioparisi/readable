@@ -10,7 +10,9 @@ class Post extends Component {
     super(props);
     this.state = {
       comments: [],
-      writingComment: false
+      writingComment: false,
+      editing: false,
+      textarea: ''
     };
     this.handleNewComment = this.handleNewComment.bind(this);
   }
@@ -53,8 +55,8 @@ class Post extends Component {
   }
 
   render() {
-    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
-    const { comments, writingComment } = this.state;
+    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost, onEdit } = this.props;
+    const { comments, writingComment, editing, textarea } = this.state;
     return (
       <article>
         <header>
@@ -66,12 +68,27 @@ class Post extends Component {
           <h5>Time posted: {timestamp.timeCreated}</h5>
         </header>
         <p>{body}</p>
+        {editing && (
+          <form>
+            <textarea value={textarea} onChange={evt => this.setState({textarea: evt.target.value})} />
+            <input type="submit" value="Edit" onClick={evt => {
+              evt.preventDefault();
+              onEdit(id, textarea, Date.now());
+              this.setState({textarea: '', editing: false});
+            }} />
+          </form>
+        )}
         <footer>
           <p>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
           <div>
             <button>Upvote</button>
             <button>Downvote</button>
           </div>
+          {viewingPost && (
+            <div>
+              <button onClick={() => this.setState({editing: true})}>Edit</button>
+            </div>
+          )}
           {writingComment && (
             <CommentForm
               onClick={this.handleNewComment}
