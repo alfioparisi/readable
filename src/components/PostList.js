@@ -1,7 +1,7 @@
 import React from 'react';
 import Post from './Post';
 
-const PostList = ({ posts, isViewingPost }) => (
+const PostList = ({ posts, isViewingPost, viewingPost }) => (
   <ul>
     {posts && posts.map(post => (
       <li key={post.id}>
@@ -15,6 +15,7 @@ const PostList = ({ posts, isViewingPost }) => (
           voteScore={post.voteScore}
           showComments={false}
           isViewingPost={isViewingPost}
+          viewingPost={viewingPost}
         />
       </li>
     ))}

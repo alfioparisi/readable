@@ -40,6 +40,7 @@ const post = (state = {}, action) => {
         voteScore: action.upvote ? state['voteScore']++ : state['voteScore']--
       };
     case ADD_COMMENT :
+      if (state['comments'].find(comment => comment === action.id)) return state;
       return {
         ...state,
         comments: [...state['comments'], action.id]

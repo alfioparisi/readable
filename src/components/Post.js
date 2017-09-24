@@ -40,7 +40,7 @@ class Post extends Component {
   }
 
   render() {
-    const { id, category, title, body, author, timestamp, voteScore, showComments } = this.props;
+    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
     const { comments } = this.state;
     return (
       <article>
@@ -59,9 +59,13 @@ class Post extends Component {
             <button>Upvote</button>
             <button>Downvote</button>
           </div>
-          <div>
-            <button>Add a comment</button>
-          </div>
+          {viewingPost && (
+            <div>
+              <button
+                onClick={() => console.log('click')}
+              >Add a comment</button>
+            </div>
+          )}
         </footer>
         {showComments && comments && comments.map(comment => (
           <Comment key={comment.id}
@@ -81,6 +85,6 @@ export default Post;
 /*
   TODO:
   * save comments into Redux.   V
-  * show addComment button only when in Post view.
+  * show addComment button only when in Post view.    V
   * add a new comment both on Redux and the server.
 */

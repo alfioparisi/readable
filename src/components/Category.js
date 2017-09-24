@@ -40,7 +40,11 @@ class Category extends Component {
           <h2>{name || 'All Categories'}</h2>
         </header>
         <Route exact path={`/category/${name || ''}`}
-          render={() => <PostList posts={posts} isViewingPost={bool => this.setState({viewingPost: bool})} />}
+          render={() => <PostList
+            posts={posts}
+            isViewingPost={bool => this.setState({viewingPost: bool})}
+            viewingPost={viewingPost}
+          />}
         />
         {posts && posts.map(post => (
           <Route key={post.id} path={`/category/${post.category}/${post.id}`}
@@ -55,6 +59,7 @@ class Category extends Component {
                 voteScore={post.voteScore}
                 showComments={true}
                 isViewingPost={bool => this.setState({viewingPost: bool})}
+                viewingPost={viewingPost}
               />
             )}
           />
