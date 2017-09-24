@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Comment from './Comment';
 import { Link } from 'react-router-dom';
+import store from '../store';
+import { addComment } from '../actions/comments';
 
 class Post extends Component {
   constructor(props) {
@@ -17,7 +19,17 @@ class Post extends Component {
         headers: {'Authorization': 'let-me-in-please'}
       })
       .then(res => res.json())
-      .then(comments => this.setState({comments}))
+      .then(comments => {
+        comments.forEach(comment => store.dispatch(addComment(
+          comment.id,
+          id,
+          comment.body,
+          comment.author,
+          comment.timestamp,
+          comment.voteScore
+        )));
+        this.setState({comments});
+      })
       .catch(err => {
         console.error(err);
         window.alert('Couldnt fetch comments for this post.');
@@ -65,3 +77,10 @@ class Post extends Component {
 }
 
 export default Post;
+
+/*
+  TODO:
+  * save comments into Redux.   V
+  * show addComment button only when in Post view.
+  * add a new comment both on Redux and the server.
+*/
