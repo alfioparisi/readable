@@ -3,7 +3,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { Link } from 'react-router-dom';
 import store from '../store';
-import { addComment, addCommentOnServer } from '../actions/comments';
+import { addComment, addCommentOnServer, editCommentOnServer, deleteCommentOnServer } from '../actions/comments';
 
 class Post extends Component {
   constructor(props) {
@@ -15,6 +15,8 @@ class Post extends Component {
       textarea: ''
     };
     this.handleNewComment = this.handleNewComment.bind(this);
+    this.onCommentEdit = this.onCommentEdit.bind(this);
+    this.onCommentDelete = this.onCommentDelete.bind(this);
   }
 
   componentDidMount() {
@@ -33,7 +35,8 @@ class Post extends Component {
           comment.timestamp,
           comment.voteScore
         )));
-        this.setState({comments});
+        const notDeletedComments = comments.filter(comment => !comment.deleted);
+        this.setState({comments: notDeletedComments});
       })
       .catch(err => {
         console.error(err);
@@ -52,6 +55,30 @@ class Post extends Component {
       comments: [...prevState.comments, comment],
       writingComment: false
     })));
+  }
+
+  onCommentEdit(id, body, timeEdited) {
+    const { currentUser } = this.props;
+    const author = currentUser ? currentUser.name : 'Anonymous';
+    store.dispatch(editCommentOnServer(id, body, author, timeEdited))
+    .then(comment => this.setState(prevState => ({
+      comments: [...prevState.comments.filter(c => c.id !== comment.id), comment]
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt edit the comment.')
+    });
+  }
+
+  onCommentDelete(id, timeDeleted) {
+    store.dispatch(deleteCommentOnServer(id, timeDeleted))
+    .then(() => this.setState(prevState => ({
+      comments: prevState.comments.filter(comment => comment.id !== id)
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt delete the comment.')
+    });
   }
 
   render() {
@@ -106,10 +133,13 @@ class Post extends Component {
         </footer>
         {showComments && comments && comments.map(comment => (
           <Comment key={comment.id}
+            id={comment.id}
             body={comment.body}
             author={comment.author}
             timestamp={{timeCreated: comment.timestamp}}
             voteScore={comment.voteScore}
+            onEdit={this.onCommentEdit}
+            onDelete={this.onCommentDelete}
           />
         ))}
       </article>
