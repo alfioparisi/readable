@@ -39,11 +39,28 @@ export const addPostOnServer = (id, category, title, body, author, timeCreated) 
   .catch(err => console.error(err))
 );
 
-export const deletePost = (id, timeDeleted) => ({
+const deletePost = (id, timeDeleted) => ({
   type: DELETE_POST,
   id,
   timeDeleted
 });
+
+export const deletePostOnServer = (id, timeDeleted) => dispatch => (
+  fetch(`http://localhost:3001/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id })
+  })
+  .then(post => {
+    dispatch(deletePost(id, timeDeleted));
+    return post;
+  })
+  .catch(err => console.error(err))
+);
 
 const editPost = (id, body, author, timeEdited) => ({
   type: EDIT_POST,

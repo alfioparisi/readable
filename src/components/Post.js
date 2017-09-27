@@ -55,7 +55,8 @@ class Post extends Component {
   }
 
   render() {
-    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost, onEdit } = this.props;
+    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
+    const { onEdit, onDelete } = this.props;
     const { comments, writingComment, editing, textarea } = this.state;
     return (
       <article>
@@ -87,6 +88,7 @@ class Post extends Component {
           {viewingPost && (
             <div>
               <button onClick={() => this.setState({editing: true})}>Edit</button>
+              <button onClick={() => onDelete(id, Date.now())}>Delete</button>
             </div>
           )}
           {writingComment && (

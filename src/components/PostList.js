@@ -1,7 +1,7 @@
 import React from 'react';
 import Post from './Post';
 
-const PostList = ({ posts, isViewingPost, viewingPost, currentUser, onPostEdit }) => (
+const PostList = ({ posts, isViewingPost, viewingPost, currentUser }) => (
   <ul>
     {posts && posts.map(post => (
       <li key={post.id}>
@@ -17,7 +17,6 @@ const PostList = ({ posts, isViewingPost, viewingPost, currentUser, onPostEdit }
           isViewingPost={isViewingPost}
           viewingPost={viewingPost}
           currentUser={currentUser}
-          onEdit={onPostEdit}
         />
       </li>
     ))}

@@ -8,7 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { addInitialUser, signUp, logIn, logOut } from '../actions/users';
-import { addPostOnServer, addPost, editPostOnServer } from '../actions/posts';
+import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
@@ -28,6 +28,7 @@ class App extends Component {
     this.onLogOut = this.onLogOut.bind(this);
     this.handleNewPost = this.handleNewPost.bind(this);
     this.onPostEdit = this.onPostEdit.bind(this);
+    this.onPostDelete = this.onPostDelete.bind(this);
   }
 
   componentDidMount() {
@@ -113,7 +114,8 @@ class App extends Component {
     .then(res => res.json())
     .then(posts => {
       posts.forEach(post => store.dispatch(addPost(post.id, post.category, post.title, post.body, post.author, post.timestamp)));
-      this.setState({posts});
+      const notDeletedPosts = posts.filter(post => !post.deleted);
+      this.setState({posts: notDeletedPosts});
     })
     .catch(err => console.error(err));
   }
@@ -196,6 +198,17 @@ class App extends Component {
     })
   }
 
+  onPostDelete(id, timeDeleted) {
+    store.dispatch(deletePostOnServer(id, timeDeleted))
+    .then(() => this.setState(prevState => ({
+      posts: prevState.posts.filter(post => post.id !== id)
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt delete the post correctly.');
+    });
+  }
+
   render() {
     const { categories, posts, currentUser } = this.state;
     return (
@@ -214,6 +227,7 @@ class App extends Component {
               categories={categories}
               onClick={this.handleNewPost}
               onPostEdit={this.onPostEdit}
+              onPostDelete={this.onPostDelete}
             />
           )}
         />
@@ -229,6 +243,7 @@ class App extends Component {
                   categories={categories}
                   onClick={this.handleNewPost}
                   onPostEdit={this.onPostEdit}
+                  onPostDelete={this.onPostDelete}
                 />
               )}
             />
