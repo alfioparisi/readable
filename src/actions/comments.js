@@ -38,13 +38,14 @@ export const addCommentOnServer = (id, parentId, body, author, timeCreated, vote
   .catch(err => console.error(err))
 );
 
-const deleteComment = (id, timeDeleted) => ({
+const deleteComment = (id, parentId, timeDeleted) => ({
   type: DELETE_COMMENT,
   id,
+  parentId,
   timeDeleted
 });
 
-export const deleteCommentOnServer = (id, timeDeleted) => dispatch => (
+export const deleteCommentOnServer = (id, parentId, timeDeleted) => dispatch => (
   fetch(`http://localhost:3001/comments/${id}`, {
     method: 'DELETE',
     headers: {
@@ -55,7 +56,7 @@ export const deleteCommentOnServer = (id, timeDeleted) => dispatch => (
     body: JSON.stringify({ id })
   })
   .then(comment => {
-    dispatch(deleteComment(id, timeDeleted));
+    dispatch(deleteComment(id, parentId, timeDeleted));
     return comment;
   })
   .catch(err => console.error(err))

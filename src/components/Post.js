@@ -71,7 +71,8 @@ class Post extends Component {
   }
 
   onCommentDelete(id, timeDeleted) {
-    store.dispatch(deleteCommentOnServer(id, timeDeleted))
+    const { id: parentId } = this.props;
+    store.dispatch(deleteCommentOnServer(id, parentId, timeDeleted))
     .then(() => this.setState(prevState => ({
       comments: prevState.comments.filter(comment => comment.id !== id)
     })))
