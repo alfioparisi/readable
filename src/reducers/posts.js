@@ -17,7 +17,7 @@ const post = (state = {}, action) => {
           timeEdited: [],
           timeDeleted: null
         },
-        voteScore: 0,
+        voteScore: 1,
         deleted: false,
         comments: []
       };

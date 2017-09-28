@@ -3,7 +3,7 @@ export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT';
 
-export const addComment = (id, parentId, body, author, timeCreated, voteScore = 0) => ({
+export const addComment = (id, parentId, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_COMMENT,
   id,
   parentId,
@@ -93,8 +93,29 @@ export const editCommentOnServer = (id, body, author, timeEdited) => dispatch =>
   .catch(err => console.error(err))
 );
 
-export const voteComment = (id, upvote) => ({
+const voteComment = (id, upvote) => ({
   type: VOTE_COMMENT,
   id,
   upvote
 });
+
+export const voteCommentOnServer = (id, upvote) => dispatch => (
+  fetch(`http://localhost:3001/comments/${id}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id,
+      option: upvote ? 'upVote' : 'downVote'
+    })
+  })
+  .then(res => res.json())
+  .then(comment => {
+    dispatch(voteComment(id, upvote));
+    return comment;
+  })
+  .catch(err => console.error(err))
+);

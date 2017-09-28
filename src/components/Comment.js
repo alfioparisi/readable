@@ -10,7 +10,7 @@ class Comment extends Component {
   }
 
   render() {
-    const { id, body, author, timestamp, voteScore, onEdit, onDelete } = this.props;
+    const { id, body, author, timestamp, voteScore, onEdit, onDelete, onVote } = this.props;
     const { editing, textarea } = this.state;
     return (
       <section>
@@ -32,8 +32,8 @@ class Comment extends Component {
         <footer>
           <p>This comment has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
           <div>
-            <button>Upvote</button>
-            <button>Downvote</button>
+            <button onClick={() => onVote(id, true)}>Upvote</button>
+            <button onClick={() => onVote(id, false)}>Downvote</button>
             <button onClick={() => this.setState({editing: true})}>Edit</button>
             <button onClick={() => onDelete(id, Date.now())}>Delete</button>
           </div>

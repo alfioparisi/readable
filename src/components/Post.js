@@ -3,7 +3,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { Link } from 'react-router-dom';
 import store from '../store';
-import { addComment, addCommentOnServer, editCommentOnServer, deleteCommentOnServer } from '../actions/comments';
+import { addComment, addCommentOnServer, editCommentOnServer, deleteCommentOnServer, voteCommentOnServer } from '../actions/comments';
 
 class Post extends Component {
   constructor(props) {
@@ -17,6 +17,7 @@ class Post extends Component {
     this.handleNewComment = this.handleNewComment.bind(this);
     this.onCommentEdit = this.onCommentEdit.bind(this);
     this.onCommentDelete = this.onCommentDelete.bind(this);
+    this.onCommentVote = this.onCommentVote.bind(this);
   }
 
   componentDidMount() {
@@ -82,6 +83,17 @@ class Post extends Component {
     });
   }
 
+  onCommentVote(id, upvote) {
+    store.dispatch(voteCommentOnServer(id, upvote))
+    .then(comment => this.setState(prevState => ({
+      comments: [...prevState.comments.filter(c => c.id !== comment.id), comment]
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt vote the comment.');
+    });
+  }
+
   render() {
     const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
     const { onEdit, onDelete } = this.props;
@@ -141,6 +153,7 @@ class Post extends Component {
             voteScore={comment.voteScore}
             onEdit={this.onCommentEdit}
             onDelete={this.onCommentDelete}
+            onVote={this.onCommentVote}
           />
         ))}
       </article>
