@@ -33,9 +33,10 @@ const comment = (state = {}, action) => {
         timestamp: {...state['timestamp'], timeEdited: [...state['timestamp']['timeEdited'], action.timeEdited]}
       };
     case VOTE_COMMENT :
+      const newScore = action.upvote ? state['voteScore'] += 1 : state['voteScore'] -= 1;
       return {
         ...state,
-        voteScore: action.upvote ? state['voteScore']++ : state['voteScore']--
+        voteScore: newScore
       };
     default :
       return state;

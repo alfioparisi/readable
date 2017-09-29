@@ -35,9 +35,10 @@ const post = (state = {}, action) => {
         timestamp: {...state['timestamp'], timeEdited: [...state['timestamp']['timeEdited'], action.timeEdited]}
       };
     case VOTE_POST :
+      const newScore = action.upvote ? state['voteScore'] += 1 : state['voteScore'] -= 1;
       return {
         ...state,
-        voteScore: action.upvote ? state['voteScore']++ : state['voteScore']--
+        voteScore: newScore
       };
     case ADD_COMMENT :
       if (state['comments'].find(comment => comment === action.id)) return state;
