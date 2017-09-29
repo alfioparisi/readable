@@ -72,7 +72,7 @@ class Category extends Component {
         <Route exact path={`/category/${name || ''}`}
           render={() => <PostList
             posts={posts}
-            isViewingPost={bool => this.setState({viewingPost: bool})}
+            isViewingPost={viewingPost => this.setState({viewingPost})}
             viewingPost={viewingPost}
             currentUser={currentUser}
             onVote={onPostVote}
@@ -90,7 +90,7 @@ class Category extends Component {
                 timestamp={{timeCreated: post.timestamp}}
                 voteScore={post.voteScore}
                 showComments={true}
-                isViewingPost={bool => this.setState({viewingPost: bool})}
+                isViewingPost={viewingPost => this.setState({viewingPost})}
                 viewingPost={viewingPost}
                 currentUser={currentUser}
                 onEdit={onPostEdit}

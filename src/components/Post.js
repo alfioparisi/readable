@@ -126,6 +126,7 @@ class Post extends Component {
           <h5>Category: {category}</h5>
           <h5>Posted by: {author}</h5>
           <h5>Time posted: {timestamp.timeCreated}</h5>
+          {viewingPost && <h5>This post has {comments.length} comments.</h5>}
         </header>
         <p>{body}</p>
         {editing && (

@@ -47,14 +47,7 @@ class PostingForm extends Component {
           onClick={evt => {
             evt.preventDefault();
             const author = currentUser ? currentUser.name : 'Anonymous';
-            onClick(
-              uuidv1(),
-              category,
-              title,
-              textarea,
-              author,
-              Date.now()
-            );
+            onClick(uuidv1(), category, title, textarea, author, Date.now());
             this.setState({title: '', textarea: ''});
           }}
         />
