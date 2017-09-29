@@ -115,7 +115,10 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(posts => {
-      posts.forEach(post => store.dispatch(addPost(post.id, post.category, post.title, post.body, post.author, post.timestamp, post.voteScore)));
+      posts.forEach(post => {
+        const { id, category, title, body, author, timestamp, voteScore } = post;
+        store.dispatch(addPost(id, category, title, body, author, timestamp, voteScore));
+      });
       const notDeletedPosts = posts.filter(post => !post.deleted);
       this.setState({posts: notDeletedPosts});
     })

@@ -58,14 +58,16 @@ class Category extends Component {
       <main>
         <header>
           <h2>{name || 'All Categories'}</h2>
-          <label>Filter by:
-            <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
-              <option value='byVoteDec'>More Likes</option>
-              <option value='byVoteCre'>Less Likes</option>
-              <option value='byDateNew'>Newest</option>
-              <option value='byDateOld'>Oldest</option>
-            </select>
-          </label>
+          {!viewingPost && (
+            <label>Filter by:
+              <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
+                <option value='byVoteDec'>More Likes</option>
+                <option value='byVoteCre'>Less Likes</option>
+                <option value='byDateNew'>Newest</option>
+                <option value='byDateOld'>Oldest</option>
+              </select>
+            </label>
+          )}
         </header>
         <Route exact path={`/category/${name || ''}`}
           render={() => <PostList
