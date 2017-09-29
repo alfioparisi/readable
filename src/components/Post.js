@@ -144,7 +144,8 @@ class Post extends Component {
             </div>
           )}
         </footer>
-        {showComments && comments && comments.map(comment => (
+        {showComments && comments && comments.sort((a, b) => b.voteScore - a.voteScore)
+        .map(comment => (
           <Comment key={comment.id}
             id={comment.id}
             body={comment.body}
