@@ -13,7 +13,8 @@ class Post extends Component {
       writingComment: false,
       editing: false,
       textarea: '',
-      filter: 'byVoteDec'
+      filter: 'byVoteDec',
+      date: ''
     };
     this.handleNewComment = this.handleNewComment.bind(this);
     this.onCommentEdit = this.onCommentEdit.bind(this);
@@ -23,7 +24,8 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { id, showComments, isViewingPost, body } = this.props;
+    const { id, showComments, isViewingPost, body, timestamp } = this.props;
+    const date = new Date(timestamp.timeCreated).toLocaleString();
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
         headers: {'Authorization': 'let-me-in-please'}
@@ -39,7 +41,7 @@ class Post extends Component {
           comment.voteScore
         )));
         const notDeletedComments = comments.filter(comment => !comment.deleted);
-        this.setState({comments: notDeletedComments, textarea: body});
+        this.setState({comments: notDeletedComments, textarea: body, date});
       })
       .catch(err => {
         console.error(err);
@@ -47,7 +49,10 @@ class Post extends Component {
       });
 
       isViewingPost(true);
-    } else isViewingPost(false);
+    } else {
+      isViewingPost(false);
+      this.setState({date});
+    }
   }
 
   handleNewComment(id, body, timeCreated) {
@@ -114,9 +119,9 @@ class Post extends Component {
   }
 
   render() {
-    const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
+    const { id, category, title, body, author, voteScore, showComments, viewingPost } = this.props;
     const { onEdit, onDelete, onVote } = this.props;
-    const { comments, writingComment, editing, textarea, filter } = this.state;
+    const { comments, writingComment, editing, textarea, filter, date } = this.state;
     return (
       <article>
         <header>
@@ -125,7 +130,7 @@ class Post extends Component {
           </Link>
           <h5>Category: {category}</h5>
           <h5>Posted by: {author}</h5>
-          <h5>Time posted: {timestamp.timeCreated}</h5>
+          <h5>Time posted: {date}</h5>
           {viewingPost && <h5>This post has {comments.length} comments.</h5>}
         </header>
         <p>{body}</p>

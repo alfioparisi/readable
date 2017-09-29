@@ -5,23 +5,25 @@ class Comment extends Component {
     super(props);
     this.state = {
       editing: false,
-      textarea: ''
+      textarea: '',
+      date: ''
     };
   }
 
   componentDidMount() {
-    const { body } = this.props;
-    this.setState({textarea: body})
+    const { body, timestamp } = this.props;
+    const date = new Date(timestamp.timeCreated).toLocaleString();
+    this.setState({textarea: body, date});
   }
 
   render() {
-    const { id, body, author, timestamp, voteScore, onEdit, onDelete, onVote } = this.props;
-    const { editing, textarea } = this.state;
+    const { id, body, author, voteScore, onEdit, onDelete, onVote } = this.props;
+    const { editing, textarea, date } = this.state;
     return (
       <section>
         <header>
           <h5>Comment by: {author}</h5>
-          <h5>Commented at: {timestamp.timeCreated}</h5>
+          <h5>Commented at: {date}</h5>
         </header>
         <p>{body}</p>
         {editing && (
