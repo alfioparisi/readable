@@ -12,12 +12,14 @@ class Post extends Component {
       comments: [],
       writingComment: false,
       editing: false,
-      textarea: ''
+      textarea: '',
+      filter: 'byVoteDec'
     };
     this.handleNewComment = this.handleNewComment.bind(this);
     this.onCommentEdit = this.onCommentEdit.bind(this);
     this.onCommentDelete = this.onCommentDelete.bind(this);
     this.onCommentVote = this.onCommentVote.bind(this);
+    this.applyFilter = this.applyFilter.bind(this);
   }
 
   componentDidMount() {
@@ -94,10 +96,27 @@ class Post extends Component {
     });
   }
 
+  applyFilter() {
+    const { filter, comments } = this.state;
+    switch(filter) {
+      case 'byVoteDec' :
+        return comments.sort((a, b) => b.voteScore - a.voteScore);
+      case 'byVoteCre' :
+        return comments.sort((a, b) => a.voteScore - b.voteScore);
+      case 'byDateNew' :
+        return comments.sort((a, b) => b.timestamp - a.timestamp);
+      case 'byDateOld' :
+        return comments.sort((a, b) => a.timestamp - b.timestamp);
+      default :
+        window.alert('Invalid filter');
+        return comments;
+    }
+  }
+
   render() {
     const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
     const { onEdit, onDelete } = this.props;
-    const { comments, writingComment, editing, textarea } = this.state;
+    const { comments, writingComment, editing, textarea, filter } = this.state;
     return (
       <article>
         <header>
@@ -144,19 +163,33 @@ class Post extends Component {
             </div>
           )}
         </footer>
-        {showComments && comments && comments.sort((a, b) => b.voteScore - a.voteScore)
-        .map(comment => (
-          <Comment key={comment.id}
-            id={comment.id}
-            body={comment.body}
-            author={comment.author}
-            timestamp={{timeCreated: comment.timestamp}}
-            voteScore={comment.voteScore}
-            onEdit={this.onCommentEdit}
-            onDelete={this.onCommentDelete}
-            onVote={this.onCommentVote}
-          />
-        ))}
+        {showComments && comments && (
+          <section>
+            <header>
+              <h3>Comments</h3>
+              <label>Filter by:
+                <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
+                  <option value='byVoteDec'>More Likes</option>
+                  <option value='byVoteCre'>Less Likes</option>
+                  <option value='byDateNew'>Newest</option>
+                  <option value='byDateOld'>Oldest</option>
+                </select>
+              </label>
+            </header>
+            {this.applyFilter().map(comment => (
+              <Comment key={comment.id}
+                id={comment.id}
+                body={comment.body}
+                author={comment.author}
+                timestamp={{timeCreated: comment.timestamp}}
+                voteScore={comment.voteScore}
+                onEdit={this.onCommentEdit}
+                onDelete={this.onCommentDelete}
+                onVote={this.onCommentVote}
+              />
+            ))}
+          </section>
+        )}
       </article>
     );
   }
