@@ -11,9 +11,11 @@ class Category extends Component {
       posts: [],
       writingPost: false,
       viewingPost: false,
-      category: ''
+      category: '',
+      filter: 'byVoteDec'
     };
     this.handleChange = this.handleChange.bind(this);
+    this.applyFilter = this.applyFilter.bind(this);
   }
 
   componentDidMount() {
@@ -31,13 +33,39 @@ class Category extends Component {
     this.setState({category});
   }
 
+  applyFilter() {
+    const { filter, posts } = this.state;
+    switch(filter) {
+      case 'byVoteDec' :
+        return posts.sort((a, b) => b.voteScore - a.voteScore);
+      case 'byVoteCre' :
+        return posts.sort((a, b) => a.voteScore - b.voteScore);
+      case 'byDateNew' :
+        return posts.sort((a, b) => b.timestamp - a.timestamp);
+      case 'byDateOld' :
+        return posts.sort((a, b) => a.timestamp - b.timestamp);
+      default :
+        window.alert('Invalid filter');
+        return posts;
+    }
+  }
+
   render() {
-    const { posts, writingPost, viewingPost, category } = this.state;
+    const { writingPost, viewingPost, category, filter } = this.state;
     const { name, currentUser, categories, onClick, onPostEdit, onPostDelete, onPostVote } = this.props;
+    const posts = this.applyFilter();
     return (
       <main>
         <header>
           <h2>{name || 'All Categories'}</h2>
+          <label>Filter by:
+            <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
+              <option value='byVoteDec'>More Likes</option>
+              <option value='byVoteCre'>Less Likes</option>
+              <option value='byDateNew'>Newest</option>
+              <option value='byDateOld'>Oldest</option>
+            </select>
+          </label>
         </header>
         <Route exact path={`/category/${name || ''}`}
           render={() => <PostList

@@ -18,7 +18,8 @@ class App extends Component {
       categories: [],
       posts: [],
       users: [],
-      currentUser: null
+      currentUser: null,
+      filter: 'byVoteDec'
     };
     this.getInitialPosts = this.getInitialPosts.bind(this);
     this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
@@ -222,7 +223,7 @@ class App extends Component {
   }
 
   render() {
-    const { categories, posts, currentUser } = this.state;
+    const { categories, currentUser, posts } = this.state;
     return (
       <div>
         <Header
