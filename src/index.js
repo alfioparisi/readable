@@ -13,3 +13,12 @@ ReactDOM.render(
   document.getElementById('root')
 );
 registerServiceWorker();
+
+/*
+  TODO:
+    * on edit, prefill the form with the existing content
+    * posts should show how many comments they have
+    * date should be in redable format
+    * connect()
+    * README
+*/

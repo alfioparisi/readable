@@ -23,7 +23,7 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { id, showComments, isViewingPost } = this.props;
+    const { id, showComments, isViewingPost, body } = this.props;
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
         headers: {'Authorization': 'let-me-in-please'}
@@ -39,7 +39,7 @@ class Post extends Component {
           comment.voteScore
         )));
         const notDeletedComments = comments.filter(comment => !comment.deleted);
-        this.setState({comments: notDeletedComments});
+        this.setState({comments: notDeletedComments, textarea: body});
       })
       .catch(err => {
         console.error(err);
@@ -134,7 +134,7 @@ class Post extends Component {
             <input type="submit" value="Edit" onClick={evt => {
               evt.preventDefault();
               onEdit(id, textarea, Date.now());
-              this.setState({textarea: '', editing: false});
+              this.setState({editing: false});
             }} />
           </form>
         )}

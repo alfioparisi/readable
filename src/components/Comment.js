@@ -9,6 +9,11 @@ class Comment extends Component {
     };
   }
 
+  componentDidMount() {
+    const { body } = this.props;
+    this.setState({textarea: body})
+  }
+
   render() {
     const { id, body, author, timestamp, voteScore, onEdit, onDelete, onVote } = this.props;
     const { editing, textarea } = this.state;
@@ -25,7 +30,7 @@ class Comment extends Component {
             <input type="submit" value="Edit" onClick={evt => {
               evt.preventDefault();
               onEdit(id, textarea, Date.now());
-              this.setState({textarea: '', editing: false});
+              this.setState({editing: false});
             }} />
           </form>
         )}
