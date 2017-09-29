@@ -8,7 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { addInitialUser, signUp, logIn, logOut } from '../actions/users';
-import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer } from '../actions/posts';
+import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
@@ -29,6 +29,7 @@ class App extends Component {
     this.handleNewPost = this.handleNewPost.bind(this);
     this.onPostEdit = this.onPostEdit.bind(this);
     this.onPostDelete = this.onPostDelete.bind(this);
+    this.onPostVote = this.onPostVote.bind(this);
   }
 
   componentDidMount() {
@@ -113,7 +114,7 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(posts => {
-      posts.forEach(post => store.dispatch(addPost(post.id, post.category, post.title, post.body, post.author, post.timestamp)));
+      posts.forEach(post => store.dispatch(addPost(post.id, post.category, post.title, post.body, post.author, post.timestamp, post.voteScore)));
       const notDeletedPosts = posts.filter(post => !post.deleted);
       this.setState({posts: notDeletedPosts});
     })
@@ -209,6 +210,17 @@ class App extends Component {
     });
   }
 
+  onPostVote(id, upvote) {
+    store.dispatch(votePostOnServer(id, upvote))
+    .then(post => this.setState(prevState => ({
+      posts: [...prevState.posts.filter(p => p.id !== post.id), post]
+    })))
+    .catch(err => {
+      console.error(err);
+      window.alert('Couldnt vote the post.');
+    });
+  }
+
   render() {
     const { categories, posts, currentUser } = this.state;
     return (
@@ -228,6 +240,7 @@ class App extends Component {
               onClick={this.handleNewPost}
               onPostEdit={this.onPostEdit}
               onPostDelete={this.onPostDelete}
+              onPostVote={this.onPostVote}
             />
           )}
         />
@@ -244,6 +257,7 @@ class App extends Component {
                   onClick={this.handleNewPost}
                   onPostEdit={this.onPostEdit}
                   onPostDelete={this.onPostDelete}
+                  onPostVote={this.onPostVote}
                 />
               )}
             />

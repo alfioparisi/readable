@@ -115,7 +115,7 @@ class Post extends Component {
 
   render() {
     const { id, category, title, body, author, timestamp, voteScore, showComments, viewingPost } = this.props;
-    const { onEdit, onDelete } = this.props;
+    const { onEdit, onDelete, onVote } = this.props;
     const { comments, writingComment, editing, textarea, filter } = this.state;
     return (
       <article>
@@ -141,8 +141,8 @@ class Post extends Component {
         <footer>
           <p>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
           <div>
-            <button>Upvote</button>
-            <button>Downvote</button>
+            <button onClick={() => onVote(id, true)}>Upvote</button>
+            <button onClick={() => onVote(id, false)}>Downvote</button>
           </div>
           {viewingPost && (
             <div>

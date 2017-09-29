@@ -3,14 +3,15 @@ export const DELETE_POST = 'DELETE_POST';
 export const EDIT_POST = 'EDIT_POST';
 export const VOTE_POST = 'VOTE_POST';
 
-export const addPost = (id, category, title, body, author, timeCreated) => ({
+export const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_POST,
   id,
   category,
   title,
   body,
   author,
-  timeCreated
+  timeCreated,
+  voteScore
 });
 
 // By returning the 'fetch()' call we'll be able to chain '.then()' when we'll call
@@ -93,8 +94,29 @@ export const editPostOnServer = (id, body, author, timeEdited) => dispatch => (
   .catch(err => console.error(err))
 );
 
-export const votePost = (id, upvote) => ({
+const votePost = (id, upvote) => ({
   type: VOTE_POST,
   id,
   upvote
 });
+
+export const votePostOnServer = (id, upvote) => dispatch => (
+  fetch(`http://localhost:3001/posts/${id}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id,
+      option: upvote ? 'upVote' : 'downVote'
+    })
+  })
+  .then(res => res.json())
+  .then(post => {
+    dispatch(votePost(id, upvote));
+    return post;
+  })
+  .catch(err => console.error(err))
+);

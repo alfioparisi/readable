@@ -33,7 +33,7 @@ class Category extends Component {
 
   render() {
     const { posts, writingPost, viewingPost, category } = this.state;
-    const { name, currentUser, categories, onClick, onPostEdit, onPostDelete } = this.props;
+    const { name, currentUser, categories, onClick, onPostEdit, onPostDelete, onPostVote } = this.props;
     return (
       <main>
         <header>
@@ -45,6 +45,7 @@ class Category extends Component {
             isViewingPost={bool => this.setState({viewingPost: bool})}
             viewingPost={viewingPost}
             currentUser={currentUser}
+            onVote={onPostVote}
           />}
         />
         {posts && posts.map(post => (
@@ -64,6 +65,7 @@ class Category extends Component {
                 currentUser={currentUser}
                 onEdit={onPostEdit}
                 onDelete={onPostDelete}
+                onVote={onPostVote}
               />
             )}
           />
