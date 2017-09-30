@@ -1,9 +1,8 @@
 import React from 'react';
-import store from '../store';
 
-const isUser = (users, name, password) => Object.keys(users).find(key => users[key].name === name && users[key].password === password);
+const isUser = (users, name, password) =>users.find(user => user.name === name && user.password === password);
 
-const LogIn = ({ onClick }) => {
+const LogIn = ({ onClick, users }) => {
   let name = null;
   let password = null;
   return (
@@ -17,7 +16,7 @@ const LogIn = ({ onClick }) => {
       <input type="submit" value="LogIn"
         onClick={evt => {
           evt.preventDefault();
-          if (isUser(store.getState().users, name.value.trim(), password.value.trim())) {
+          if (isUser(users, name.value.trim(), password.value.trim())) {
             onClick(name.value.trim(), password.value.trim());
           } else window.alert('No user found under those credentials.');
           name.value = '';
