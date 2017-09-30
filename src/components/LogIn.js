@@ -1,6 +1,6 @@
 import React from 'react';
 
-const isUser = (users, name, password) =>users.find(user => user.name === name && user.password === password);
+const isUser = (users, name, password) => users.find(user => user.name === name && user.password === password);
 
 const LogIn = ({ onClick, users }) => {
   let name = null;
@@ -8,7 +8,7 @@ const LogIn = ({ onClick, users }) => {
   return (
     <form>
       <label>Username :
-        <input placeholder="AryaStark" ref={inputName => name = inputName} />
+        <input autoFocus placeholder="AryaStark" ref={inputName => name = inputName} />
       </label>
       <label>Password :
         <input type="password" ref={inputPassword => password = inputPassword} />

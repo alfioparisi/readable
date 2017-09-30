@@ -153,12 +153,11 @@ class App extends Component {
   onSignUp(username, password, dateCreated) {
     this.addUserToStorage(username, password, dateCreated);
     store.dispatch(signUp(username, password, dateCreated));
-    const users = store.getState().users;
-    const usersArray = Object.keys(users).map(name => users[name]);
-    this.setState({
-      users: usersArray,
-      currentUser: store.getState().users[username]
-    });
+    const user = store.getState().users[username];
+    this.setState(prevState => ({
+      users: [...prevState.users, user],
+      currentUser: user
+    }));
   }
 
   onLogOut(name) {
