@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
-import { addInitialUser, signUp, logIn, logOut } from '../actions/users';
+import { addInitialUser, signUp, logOut } from '../actions/users';
 import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import '../css/App.css';
 
@@ -126,8 +126,7 @@ class App extends Component {
   }
 
   // On log in update Redux and this state. Set the 'currentUser'.
-  onLogIn(name, password) {
-    store.dispatch(logIn(name, password));
+  onLogIn(name) {
     const users = store.getState().users;
     const usersArray = Object.keys(users).map(name => users[name]);
     this.setState({
@@ -225,7 +224,7 @@ class App extends Component {
   }
 
   render() {
-    const { categories, currentUser, posts, users } = this.state;
+    const { categories, currentUser, posts } = this.state;
     return (
       <div>
         <Header
@@ -270,7 +269,7 @@ class App extends Component {
           <SignUp onClick={this.onSignUp} />
         )} />
         <Route path="/login" render={() => (
-          <LogIn onClick={this.onLogIn} users={users} />
+          <LogIn onClick={this.onLogIn} />
         )} />
         <Footer />
       </div>

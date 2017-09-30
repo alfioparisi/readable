@@ -1,14 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { logIn } from '../actions/users';
 
 const isUser = (users, name, password) => users.find(user => user.name === name && user.password === password);
 
-const LogIn = ({ onClick, users }) => {
+const LogIn = ({ users, onClick }) => {
   let name = null;
   let password = null;
   return (
     <form>
       <label>Username :
-        <input autoFocus placeholder="AryaStark" ref={inputName => name = inputName} />
+        <input placeholder="AryaStark" ref={inputName => name = inputName} />
       </label>
       <label>Password :
         <input type="password" ref={inputPassword => password = inputPassword} />
@@ -27,4 +29,15 @@ const LogIn = ({ onClick, users }) => {
   );
 };
 
-export default LogIn;
+const mapStateToProps = state => ({
+  users: Object.keys(state.users).map(name => state.users[name])
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: (name, pass) => {
+    dispatch(logIn(name, pass));
+    ownProps.onClick(name);
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
