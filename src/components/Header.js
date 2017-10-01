@@ -26,10 +26,10 @@ class Header extends Component {
         <nav>
           <ul>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <NavLink to="/">home</NavLink>
             </li>
             <li>
-              <NavLink to="/category">Category</NavLink>
+              <NavLink to="/category">all categories</NavLink>
             </li>
             {categories && categories.map(category => (
               <li key={category.name}>
@@ -45,12 +45,12 @@ class Header extends Component {
             )}
             {!active && (
               <li>
-                <NavLink to="/signup">SignUp</NavLink>
+                <NavLink to="/signup">signup</NavLink>
               </li>
             )}
             {!active && (
               <li>
-                <NavLink to="/login">LogIn</NavLink>
+                <NavLink to="/login">login</NavLink>
               </li>
             )}
           </ul>
@@ -59,5 +59,52 @@ class Header extends Component {
     );
   }
 }
+
+// const mapStateToProps = state => ({
+//   categories: ,
+//   currentUser: ,
+//   active:
+// })
+//
+// const Header = ({ categories, currentUser, active, onClick }) => ({
+//   <header>
+//     <div>
+//       <button>Nav button</button>
+//       <h1>Readable</h1>
+//     </div>
+//     <nav>
+//       <ul>
+//         <li>
+//           <NavLink to="/">home</NavLink>
+//         </li>
+//         <li>
+//           <NavLink to="/category">all categories</NavLink>
+//         </li>
+//         {categories && categories.map(category => (
+//           <li key={category.name}>
+//             <NavLink to={`/category/${category.path}`}>{category.name}</NavLink>
+//           </li>
+//         ))}
+//         {active && (
+//           <li>
+//             <button
+//               onClick={() => onClick(currentUser.name)}
+//             >LogOut</button>
+//           </li>
+//         )}
+//         {!active && (
+//           <li>
+//             <NavLink to="/signup">signup</NavLink>
+//           </li>
+//         )}
+//         {!active && (
+//           <li>
+//             <NavLink to="/login">login</NavLink>
+//           </li>
+//         )}
+//       </ul>
+//     </nav>
+//   </header>
+// });
 
 export default Header;
