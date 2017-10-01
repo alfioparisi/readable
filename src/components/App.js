@@ -7,6 +7,7 @@ import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
+import { getCategoriesFromServer } from '../actions/categories';
 import { addInitialUser, logOut } from '../actions/users';
 import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import '../css/App.css';
@@ -34,6 +35,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    store.dispatch(getCategoriesFromServer());
     // Fetch the categories and save them in this state.
     fetch('http://localhost:3001/categories', {
       headers: {'Authorization': 'let-me-in-please'}
