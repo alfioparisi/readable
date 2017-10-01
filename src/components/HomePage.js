@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => (
   <main>
@@ -7,9 +8,9 @@ const HomePage = () => (
     </header>
     <p>You can either create an account or move on as 'Anonymous'</p>
     <div>
-      <a href="#signup">Sign Up</a>
-      <a href="#login">Log In</a>
-      <a href="#allcategories">Anonymous</a>
+      <Link to="signup">Sign Up</Link>
+      <Link to="login">Log In</Link>
+      <Link to="category">Anonymous</Link>
     </div>
   </main>
 );
