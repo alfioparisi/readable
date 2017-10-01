@@ -23,5 +23,6 @@ registerServiceWorker();
     * posts should show how many comments they have
     * date should be in readable format
     * connect()
+    * polish React state
     * README
 */

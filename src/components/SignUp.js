@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { signUp } from '../actions/users';
 
 const SignUp = ({ onClick }) => {
   let name = null;
@@ -25,4 +27,11 @@ const SignUp = ({ onClick }) => {
   );
 };
 
-export default SignUp;
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: (username, pass, dateCreated) => {
+    dispatch(signUp(username, pass, dateCreated));
+    ownProps.onClick(username, pass, dateCreated);
+  }
+});
+
+export default connect(null, mapDispatchToProps)(SignUp);
