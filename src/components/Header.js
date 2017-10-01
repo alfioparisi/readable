@@ -1,110 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logOut } from '../actions/users';
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false
-    };
+const Header = ({ categories, currentUser, onClick }) => (
+  <header>
+    <div>
+      <button>Nav button</button>
+      <h1>Readable</h1>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <NavLink to="/">home</NavLink>
+        </li>
+        <li>
+          <NavLink to="/category">all categories</NavLink>
+        </li>
+        {categories && categories.map(category => (
+          <li key={category}>
+            <NavLink to={`/category/${category}`}>{category}</NavLink>
+          </li>
+        ))}
+        {currentUser && (
+          <li>
+            <button
+              onClick={() => onClick(currentUser)}
+            >LogOut</button>
+          </li>
+        )}
+        {!currentUser && (
+          <li>
+            <NavLink to="/signup">signup</NavLink>
+          </li>
+        )}
+        {!currentUser && (
+          <li>
+            <NavLink to="/login">login</NavLink>
+          </li>
+        )}
+      </ul>
+    </nav>
+  </header>
+);
+
+const mapStateToProps = state => ({
+  categories: state.categories,
+  currentUser: state.currentUser
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: user => {
+    dispatch(logOut(user));
+    ownProps.onClick(user);
   }
+});
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser) this.setState({active: true});
-    else this.setState({active: false});
-  }
-
-  render() {
-    const { categories, currentUser, onClick } = this.props;
-    const { active } = this.state;
-    return (
-      <header>
-        <div>
-          <button>Nav button</button>
-          <h1>Readable</h1>
-        </div>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/">home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/category">all categories</NavLink>
-            </li>
-            {categories && categories.map(category => (
-              <li key={category.name}>
-                <NavLink to={`/category/${category.path}`}>{category.name}</NavLink>
-              </li>
-            ))}
-            {active && (
-              <li>
-                <button
-                  onClick={() => onClick(currentUser.name)}
-                >LogOut</button>
-              </li>
-            )}
-            {!active && (
-              <li>
-                <NavLink to="/signup">signup</NavLink>
-              </li>
-            )}
-            {!active && (
-              <li>
-                <NavLink to="/login">login</NavLink>
-              </li>
-            )}
-          </ul>
-        </nav>
-      </header>
-    );
-  }
-}
-
-// const mapStateToProps = state => ({
-//   categories: ,
-//   currentUser: ,
-//   active:
-// })
-//
-// const Header = ({ categories, currentUser, active, onClick }) => ({
-//   <header>
-//     <div>
-//       <button>Nav button</button>
-//       <h1>Readable</h1>
-//     </div>
-//     <nav>
-//       <ul>
-//         <li>
-//           <NavLink to="/">home</NavLink>
-//         </li>
-//         <li>
-//           <NavLink to="/category">all categories</NavLink>
-//         </li>
-//         {categories && categories.map(category => (
-//           <li key={category.name}>
-//             <NavLink to={`/category/${category.path}`}>{category.name}</NavLink>
-//           </li>
-//         ))}
-//         {active && (
-//           <li>
-//             <button
-//               onClick={() => onClick(currentUser.name)}
-//             >LogOut</button>
-//           </li>
-//         )}
-//         {!active && (
-//           <li>
-//             <NavLink to="/signup">signup</NavLink>
-//           </li>
-//         )}
-//         {!active && (
-//           <li>
-//             <NavLink to="/login">login</NavLink>
-//           </li>
-//         )}
-//       </ul>
-//     </nav>
-//   </header>
-// });
-
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

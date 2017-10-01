@@ -8,7 +8,7 @@ import LogIn from './LogIn';
 import { Route } from 'react-router-dom';
 import store from '../store';
 import { getCategoriesFromServer } from '../actions/categories';
-import { addInitialUser, logOut } from '../actions/users';
+import { addInitialUser } from '../actions/users';
 import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import '../css/App.css';
 
@@ -161,7 +161,6 @@ class App extends Component {
   }
 
   onLogOut(name) {
-    store.dispatch(logOut(name));
     const users = store.getState().users;
     const usersArray = Object.keys(users).map(name => users[name]);
     this.setState({
@@ -229,8 +228,6 @@ class App extends Component {
     return (
       <div>
         <Header
-          categories={categories}
-          currentUser={currentUser}
           onClick={this.onLogOut}
         />
         <Route exact path="/" component={HomePage} />
