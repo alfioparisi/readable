@@ -3,7 +3,8 @@ import { EDITING } from '../actions/editing';
 const editingComment = (state = false, action) => {
   switch(action.type) {
     case EDITING :
-      return action.editing;
+      if (action.comment) return action.editing;
+      else return state;
     default :
       return state;
   }

@@ -40,11 +40,11 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
   onEdit: (id, body, author, timeEdited) => {
     dispatch(editCommentOnServer(id, body, author, timeEdited));
-    dispatch(isEditing(false));
+    dispatch(isEditing(false, true, false));
   },
   onDelete: (id, timeDeleted) => dispatch(deleteCommentOnServer(id, timeDeleted)),
   onVote: (id, upvote) => dispatch(voteCommentOnServer(id, upvote)),
-  isEditing: editing => dispatch(isEditing(editing))
+  isEditing: editing => dispatch(isEditing(editing, true, false))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);

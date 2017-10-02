@@ -3,12 +3,12 @@ import PostList from './PostList';
 import Post from './Post';
 import PostingForm from './PostingForm';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [],
       writingPost: false,
       viewingPost: false,
       category: '',
@@ -19,14 +19,10 @@ class Category extends Component {
   }
 
   componentDidMount() {
-    const { name, posts } = this.props;
+    const { name } = this.props;
     // Category showing all the posts doesn't receive a 'name' prop, so set 'react'
     // as default.
-    this.setState({posts, category: name || 'react'});
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.posts) this.setState({posts: nextProps.posts});
+    this.setState({category: name || 'react'});
   }
 
   handleChange(category) {
@@ -34,7 +30,8 @@ class Category extends Component {
   }
 
   applyFilter() {
-    const { filter, posts } = this.state;
+    const { filter } = this.state;
+    const { posts } = this.props;
     switch(filter) {
       case 'byVoteDec' :
         return posts.sort((a, b) => b.voteScore - a.voteScore);
@@ -52,7 +49,7 @@ class Category extends Component {
 
   render() {
     const { writingPost, viewingPost, category, filter } = this.state;
-    const { name, currentUser, categories, onClick, onPostEdit, onPostDelete, onPostVote } = this.props;
+    const { name, currentUser, categories, onClick } = this.props;
     const posts = this.applyFilter();
     return (
       <main>
@@ -74,28 +71,16 @@ class Category extends Component {
             posts={posts}
             isViewingPost={viewingPost => this.setState({viewingPost})}
             viewingPost={viewingPost}
-            currentUser={currentUser}
-            onVote={onPostVote}
           />}
         />
         {posts && posts.map(post => (
           <Route key={post.id} path={`/category/${post.category}/${post.id}`}
             render={() => (
               <Post
-                id={post.id}
-                category={post.category}
-                title={post.title}
-                body={post.body}
-                author={post.author}
-                timestamp={{timeCreated: post.timestamp}}
-                voteScore={post.voteScore}
+                post={post}
                 showComments={true}
                 isViewingPost={viewingPost => this.setState({viewingPost})}
                 viewingPost={viewingPost}
-                currentUser={currentUser}
-                onEdit={onPostEdit}
-                onDelete={onPostDelete}
-                onVote={onPostVote}
               />
             )}
           />
@@ -125,4 +110,13 @@ class Category extends Component {
   }
 }
 
-export default Category;
+const mapStateToProps = (state, ownProps) => ({
+  name: ownProps.name,
+  posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => console.log(post, ownProps.name))
+});
+
+const mapDispatchToProps = dispatch => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Category);

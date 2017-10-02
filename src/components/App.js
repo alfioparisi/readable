@@ -120,6 +120,7 @@ class App extends Component {
       posts.forEach(post => {
         const { id, category, title, body, author, timestamp, voteScore } = post;
         store.dispatch(addPost(id, category, title, body, author, timestamp, voteScore));
+        post.comments = [];
       });
       const notDeletedPosts = posts.filter(post => !post.deleted);
       this.setState({posts: notDeletedPosts});
@@ -245,13 +246,11 @@ class App extends Component {
           )}
         />
         {categories && categories.map(category => {
-          const categoryPosts = this.filterPostsByCategory(category.name);
           return (
             <Route key={category.name} path={`/category/${category.path}`}
               render={() => (
                 <Category
                   name={category.name}
-                  posts={categoryPosts}
                   currentUser={currentUser}
                   categories={categories}
                   onClick={this.handleNewPost}

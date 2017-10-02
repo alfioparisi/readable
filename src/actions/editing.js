@@ -1,6 +1,8 @@
 export const EDITING = 'EDITING';
 
-export const isEditing = editing => ({
+export const isEditing = (editing, comment = false, post = false) => ({
   type: EDITING,
-  editing
+  editing,
+  comment,
+  post
 });

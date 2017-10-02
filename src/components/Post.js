@@ -1,31 +1,29 @@
 import React, { Component } from 'react';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
+import EditingForm from './EditingForm';
 import { Link } from 'react-router-dom';
+import { addComment, addCommentOnServer } from '../actions/comments';
+import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
+import { isEditing } from '../actions/editing';
+import { connect } from 'react-redux';
 import store from '../store';
-import { addComment, addCommentOnServer, editCommentOnServer, deleteCommentOnServer, voteCommentOnServer } from '../actions/comments';
 
 class Post extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: [],
       writingComment: false,
       editing: false,
-      textarea: '',
-      filter: 'byVoteDec',
-      date: ''
+      filter: 'byVoteDec'
     };
     this.handleNewComment = this.handleNewComment.bind(this);
-    this.onCommentEdit = this.onCommentEdit.bind(this);
-    this.onCommentDelete = this.onCommentDelete.bind(this);
-    this.onCommentVote = this.onCommentVote.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
   }
 
   componentDidMount() {
-    const { id, showComments, isViewingPost, body, timestamp } = this.props;
-    const date = new Date(timestamp.timeCreated).toLocaleString();
+    const { post, showComments, isViewingPost } = this.props;
+    const { id } = post;
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
         headers: {'Authorization': 'let-me-in-please'}
@@ -40,8 +38,6 @@ class Post extends Component {
           comment.timestamp,
           comment.voteScore
         )));
-        const notDeletedComments = comments.filter(comment => !comment.deleted);
-        this.setState({comments: notDeletedComments, textarea: body, date});
       })
       .catch(err => {
         console.error(err);
@@ -51,58 +47,22 @@ class Post extends Component {
       isViewingPost(true);
     } else {
       isViewingPost(false);
-      this.setState({date});
     }
   }
 
   handleNewComment(id, body, timeCreated) {
-    const { id: parentId, currentUser } = this.props;
-    const author = currentUser ? currentUser.name : 'Anonymous';
+    const { post, currentUser } = this.props;
+    const { id: parentId } = post;
+    const author = currentUser || 'Anonymous';
     store.dispatch(addCommentOnServer(id, parentId, body, author, timeCreated))
-    .then(comment => this.setState(prevState => ({
-      comments: [...prevState.comments, comment],
+    .then(comment => this.setState({
       writingComment: false
-    })));
-  }
-
-  onCommentEdit(id, body, timeEdited) {
-    const { currentUser } = this.props;
-    const author = currentUser ? currentUser.name : 'Anonymous';
-    store.dispatch(editCommentOnServer(id, body, author, timeEdited))
-    .then(comment => this.setState(prevState => ({
-      comments: [...prevState.comments.filter(c => c.id !== comment.id), comment]
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt edit the comment.')
-    });
-  }
-
-  onCommentDelete(id, timeDeleted) {
-    const { id: parentId } = this.props;
-    store.dispatch(deleteCommentOnServer(id, parentId, timeDeleted))
-    .then(() => this.setState(prevState => ({
-      comments: prevState.comments.filter(comment => comment.id !== id)
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt delete the comment.')
-    });
-  }
-
-  onCommentVote(id, upvote) {
-    store.dispatch(voteCommentOnServer(id, upvote))
-    .then(comment => this.setState(prevState => ({
-      comments: [...prevState.comments.filter(c => c.id !== comment.id), comment]
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt vote the comment.');
-    });
+    }));
   }
 
   applyFilter() {
-    const { filter, comments } = this.state;
+    const { filter } = this.state;
+    const { comments } = this.props;
     switch(filter) {
       case 'byVoteDec' :
         return comments.sort((a, b) => b.voteScore - a.voteScore);
@@ -119,9 +79,11 @@ class Post extends Component {
   }
 
   render() {
-    const { id, category, title, body, author, voteScore, showComments, viewingPost } = this.props;
+    const { post, showComments, viewingPost, currentUser, comments } = this.props;
+    const { id, category, title, body, author, timestamp, voteScore } = post;
+    const date = new Date(timestamp).toLocaleString();
     const { onEdit, onDelete, onVote } = this.props;
-    const { comments, writingComment, editing, textarea, filter, date } = this.state;
+    const { writingComment, editing, filter } = this.state;
     return (
       <article>
         <header>
@@ -134,16 +96,10 @@ class Post extends Component {
           {viewingPost && <h5>This post has {comments.length} comments.</h5>}
         </header>
         <p>{body}</p>
-        {editing && (
-          <form>
-            <textarea value={textarea} onChange={evt => this.setState({textarea: evt.target.value})} />
-            <input type="submit" value="Edit" onClick={evt => {
-              evt.preventDefault();
-              onEdit(id, textarea, Date.now());
-              this.setState({editing: false});
-            }} />
-          </form>
-        )}
+        {editing && <EditingForm body={body} onEdit={(textarea, timeEdited) => {
+          const author = currentUser || 'Anonymous';
+          onEdit(id, textarea, author, timeEdited);
+        }} />}
         <footer>
           <p>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
           <div>
@@ -194,4 +150,22 @@ class Post extends Component {
   }
 }
 
-export default Post;
+const mapStateToProps = (state, ownProps) => ({
+  post: ownProps.post,
+  showComments: ownProps.showComments,
+  viewingPost: ownProps.viewingPost,
+  isViewingPost: ownProps.isViewingPost,
+  currentUser: state.currentUser,
+  comments: ownProps.post.comments.map(commentId => state.comments.commentId).filter(comment => !comment.deleted)
+});
+
+const mapDispatchToProps = dispatch => ({
+  onEdit: (id, body, author, timeEdited) => {
+    dispatch(editPostOnServer(id, body, author, timeEdited));
+    dispatch(isEditing(false, false, true));
+  },
+  onDelete: (id, timeDeleted) => dispatch(deletePostOnServer(id, timeDeleted)),
+  onVote: (id, upvote) => dispatch(votePostOnServer(id, upvote))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
