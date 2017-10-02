@@ -1,55 +1,53 @@
-import React, { Component } from 'react';
+import React from 'react';
 import EditingForm from './EditingForm';
+import { editCommentOnServer, deleteCommentOnServer, voteCommentOnServer } from '../actions/comments';
+import { isEditing } from '../actions/editing';
+import { connect } from 'react-redux';
 
-class Comment extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: false,
-      date: ''
-    };
-  }
+const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
+  const { id, body, author, timestamp, voteScore } = comment;
+  const date = new Date(timestamp).toLocaleString();
+  return (
+    <section>
+      <header>
+        <h5>Comment by: {author}</h5>
+        <h5>Commented at: {date}</h5>
+      </header>
+      <p>{body}</p>
+      {editing && <EditingForm body={body} onEdit={(textarea, timeEdited) => {
+        const author = currentUser || 'Anonymous';
+        onEdit(id, textarea, author, timeEdited);
+      }} />}
+      <footer>
+        <p>This comment has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
+        <div>
+          <button onClick={() => onVote(id, true)}>Upvote</button>
+          <button onClick={() => onVote(id, false)}>Downvote</button>
+          <button onClick={() => isEditing(true)}>Edit</button>
+          <button onClick={() => onDelete(id, Date.now())}>Delete</button>
+        </div>
+      </footer>
+    </section>
+  );
+};
 
-  componentDidMount() {
-    const { timestamp } = this.props;
-    const date = new Date(timestamp.timeCreated).toLocaleString();
-    this.setState({date});
-  }
-
-  render() {
-    const { id, body, author, voteScore, onEdit, onDelete, onVote } = this.props;
-    const { editing, date } = this.state;
-    return (
-      <section>
-        <header>
-          <h5>Comment by: {author}</h5>
-          <h5>Commented at: {date}</h5>
-        </header>
-        <p>{body}</p>
-        {editing && <EditingForm body={body} onEdit={(textarea, timeEdited) => {
-          onEdit(id, textarea, timeEdited);
-          this.setState({editing: false});
-        }} />}
-        <footer>
-          <p>This comment has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
-          <div>
-            <button onClick={() => onVote(id, true)}>Upvote</button>
-            <button onClick={() => onVote(id, false)}>Downvote</button>
-            <button onClick={() => this.setState({editing: true})}>Edit</button>
-            <button onClick={() => onDelete(id, Date.now())}>Delete</button>
-          </div>
-        </footer>
-      </section>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-
+const mapStateToProps = (state, ownProps) => ({
+  currentUser: state.currentUser,
+  editing: state.editingComment,
+  comment: ownProps.comment
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  onEdit: (id, body, author, timeEdited) => {
+    dispatch(editCommentOnServer(id, body, author, timeEdited));
+    dispatch(isEditing(false));
+  },
+  onDelete: (id, timeDeleted) => dispatch(deleteCommentOnServer(id, timeDeleted)),
+  onVote: (id, upvote) => dispatch(voteCommentOnServer(id, upvote)),
+  isEditing: editing => dispatch(isEditing(editing))
 });
 
-export default Comment;
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+
+// the comment edits correctly, but since it is passed down by Post and Post still
+// depends on App state, we don't have instant re-render.

@@ -184,14 +184,7 @@ class Post extends Component {
             </header>
             {this.applyFilter().map(comment => (
               <Comment key={comment.id}
-                id={comment.id}
-                body={comment.body}
-                author={comment.author}
-                timestamp={{timeCreated: comment.timestamp}}
-                voteScore={comment.voteScore}
-                onEdit={this.onCommentEdit}
-                onDelete={this.onCommentDelete}
-                onVote={this.onCommentVote}
+                comment={comment}
               />
             ))}
           </section>

@@ -276,9 +276,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*
-  TODO:
-  * edit post and comment
-  * delete them
-*/
