@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uuidv1 from 'uuid';
+import { connect } from 'react-redux';
 
 class PostingForm extends Component {
   constructor(props) {
@@ -32,8 +33,8 @@ class PostingForm extends Component {
         <label>Category :
           <select value={category} onChange={evt => onChange(evt.target.value)}>
             {categories && categories.map(c => (
-              <option key={c.name} value={c.name}>
-                {c.name}
+              <option key={c} value={c}>
+                {c}
               </option>
             ))}
           </select>
@@ -46,7 +47,7 @@ class PostingForm extends Component {
         <input type="submit" value="Post"
           onClick={evt => {
             evt.preventDefault();
-            const author = currentUser ? currentUser.name : 'Anonymous';
+            const author = currentUser || 'Anonymous';
             onClick(uuidv1(), category, title, textarea, author, Date.now());
             this.setState({title: '', textarea: ''});
           }}
@@ -56,4 +57,9 @@ class PostingForm extends Component {
   }
 }
 
-export default PostingForm;
+const mapStateToProps = state => ({
+  categories: state.categories,
+  currentUser: state.currentUser
+});
+
+export default connect(mapStateToProps)(PostingForm);

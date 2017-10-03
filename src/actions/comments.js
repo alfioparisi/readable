@@ -13,7 +13,7 @@ export const addComment = (id, parentId, body, author, timeCreated, voteScore = 
   voteScore
 });
 
-export const addCommentOnServer = (id, parentId, body, author, timeCreated, voteScore = 0) => dispatch => (
+export const addCommentOnServer = (id, parentId, body, author, timeCreated, voteScore) => dispatch => (
   fetch('http://localhost:3001/comments', {
     method: 'POST',
     headers: {

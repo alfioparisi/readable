@@ -14,7 +14,6 @@ class Post extends Component {
     super(props);
     this.state = {
       writingComment: false,
-      editing: false,
       filter: 'byVoteDec'
     };
     this.handleNewComment = this.handleNewComment.bind(this);
@@ -79,11 +78,11 @@ class Post extends Component {
   }
 
   render() {
-    const { post, showComments, viewingPost, currentUser, comments } = this.props;
+    const { post, showComments, viewingPost, currentUser, comments, editing } = this.props;
     const { id, category, title, body, author, timestamp, voteScore } = post;
     const date = new Date(timestamp.timeCreated).toLocaleString();
-    const { onEdit, onDelete, onVote } = this.props;
-    const { writingComment, editing, filter } = this.state;
+    const { onEdit, onDelete, onVote, isEditing } = this.props;
+    const { writingComment, filter } = this.state;
     return (
       <article>
         <header>
@@ -108,7 +107,7 @@ class Post extends Component {
           </div>
           {viewingPost && (
             <div>
-              <button onClick={() => this.setState({editing: true})}>Edit</button>
+              <button onClick={() => isEditing(true)}>Edit</button>
               <button onClick={() => onDelete(id, Date.now())}>Delete</button>
             </div>
           )}
@@ -156,6 +155,7 @@ const mapStateToProps = (state, ownProps) => ({
   viewingPost: ownProps.viewingPost,
   isViewingPost: ownProps.isViewingPost,
   currentUser: state.currentUser,
+  editing: state.editingPost,
   comments: ownProps.post.comments.map(commentId => state.comments[commentId]).filter(comment => !comment.deleted)
 });
 
@@ -165,7 +165,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(isEditing(false, false, true));
   },
   onDelete: (id, timeDeleted) => dispatch(deletePostOnServer(id, timeDeleted)),
-  onVote: (id, upvote) => dispatch(votePostOnServer(id, upvote))
+  onVote: (id, upvote) => dispatch(votePostOnServer(id, upvote)),
+  isEditing: editing => dispatch(isEditing(editing, false, true))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

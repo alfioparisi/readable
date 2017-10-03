@@ -49,7 +49,7 @@ class Category extends Component {
 
   render() {
     const { writingPost, viewingPost, category, filter } = this.state;
-    const { name, currentUser, categories, onClick } = this.props;
+    const { name, onClick } = this.props;
     const posts = this.applyFilter();
     return (
       <main>
@@ -88,8 +88,6 @@ class Category extends Component {
         {writingPost && (
           <PostingForm
             category={category}
-            categories={categories}
-            currentUser={currentUser}
             onChange={this.handleChange}
             onClick={(id, category, title, body, author, timeCreated) => {
               onClick(id, category, title, body, author, timeCreated);
