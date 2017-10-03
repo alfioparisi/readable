@@ -69,9 +69,9 @@ class Post extends Component {
       case 'byVoteCre' :
         return comments.sort((a, b) => a.voteScore - b.voteScore);
       case 'byDateNew' :
-        return comments.sort((a, b) => b.timestamp - a.timestamp);
+        return comments.sort((a, b) => b.timestamp.timeCreated - a.timestamp.timeCreated);
       case 'byDateOld' :
-        return comments.sort((a, b) => a.timestamp - b.timestamp);
+        return comments.sort((a, b) => a.timestamp.timeCreated - b.timestamp.timeCreated);
       default :
         window.alert('Invalid filter');
         return comments;
@@ -81,7 +81,7 @@ class Post extends Component {
   render() {
     const { post, showComments, viewingPost, currentUser, comments } = this.props;
     const { id, category, title, body, author, timestamp, voteScore } = post;
-    const date = new Date(timestamp).toLocaleString();
+    const date = new Date(timestamp.timeCreated).toLocaleString();
     const { onEdit, onDelete, onVote } = this.props;
     const { writingComment, editing, filter } = this.state;
     return (
@@ -156,7 +156,7 @@ const mapStateToProps = (state, ownProps) => ({
   viewingPost: ownProps.viewingPost,
   isViewingPost: ownProps.isViewingPost,
   currentUser: state.currentUser,
-  comments: ownProps.post.comments.map(commentId => state.comments.commentId).filter(comment => !comment.deleted)
+  comments: ownProps.post.comments.map(commentId => state.comments[commentId]).filter(comment => !comment.deleted)
 });
 
 const mapDispatchToProps = dispatch => ({

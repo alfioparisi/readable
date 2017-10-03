@@ -8,6 +8,7 @@ const post = (state = {}, action) => {
   switch(action.type) {
     case ADD_POST :
       return {
+        id: action.id,
         category: action.category,
         title: action.title,
         body: action.body,

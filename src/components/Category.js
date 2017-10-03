@@ -38,9 +38,9 @@ class Category extends Component {
       case 'byVoteCre' :
         return posts.sort((a, b) => a.voteScore - b.voteScore);
       case 'byDateNew' :
-        return posts.sort((a, b) => b.timestamp - a.timestamp);
+        return posts.sort((a, b) => b.timestamp.timeCreated - a.timestamp.timeCreated);
       case 'byDateOld' :
-        return posts.sort((a, b) => a.timestamp - b.timestamp);
+        return posts.sort((a, b) => a.timestamp.timeCreated - b.timestamp.timeCreated);
       default :
         window.alert('Invalid filter');
         return posts;
@@ -112,7 +112,10 @@ class Category extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   name: ownProps.name,
-  posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => console.log(post, ownProps.name))
+  posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => {
+    if (ownProps.name) return post.category === ownProps.name;
+    return post;
+  })
 });
 
 const mapDispatchToProps = dispatch => ({

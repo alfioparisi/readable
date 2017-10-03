@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
   const { id, body, author, timestamp, voteScore } = comment;
-  const date = new Date(timestamp).toLocaleString();
+  const date = new Date(timestamp.timeCreated).toLocaleString();
   return (
     <section>
       <header>
