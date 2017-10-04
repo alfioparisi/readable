@@ -7,7 +7,6 @@ import SignUp from './SignUp';
 import LogIn from './LogIn';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import store from '../store';
 import { getCategoriesFromServer } from '../actions/categories';
 import { addInitialUser } from '../actions/users';
 import { addPost } from '../actions/posts';
@@ -24,15 +23,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    store.dispatch(getCategoriesFromServer())
+    const { getCategories, onUserAdd, onPostAdd } = this.props;
+
+    // Fetch categories from the server.
+    getCategories();
 
     // If there is the 'user' object in the localStorage, populate the Redux state
-    // and this state off of it.
+    // off of it.
     if (localStorage.getItem('users')) {
       const users = JSON.parse(localStorage.getItem('users'));
       const usersArray = Object.keys(users).map(name => users[name]);
-      usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
-    // If not, create the 'users' object by fetching the initial users from the server.
+      usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
+      // Fetch initial posts from the server.
+      this.getInitialPosts();
+    // If not, create the 'users' object by fetching the initial posts from the server.
     } else {
       // Make the 'Anonymous' user.
       const users = {
@@ -64,23 +68,24 @@ class App extends Component {
           comments: [],
           isLoggedIn: false
         };
+        const { id, category, title, body, author, timestamp, voteScore } = post;
+        onPostAdd(id, category, title, body, author, timestamp, voteScore);
       }))
       // Finally save the 'users' object on the localStorage, dispatch actions to
-      // add users to Redux, and set this state to be the array version of 'users'.
+      // add users to Redux.
       .then(() => {
         localStorage.setItem('users', JSON.stringify(users));
         const usersArray = Object.keys(users).map(name => users[name]);
-        usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
+        usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
       })
       .catch(err => console.error(err));
     }
-
-    // Fetch initial posts from the server.
-    this.getInitialPosts();
   }
 
   // Fetch posts from the server and add them to Redux.
   getInitialPosts() {
+    const { onPostAdd } = this.props;
+
     fetch('http://localhost:3001/posts', {
       headers: {
         'Authorization': 'let-me-in-please',
@@ -92,8 +97,8 @@ class App extends Component {
     .then(posts => {
       posts.forEach(post => {
         const { id, category, title, body, author, timestamp, voteScore } = post;
-        store.dispatch(addPost(id, category, title, body, author, timestamp, voteScore));
-        post.comments = [];
+        onPostAdd(id, category, title, body, author, timestamp, voteScore);
+        return posts;
       });
     })
     .catch(err => console.error(err));
@@ -144,7 +149,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  getCategories: () => dispatch(getCategoriesFromServer()),
+  onUserAdd: (name, pass, dateCreated) => dispatch(addInitialUser(name, pass, dateCreated)),
+  onPostAdd: (id, category, title, body, author, timestamp, voteScore) => dispatch(addPost(id, category, title, body, author, timestamp, voteScore))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

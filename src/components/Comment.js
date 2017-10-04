@@ -48,6 +48,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);
-
-// the comment edits correctly, but since it is passed down by Post and Post still
-// depends on App state, we don't have instant re-render.
