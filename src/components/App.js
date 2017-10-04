@@ -35,17 +35,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    store.dispatch(getCategoriesFromServer());
-    // Fetch the categories and save them in this state.
-    fetch('http://localhost:3001/categories', {
-      headers: {'Authorization': 'let-me-in-please'}
-    })
-    .then(res => res.json())
-    .then(res => this.setState({categories: res.categories}))
-    .catch(err => {
-      console.error(err);
-      window.alert('Impossible to connect with the server.')
-    });
+    store.dispatch(getCategoriesFromServer())
+    .then(() => this.setState({categories: store.getState().categories}));
 
     // If there is the 'user' object in the localStorage, populate the Redux state
     // and this state off of it.
@@ -235,9 +226,6 @@ class App extends Component {
         <Route exact path="/category"
           render={() => (
             <Category
-              posts={posts}
-              currentUser={currentUser}
-              categories={categories}
               onClick={this.handleNewPost}
               onPostEdit={this.onPostEdit}
               onPostDelete={this.onPostDelete}
@@ -245,14 +233,11 @@ class App extends Component {
             />
           )}
         />
-        {categories && categories.map(category => {
-          return (
-            <Route key={category.name} path={`/category/${category.path}`}
+        {categories && categories.map(category => (
+            <Route key={category} path={`/category/${category}`}
               render={() => (
                 <Category
-                  name={category.name}
-                  currentUser={currentUser}
-                  categories={categories}
+                  name={category}
                   onClick={this.handleNewPost}
                   onPostEdit={this.onPostEdit}
                   onPostDelete={this.onPostDelete}
@@ -260,8 +245,8 @@ class App extends Component {
                 />
               )}
             />
-          );
-        })}
+          )
+        )}
         <Route path="/signup" render={() => (
           <SignUp onClick={this.onSignUp} />
         )} />

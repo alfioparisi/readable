@@ -42,7 +42,7 @@ class Category extends Component {
       case 'byDateOld' :
         return posts.sort((a, b) => a.timestamp.timeCreated - b.timestamp.timeCreated);
       default :
-        window.alert('Invalid filter');
+        window.alert('Invalid filter.');
         return posts;
     }
   }
