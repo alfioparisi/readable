@@ -5,7 +5,7 @@ import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
 
 const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
-  const { id, body, author, timestamp, voteScore } = comment;
+  const { id, parentId, body, author, timestamp, voteScore } = comment;
   const date = new Date(timestamp.timeCreated).toLocaleString();
   return (
     <section>
@@ -24,7 +24,7 @@ const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEd
           <button onClick={() => onVote(id, true)}>Upvote</button>
           <button onClick={() => onVote(id, false)}>Downvote</button>
           <button onClick={() => isEditing(true)}>Edit</button>
-          <button onClick={() => onDelete(id, Date.now())}>Delete</button>
+          <button onClick={() => onDelete(id, parentId, Date.now())}>Delete</button>
         </div>
       </footer>
     </section>
@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(editCommentOnServer(id, body, author, timeEdited));
     dispatch(isEditing(false, true, false));
   },
-  onDelete: (id, timeDeleted) => dispatch(deleteCommentOnServer(id, timeDeleted)),
+  onDelete: (id, parentId, timeDeleted) => dispatch(deleteCommentOnServer(id, parentId, timeDeleted)),
   onVote: (id, upvote) => dispatch(voteCommentOnServer(id, upvote)),
   isEditing: editing => dispatch(isEditing(editing, true, false))
 });
