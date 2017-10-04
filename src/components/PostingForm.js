@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import uuidv1 from 'uuid';
 import { connect } from 'react-redux';
+import { addPostOnServer } from '../actions/posts';
 
 class PostingForm extends Component {
   constructor(props) {
@@ -62,4 +63,11 @@ const mapStateToProps = state => ({
   currentUser: state.currentUser
 });
 
-export default connect(mapStateToProps)(PostingForm);
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: (id, category, title, body, author, timeCreated) => {
+    dispatch(addPostOnServer(id, category, title, body, author, timeCreated));
+    ownProps.onClick();
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostingForm);

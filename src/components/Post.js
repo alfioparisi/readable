@@ -3,7 +3,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import EditingForm from './EditingForm';
 import { Link } from 'react-router-dom';
-import { addCommentOnServer } from '../actions/comments';
+import { addComment, addCommentOnServer } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
@@ -21,8 +21,28 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { showComments, isViewingPost } = this.props;
+    const { post, showComments, isViewingPost } = this.props;
+    const { id } = post;
     if (showComments) {
+      fetch(`http://localhost:3001/posts/${id}/comments`, {
+        headers: {'Authorization': 'let-me-in-please'}
+      })
+      .then(res => res.json())
+      .then(comments => {
+        comments.forEach(comment => store.dispatch(addComment(
+          comment.id,
+          id,
+          comment.body,
+          comment.author,
+          comment.timestamp,
+          comment.voteScore
+        )));
+      })
+      .catch(err => {
+        console.error(err);
+        window.alert('Couldnt fetch comments for this post.');
+      });
+
       isViewingPost(true);
     } else {
       isViewingPost(false);

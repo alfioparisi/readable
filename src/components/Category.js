@@ -49,7 +49,7 @@ class Category extends Component {
 
   render() {
     const { writingPost, viewingPost, category, filter } = this.state;
-    const { name, onClick } = this.props;
+    const { name } = this.props;
     const posts = this.applyFilter();
     return (
       <main>
@@ -90,7 +90,6 @@ class Category extends Component {
             category={category}
             onChange={this.handleChange}
             onClick={(id, category, title, body, author, timeCreated) => {
-              onClick(id, category, title, body, author, timeCreated);
               this.setState({writingPost: false})
             }}
           />
@@ -113,7 +112,7 @@ const mapStateToProps = (state, ownProps) => ({
   posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => {
     if (ownProps.name) return post.category === ownProps.name;
     return post;
-  })
+  }).filter(post => !post.deleted)
 });
 
 const mapDispatchToProps = dispatch => ({
