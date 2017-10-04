@@ -34,10 +34,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onClick: (name, pass) => {
-    dispatch(logIn(name, pass));
-    ownProps.onClick(name);
-  }
+  onClick: (name, pass) => dispatch(logIn(name, pass))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

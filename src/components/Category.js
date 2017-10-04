@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PostList from './PostList';
 import Post from './Post';
 import PostingForm from './PostingForm';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class Category extends Component {
@@ -120,4 +120,4 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Category));

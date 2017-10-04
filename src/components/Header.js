@@ -50,10 +50,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onClick: user => {
-    dispatch(logOut(user));
-    ownProps.onClick(user);
-  }
+  onClick: user => dispatch(logOut(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

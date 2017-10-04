@@ -5,38 +5,26 @@ import Footer from './Footer';
 import Category from './Category';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import store from '../store';
 import { getCategoriesFromServer } from '../actions/categories';
 import { addInitialUser } from '../actions/users';
-import { addPostOnServer, addPost, editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
+import { addPost } from '../actions/posts';
 import '../css/App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: [],
-      posts: [],
-      users: [],
-      currentUser: null,
       filter: 'byVoteDec'
     };
     this.getInitialPosts = this.getInitialPosts.bind(this);
-    this.getLoggedInUsers = this.getLoggedInUsers.bind(this);
-    this.onLogIn = this.onLogIn.bind(this);
-    this.onSignUp = this.onSignUp.bind(this);
     this.addUserToStorage = this.addUserToStorage.bind(this);
-    this.onLogOut = this.onLogOut.bind(this);
-    this.handleNewPost = this.handleNewPost.bind(this);
-    this.onPostEdit = this.onPostEdit.bind(this);
-    this.onPostDelete = this.onPostDelete.bind(this);
-    this.onPostVote = this.onPostVote.bind(this);
   }
 
   componentDidMount() {
     store.dispatch(getCategoriesFromServer())
-    .then(() => this.setState({categories: store.getState().categories}));
 
     // If there is the 'user' object in the localStorage, populate the Redux state
     // and this state off of it.
@@ -44,9 +32,6 @@ class App extends Component {
       const users = JSON.parse(localStorage.getItem('users'));
       const usersArray = Object.keys(users).map(name => users[name]);
       usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
-      this.setState({
-        users: usersArray
-      });
     // If not, create the 'users' object by fetching the initial users from the server.
     } else {
       // Make the 'Anonymous' user.
@@ -86,9 +71,6 @@ class App extends Component {
         localStorage.setItem('users', JSON.stringify(users));
         const usersArray = Object.keys(users).map(name => users[name]);
         usersArray.forEach(user => store.dispatch(addInitialUser(user.name, user.password, user.dateCreated)));
-        this.setState({
-          users: usersArray
-        });
       })
       .catch(err => console.error(err));
     }
@@ -113,20 +95,8 @@ class App extends Component {
         store.dispatch(addPost(id, category, title, body, author, timestamp, voteScore));
         post.comments = [];
       });
-      const notDeletedPosts = posts.filter(post => !post.deleted);
-      this.setState({posts: notDeletedPosts});
     })
     .catch(err => console.error(err));
-  }
-
-  // On log in update Redux and this state. Set the 'currentUser'.
-  onLogIn(name) {
-    const users = store.getState().users;
-    const usersArray = Object.keys(users).map(name => users[name]);
-    this.setState({
-      users: usersArray,
-      currentUser: store.getState().users[name]
-    });
   }
 
   // Get the 'users' object from localStorage and update it with the new user.
@@ -142,121 +112,41 @@ class App extends Component {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
-  // Update Redux, localStorage and this state.
-  onSignUp(username, password, dateCreated) {
-    this.addUserToStorage(username, password, dateCreated);
-    const user = store.getState().users[username];
-    this.setState(prevState => ({
-      users: [...prevState.users, user],
-      currentUser: user
-    }));
-  }
-
-  onLogOut(name) {
-    const users = store.getState().users;
-    const usersArray = Object.keys(users).map(name => users[name]);
-    this.setState({
-      users: usersArray,
-      currentUser: null
-    });
-  }
-
-  getLoggedInUsers() {
-    const { users } = this.state;
-    return users.filter(user => user.isLoggedIn);
-  }
-
-  filterPostsByCategory(category) {
-    const { posts } = this.state;
-    return posts.filter(post => post.category === category);
-  }
-
-  handleNewPost(id, category, title, body, author, timeCreated) {
-    // Can chain '.then()' because we return the 'fetch()' call from 'addPostOnServer()'.
-    store.dispatch(addPostOnServer(id, category, title, body, author, timeCreated))
-    .then(res => res.json())
-    .then(post => this.setState(prevState => ({
-      posts: [...prevState.posts, post]
-    })));
-  }
-
-  onPostEdit(id, body, timeEdited) {
-    const { currentUser } = this.state;
-    const author = currentUser ? currentUser.name : 'Anonymous';
-    store.dispatch(editPostOnServer(id, body, author, timeEdited))
-    .then(post => this.setState(prevState => ({
-      posts: [...prevState.posts.filter(post => post.id !== id), post]
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt edit the post correctly.');
-    })
-  }
-
-  onPostDelete(id, timeDeleted) {
-    store.dispatch(deletePostOnServer(id, timeDeleted))
-    .then(() => this.setState(prevState => ({
-      posts: prevState.posts.filter(post => post.id !== id)
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt delete the post correctly.');
-    });
-  }
-
-  onPostVote(id, upvote) {
-    store.dispatch(votePostOnServer(id, upvote))
-    .then(post => this.setState(prevState => ({
-      posts: [...prevState.posts.filter(p => p.id !== post.id), post]
-    })))
-    .catch(err => {
-      console.error(err);
-      window.alert('Couldnt vote the post.');
-    });
-  }
-
   render() {
-    const { categories, currentUser, posts } = this.state;
+    const { categories } = this.props;
     return (
       <div>
-        <Header
-          onClick={this.onLogOut}
-        />
+        <Header />
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/category"
-          render={() => (
-            <Category
-              onClick={this.handleNewPost}
-              onPostEdit={this.onPostEdit}
-              onPostDelete={this.onPostDelete}
-              onPostVote={this.onPostVote}
-            />
-          )}
-        />
+        <Route exact path="/category" component={Category} />
         {categories && categories.map(category => (
             <Route key={category} path={`/category/${category}`}
               render={() => (
                 <Category
                   name={category}
-                  onClick={this.handleNewPost}
-                  onPostEdit={this.onPostEdit}
-                  onPostDelete={this.onPostDelete}
-                  onPostVote={this.onPostVote}
                 />
               )}
             />
           )
         )}
         <Route path="/signup" render={() => (
-          <SignUp onClick={this.onSignUp} />
+          <SignUp onClick={(name, pass, dateCreated) => this.addUserToStorage(name, pass, dateCreated)} />
         )} />
-        <Route path="/login" render={() => (
-          <LogIn onClick={this.onLogIn} />
-        )} />
+        <Route path="/login" component={LogIn} />
         <Footer />
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  categories: state.categories
+});
+
+const mapDispatchToProps = dispatch => ({
+
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+
+// https://github.com/ReactTraining/react-router/issues/4671
