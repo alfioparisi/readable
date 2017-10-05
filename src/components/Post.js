@@ -3,7 +3,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import EditingForm from './EditingForm';
 import { Link } from 'react-router-dom';
-import { addComment, addCommentOnServer } from '../actions/comments';
+import { addComment } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
@@ -16,7 +16,6 @@ class Post extends Component {
       writingComment: false,
       filter: 'byVoteDec'
     };
-    this.handleNewComment = this.handleNewComment.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
   }
 
@@ -47,16 +46,6 @@ class Post extends Component {
     } else {
       isViewingPost(false);
     }
-  }
-
-  handleNewComment(id, body, timeCreated) {
-    const { post, currentUser } = this.props;
-    const { id: parentId } = post;
-    const author = currentUser || 'Anonymous';
-    store.dispatch(addCommentOnServer(id, parentId, body, author, timeCreated))
-    .then(comment => this.setState({
-      writingComment: false
-    }));
   }
 
   applyFilter() {
@@ -113,7 +102,8 @@ class Post extends Component {
           )}
           {writingComment && (
             <CommentForm
-              onClick={this.handleNewComment}
+              parentId={id}
+              onClick={() => this.setState({writingComment: false})}
             />
           )}
           {viewingPost && (

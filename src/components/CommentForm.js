@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import uuidv1 from 'uuid';
+import { connect } from 'react-redux';
+import { addCommentOnServer } from '../actions/comments';
 
+/**
+  @param {string} : the id of the parent post
+  @param {string} : the logged in user, if any
+  @param {function} : add a comment on server and on Redux
+*/
 class CommentForm extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +17,7 @@ class CommentForm extends Component {
   }
 
   render() {
-    const { onClick } = this.props;
+    const { parentId, currentUser, onClick } = this.props;
     const { textarea } = this.state;
     return (
       <form>
@@ -24,9 +31,12 @@ class CommentForm extends Component {
         <input type="submit" value="Comment"
           onClick={evt => {
             evt.preventDefault();
+            const author = currentUser || 'Anonymous';
             onClick(
               uuidv1(),
+              parentId,
               textarea,
+              author,
               Date.now()
             );
             this.setState({textarea: ''});
@@ -37,4 +47,15 @@ class CommentForm extends Component {
   }
 }
 
-export default CommentForm;
+const mapStateToProps = state => ({
+  currentUser: state.currentUser
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: (id, parentId, body, author, timeCreated) => {
+    dispatch(addCommentOnServer(id, parentId, body, author, timeCreated));
+    ownProps.onClick();
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);
