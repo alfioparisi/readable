@@ -24,5 +24,6 @@ registerServiceWorker();
     * date should be in readable format
     * connect()
     * polish React state
+    * form validation
     * README
 */

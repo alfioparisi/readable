@@ -24,9 +24,7 @@ class CommentForm extends Component {
         <textarea
           placeholder="Write your comment here."
           value={textarea}
-          onChange={evt => this.setState({
-            textarea: evt.target.value
-          })}
+          onChange={evt => this.setState({textarea: evt.target.value})}
         />
         <input type="submit" value="Comment"
           onClick={evt => {

@@ -4,6 +4,15 @@ import { editCommentOnServer, deleteCommentOnServer, voteCommentOnServer } from 
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
 
+/**
+  @param {object} : the comment
+  @param {boolean} : whether we are in edit mode or not
+  @param {string} : the logged in user, if any
+  @param {function} : edit the comment
+  @param {function} : delete this comment
+  @param {function} : vote this comment
+  @param {function} : allow for editing
+*/
 const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
   const { id, parentId, body, author, timestamp, voteScore } = comment;
   const date = new Date(timestamp.timeCreated).toLocaleString();
@@ -33,8 +42,7 @@ const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEd
 
 const mapStateToProps = (state, ownProps) => ({
   currentUser: state.currentUser,
-  editing: state.editingComment,
-  comment: ownProps.comment
+  editing: state.editingComment
 });
 
 const mapDispatchToProps = dispatch => ({

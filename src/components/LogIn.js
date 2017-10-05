@@ -2,8 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { logIn } from '../actions/users';
 
+// Check if there is a user under the provided credentials.
 const isUser = (users, name, password) => users.find(user => user.name === name && user.password === password);
 
+/**
+  @param {array} : the registered users
+  @param {function} : log in a user
+*/
 const LogIn = ({ users, onClick }) => {
   let name = null;
   let password = null;
@@ -33,7 +38,7 @@ const mapStateToProps = state => ({
   users: Object.keys(state.users).map(name => state.users[name])
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   onClick: (name, pass) => dispatch(logIn(name, pass))
 });
 

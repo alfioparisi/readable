@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+/**
+  @param {string} : the comment body
+  @param {function} : edit the comment 
+*/
 class EditingForm extends Component {
   constructor(props) {
     super(props);

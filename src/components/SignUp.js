@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { signUp } from '../actions/users';
 
+/**
+  @param {function} : add a new user to localStorage and Redux
+*/
 const SignUp = ({ onClick }) => {
   let name = null;
   let password = null;
