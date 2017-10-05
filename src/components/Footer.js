@@ -2,6 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/**
+  @param {array} : the available categories
+  @param {string} : the logged in user, if any
+*/
 const Footer = ({ categories, currentUser }) => (
   <footer>
     <nav>

@@ -12,6 +12,12 @@ import { addInitialUser } from '../actions/users';
 import { addPost } from '../actions/posts';
 import '../css/App.css';
 
+/**
+  @param {array} : the available categories
+  @param {function} : get `categories` from the server
+  @param {function} : add users to Redux
+  @param {function} : add posts to Redux
+*/
 class App extends Component {
   constructor(props) {
     super(props);

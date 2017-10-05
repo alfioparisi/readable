@@ -5,6 +5,10 @@ import PostingForm from './PostingForm';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/**
+  @param {string} : the name of the category (not required)
+  @param {array} : the post specific for a category, that aren't deleted
+*/
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +18,6 @@ class Category extends Component {
       category: '',
       filter: 'byVoteDec'
     };
-    this.handleChange = this.handleChange.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
   }
 
@@ -23,10 +26,6 @@ class Category extends Component {
     // Category showing all the posts doesn't receive a 'name' prop, so set 'react'
     // as default.
     this.setState({category: name || 'react'});
-  }
-
-  handleChange(category) {
-    this.setState({category});
   }
 
   applyFilter() {
@@ -88,10 +87,8 @@ class Category extends Component {
         {writingPost && (
           <PostingForm
             category={category}
-            onChange={this.handleChange}
-            onClick={(id, category, title, body, author, timeCreated) => {
-              this.setState({writingPost: false})
-            }}
+            onChange={category => this.setState({category})}
+            onClick={() => this.setState({writingPost: false})}
           />
         )}
         {!viewingPost && (
@@ -108,15 +105,10 @@ class Category extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  name: ownProps.name,
   posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => {
     if (ownProps.name) return post.category === ownProps.name;
     return post;
   }).filter(post => !post.deleted)
 });
 
-const mapDispatchToProps = dispatch => ({
-
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Category));
+export default withRouter(connect(mapStateToProps)(Category));

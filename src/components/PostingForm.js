@@ -3,6 +3,13 @@ import uuidv1 from 'uuid';
 import { connect } from 'react-redux';
 import { addPostOnServer } from '../actions/posts';
 
+/**
+  @param {string} : the current category
+  @param {array} : the available categories
+  @param {string} : the logged in user, if any
+  @param {function} : change the current category on the `Category` Component
+  @param {function} : add a post on server and on Redux
+*/
 class PostingForm extends Component {
   constructor(props) {
     super(props);

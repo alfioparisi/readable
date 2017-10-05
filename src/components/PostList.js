@@ -1,6 +1,11 @@
 import React from 'react';
 import Post from './Post';
 
+/**
+  @param {array} : the posts for a category, that are not deleted
+  @param {function} : change the `viewingPost` state on `Category`
+  @param {boolean} : whether we are in `Post` view or not
+*/
 const PostList = ({ posts, isViewingPost, viewingPost }) => (
   <ul>
     {posts && posts.map(post => (

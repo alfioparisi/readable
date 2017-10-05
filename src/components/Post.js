@@ -150,10 +150,6 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  post: ownProps.post,
-  showComments: ownProps.showComments,
-  viewingPost: ownProps.viewingPost,
-  isViewingPost: ownProps.isViewingPost,
   currentUser: state.currentUser,
   editing: state.editingPost,
   comments: ownProps.post.comments.map(commentId => state.comments[commentId]).filter(comment => !comment.deleted)

@@ -3,6 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logOut } from '../actions/users';
 
+/**
+  Header will always be on screen.
+  @param {array} : the available categories
+  @param {string} : the logged in user, if any
+  @param {function} : dispatch the LOG_OUT action
+*/
 const Header = ({ categories, currentUser, onClick }) => (
   <header>
     <div>
