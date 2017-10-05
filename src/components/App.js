@@ -22,6 +22,10 @@ class App extends Component {
     this.addUserToStorage = this.addUserToStorage.bind(this);
   }
 
+  /**
+    Populate Redux state with data already on the server. Also set up localStorage
+    to hold the `users` object.
+  */
   componentDidMount() {
     const { getCategories, onUserAdd } = this.props;
 
@@ -58,21 +62,25 @@ class App extends Component {
       .then(res => res.json())
       // For each post make a new user.
       .then(posts => posts.forEach(post => {
-        users[post.author] = {
-          name: post.author,
-          password: null,
-          dateCreated: null,
-          posts: [],
-          comments: [],
-          isLoggedIn: false
-        };
+        if (users[post.author]) {
+          users[post.author].posts.push(post.id);
+        } else {
+          users[post.author] = {
+            name: post.author,
+            password: null,
+            dateCreated: null,
+            posts: [post.id],
+            comments: [],
+            isLoggedIn: false
+          };
+        }
       }))
       // Finally save the 'users' object on the localStorage, dispatch actions to
       // add users to Redux.
       .then(() => {
         localStorage.setItem('users', JSON.stringify(users));
         const usersArray = Object.keys(users).map(name => users[name]);
-        usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
+        usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated, user.posts));
       })
       .catch(err => console.error(err));
     }
