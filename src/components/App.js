@@ -23,7 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { getCategories, onUserAdd, onPostAdd } = this.props;
+    const { getCategories, onUserAdd } = this.props;
 
     // Fetch categories from the server.
     getCategories();
@@ -34,8 +34,6 @@ class App extends Component {
       const users = JSON.parse(localStorage.getItem('users'));
       const usersArray = Object.keys(users).map(name => users[name]);
       usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
-      // Fetch initial posts from the server.
-      this.getInitialPosts();
     // If not, create the 'users' object by fetching the initial posts from the server.
     } else {
       // Make the 'Anonymous' user.
@@ -68,8 +66,6 @@ class App extends Component {
           comments: [],
           isLoggedIn: false
         };
-        const { id, category, title, body, author, timestamp, voteScore } = post;
-        onPostAdd(id, category, title, body, author, timestamp, voteScore);
       }))
       // Finally save the 'users' object on the localStorage, dispatch actions to
       // add users to Redux.
@@ -80,6 +76,8 @@ class App extends Component {
       })
       .catch(err => console.error(err));
     }
+    // Fetch initial posts from the server.
+    this.getInitialPosts();
   }
 
   // Fetch posts from the server and add them to Redux.
