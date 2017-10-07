@@ -91,7 +91,7 @@ class App extends Component {
       .catch(err => console.error(err));
     }
     // Fetch initial posts from the server.
-    this.getInitialPosts();
+    this.getInitialPosts(); //maybe this has to go in a .then()
   }
 
   // Fetch posts from the server and add them to Redux.

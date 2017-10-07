@@ -7,7 +7,6 @@ import { addComment } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
-import store from '../store';
 
 class Post extends Component {
   constructor(props) {
@@ -19,29 +18,31 @@ class Post extends Component {
     this.applyFilter = this.applyFilter.bind(this);
   }
 
+  /**
+    Get the comments for this specific post.
+  */
   componentDidMount() {
-    const { post, showComments, isViewingPost } = this.props;
-    const { id } = post;
+    const { post, showComments, isViewingPost, onCommentAdd } = this.props;
+    const { id, comments: alreadyPresentComments } = post;
     if (showComments) {
       fetch(`http://localhost:3001/posts/${id}/comments`, {
         headers: {'Authorization': 'let-me-in-please'}
       })
       .then(res => res.json())
       .then(comments => {
-        comments.forEach(comment => store.dispatch(addComment(
-          comment.id,
-          id,
-          comment.body,
-          comment.author,
-          comment.timestamp,
-          comment.voteScore
-        )));
+        const parentId = id;
+        comments.forEach(comment => {
+          const { id, body, author, timestamp, voteScore } = comment;
+          // If the comment is not in Redux state, dispatch an action for it.
+          if (alreadyPresentComments.indexOf(id) === -1) {
+            onCommentAdd(id, parentId, body, author, timestamp, voteScore);
+          }
+        });
       })
       .catch(err => {
         console.error(err);
         window.alert('Couldnt fetch comments for this post.');
       });
-
       isViewingPost(true);
     } else {
       isViewingPost(false);
@@ -152,7 +153,8 @@ const mapDispatchToProps = dispatch => ({
   },
   onDelete: (id, timeDeleted) => dispatch(deletePostOnServer(id, timeDeleted)),
   onVote: (id, upvote) => dispatch(votePostOnServer(id, upvote)),
-  isEditing: editing => dispatch(isEditing(editing, false, true))
+  isEditing: editing => dispatch(isEditing(editing, false, true)),
+  onCommentAdd: (id, parentId, body, author, timestamp, voteScore) => dispatch(addComment(id, parentId, body, author, timestamp, voteScore))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
