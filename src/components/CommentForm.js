@@ -12,32 +12,63 @@ class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      textarea: ''
+      textarea: '',
+      invalidities: []
     };
+    this.addInvalidity = this.addInvalidity.bind(this);
+    this.getInvalidities = this.getInvalidities.bind(this);
+    this.checkInvalidity = this.checkInvalidity.bind(this);
+    this.checkValidity = this.checkValidity.bind(this);
+  }
+
+  addInvalidity(invalidityMsg) {
+    const { invalidities } = this.state;
+    invalidities.push(invalidityMsg);
+  }
+
+  getInvalidities() {
+    const { invalidities } = this.state;
+    return invalidities.join('\n');
+  }
+
+  checkInvalidity(content) {
+    // Not empty.
+    if (!content.trim().length) {
+      this.addInvalidity(`Can't be empty.`);
+    }
+    // No special characters.
+    if (content.trim().match(/[^a-zA-Z0-9]/g)) {
+      this.addInvalidity('No special characters.')
+    }
+    this.setState({textarea: content});
+  }
+
+  checkValidity() {
+    const { parentId, currentUser, onClick } = this.props;
+    const { textarea, invalidities } = this.state;
+    invalidities.length = 0;
+    this.checkInvalidity(this.input.value);
+    if (invalidities.length) this.input.setCustomValidity(this.getInvalidities());
+    else {
+      this.input.setCustomValidity('');
+      const author = currentUser || 'Anonymous';
+      onClick(uuidv1(), parentId, textarea, author, Date.now());
+      this.setState({textarea: ''});
+    }
   }
 
   render() {
-    const { parentId, currentUser, onClick } = this.props;
     const { textarea } = this.state;
     return (
       <form>
-        <textarea
+        <textarea ref={input => this.input = input}
           placeholder="Write your comment here."
           value={textarea}
-          onChange={evt => this.setState({textarea: evt.target.value})}
+          onChange={evt => this.checkInvalidity(evt.target.value)}
         />
         <input type="submit" value="Comment"
           onClick={evt => {
-            evt.preventDefault();
-            const author = currentUser || 'Anonymous';
-            onClick(
-              uuidv1(),
-              parentId,
-              textarea,
-              author,
-              Date.now()
-            );
-            this.setState({textarea: ''});
+            this.checkValidity();
           }}
         />
       </form>
