@@ -8,6 +8,20 @@ import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actio
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
 
+/**
+  @param {object} : the post
+  @param {boolean} : whether to show comments or not
+  @param {function} : change whether we are in PostView or not
+  @param {boolean} : if we are in post view
+  @param {string} : the logged in user, if any
+  @param {boolean} : if we are editing
+  @param {array} : this post comments
+  @param {function} : dispatch edit action
+  @param {function} : dispatch delete action
+  @param {function} : dispatch vote action
+  @param {function} : change the editing status
+  @param {function} : dispatch add comment to Redux
+*/
 class Post extends Component {
   constructor(props) {
     super(props);
