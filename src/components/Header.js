@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logOut } from '../actions/users';
+import classNames from 'classnames';
 
 /**
   Header will always be on screen.
@@ -9,46 +10,63 @@ import { logOut } from '../actions/users';
   @param {string} : the logged in user, if any
   @param {function} : dispatch the LOG_OUT action
 */
-const Header = ({ categories, currentUser, onClick }) => (
-  <header>
-    <div className="main-header-title">
-      <h1>Readable</h1>
-      <button className="nav-button">Nav button</button>
-    </div>
-    <nav>
-      <ul>
-        <li>
-          <NavLink to="/">home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/category">all categories</NavLink>
-        </li>
-        {categories && categories.map(category => (
-          <li key={category}>
-            <NavLink to={`/category/${category}`}>{category}</NavLink>
-          </li>
-        ))}
-        {currentUser && (
-          <li>
-            <button
-              onClick={() => onClick(currentUser)}
-            >LogOut</button>
-          </li>
-        )}
-        {!currentUser && (
-          <li>
-            <NavLink to="/signup">signup</NavLink>
-          </li>
-        )}
-        {!currentUser && (
-          <li>
-            <NavLink to="/login">login</NavLink>
-          </li>
-        )}
-      </ul>
-    </nav>
-  </header>
-);
+class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showNavBar: false
+    }
+  }
+  render() {
+    const { categories, currentUser, onClick } = this.props;
+    const { showNavBar } = this.state;
+    return (
+      <header className="main-header">
+        <div className="main-header-title">
+          <h1>Readable</h1>
+          <button className="nav-button"
+            onClick={() => this.setState(prevState => ({showNavBar: !prevState.showNavBar}))}
+          >Nav button</button>
+        </div>
+        <nav className={classNames({
+          'nav-main': true,
+          'nav-main-active': showNavBar
+        })}>
+          <ul>
+            <li className="nav-list-item">
+              <NavLink to="/" className="nav-link">home</NavLink>
+            </li>
+            <li className="nav-list-item">
+              <NavLink to="/category" className="nav-link">all categories</NavLink>
+            </li>
+            {categories && categories.map(category => (
+              <li key={category} className="nav-list-item">
+                <NavLink to={`/category/${category}`} className="nav-link">{category}</NavLink>
+              </li>
+            ))}
+            {currentUser && (
+              <li className="nav-list-item">
+                <button
+                  onClick={() => onClick(currentUser)}
+                >LogOut</button>
+              </li>
+            )}
+            {!currentUser && (
+              <li className="nav-list-item">
+                <NavLink to="/signup" className="nav-link">signup</NavLink>
+              </li>
+            )}
+            {!currentUser && (
+              <li className="nav-list-item">
+                <NavLink to="/login" className="nav-link">login</NavLink>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </header>
+    );
+  }
+};
 
 const mapStateToProps = state => ({
   categories: state.categories,
