@@ -7,32 +7,32 @@ import { connect } from 'react-redux';
   @param {string} : the logged in user, if any
 */
 const Footer = ({ categories, currentUser }) => (
-  <footer>
-    <nav>
+  <footer className="main-footer">
+    <nav className="footer-nav">
       <ul>
-        <li>
-          <NavLink to={'/category'}>all categories</NavLink>
+        <li className="nav-list-item">
+          <NavLink to={'/category'} className="nav-link">all categories</NavLink>
         </li>
         {categories && categories.map(category => (
-          <li key={category}>
-            <NavLink to={`/category/${category}`}>{category}</NavLink>
+          <li key={category} className="nav-list-item">
+            <NavLink to={`/category/${category}`} className="nav-link">{category}</NavLink>
           </li>
         ))}
       </ul>
     </nav>
-    <nav>
+    <nav className="footer-nav">
       <ul>
-        <li>
-          <NavLink to={'/'}>home</NavLink>
+        <li className="nav-list-item">
+          <NavLink to={'/'} className="nav-link">home</NavLink>
         </li>
         {!currentUser && (
-          <li>
-            <NavLink to={'/signup'}>signup</NavLink>
+          <li className="nav-list-item">
+            <NavLink to={'/signup'} className="nav-link">signup</NavLink>
           </li>
         )}
         {!currentUser && (
-          <li>
-            <NavLink to={'/login'}>login</NavLink>
+          <li className="nav-list-item">
+            <NavLink to={'/login'} className="nav-link">login</NavLink>
           </li>
         )}
       </ul>
