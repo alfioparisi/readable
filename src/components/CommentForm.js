@@ -48,8 +48,8 @@ class CommentForm extends Component {
     this.requirements.forEach(requirement => {
       if (requirement.isInvalid(value)) {
         this.addInvalidity(requirement.invalidityMsg);
-        requirement.invalid = true;
         requirement.valid = false;
+        requirement.invalid = true;
       } else {
         requirement.invalid = false;
         requirement.valid = true;
@@ -76,32 +76,32 @@ class CommentForm extends Component {
   render() {
     const { textarea } = this.state;
     return (
-      <form>
-        <div>
-          <textarea ref={input => this.input = input}
-            placeholder="Write your comment here."
-            value={textarea}
-            onChange={evt => this.checkInvalidity(evt.target.value)}
-          />
-          <ul>
-            {this.requirements.map(requirement => (
-              <li key={requirement.invalidityMsg}
-                className={classNames({
-                  'invalid': requirement.invalid,
-                  'valid': requirement.valid
-                })}
-              >
-                {requirement.invalidityMsg}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <input type="submit" value="Comment"
-          onClick={evt => {
-            this.checkValidity();
-          }}
-        />
-      </form>
+      <div>
+        <form>
+          <div>
+            <textarea ref={input => this.input = input}
+              placeholder="Write your comment here."
+              value={textarea}
+              onChange={evt => this.checkInvalidity(evt.target.value)}
+            />
+            <ul>
+              {this.requirements.map(requirement => (
+                <li key={requirement.invalidityMsg}
+                  className={classNames({
+                    'invalid': requirement.invalid,
+                    'valid': requirement.valid
+                  })}
+                >
+                  {requirement.invalidityMsg}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </form>
+        <button onClick={() => this.checkValidity()}>
+        Comment
+        </button>
+      </div>
     );
   }
 }

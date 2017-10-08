@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import uuidv1 from 'uuid';
 import { connect } from 'react-redux';
 import { addPostOnServer } from '../actions/posts';
+import classNames from 'classnames';
 
 /**
   @param {string} : the current category
@@ -17,7 +18,86 @@ class PostingForm extends Component {
       title: '',
       textarea: ''
     };
+    // Hold the inputs.
+    this.inputs = [];
+    // Hold the invalidities messages for form validation.
+    this.invalidities = {
+      title: [],
+      textarea: []
+    };
+    // Requirements for each input in the form.
+    this.requirements = {
+      title: [
+        // Can't be empty.
+        {
+          isInvalid(value) {
+            return value.trim().length === 0;
+          },
+          invalidityMsg: `Can't be empty.`
+        }
+      ],
+      textarea: [
+        // Can't be empty.
+        {
+          isInvalid(value) {
+            return value.trim().length === 0;
+          },
+          invalidityMsg: `Can't be empty.`
+        }
+      ]
+    };
+    this.addInvalidity = this.addInvalidity.bind(this);
+    this.getInvalidities = this.getInvalidities.bind(this);
+    this.checkInvalidity = this.checkInvalidity.bind(this);
+    this.checkValidity = this.checkValidity.bind(this);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  // Push a new invalidity message into `this.invalidities`.
+  addInvalidity(input, invalidityMsg) {
+    this.invalidities[input].push(invalidityMsg);
+  }
+
+  // Take `this.invalidities` and return a list of messages.
+  getInvalidities(input) {
+    return this.invalidities[input].join('\n');
+  }
+
+  // For each requirement, if it's invalid add a new message and set up the classes.
+  checkInvalidity(input, value) {
+    this.requirements[input].forEach(requirement => {
+      if (requirement.isInvalid(value)) {
+        this.addInvalidity(input, requirement.invalidityMsg);
+        requirement.valid = false;
+        requirement.invalid = true;
+      } else {
+        requirement.invalid = false;
+        requirement.valid = true;
+      }
+    });
+    this.handleChange(input, value);
+  }
+
+  // If there are no invalidities dispatch the post, else show the messages.
+  checkValidity() {
+    const { category, currentUser, onClick } = this.props;
+    const { title, textarea } = this.state;
+    let error = false;
+    this.inputs.forEach(input => {
+      if (!input) return;
+      this.invalidities[input.name].length = 0;
+      this.checkInvalidity(input.name, input.value);
+      if (this.invalidities[input.name].length) {
+        input.setCustomValidity(this.getInvalidities(input.name));
+        error = true;
+      } else {
+        input.setCustomValidity('');
+      }
+    });
+    if (error) return;
+    const author = currentUser || 'Anonymous';
+    onClick(uuidv1(), category, title, textarea, author, Date.now());
+    this.setState({title: '', textarea: ''});
   }
 
   handleChange(input, value) {
@@ -28,39 +108,66 @@ class PostingForm extends Component {
   }
 
   render() {
-    const { category, categories, currentUser, onChange, onClick } = this.props;
+    const { category, categories, onChange } = this.props;
     const { title, textarea } = this.state;
     return (
-      <form>
-        <label>Post title :
-          <input
-            value={title}
-            onChange={evt => this.handleChange('title', evt.target.value)}
-          />
-        </label>
-        <label>Category :
-          <select value={category} onChange={evt => onChange(evt.target.value)}>
-            {categories && categories.map(c => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </label>
-        <textarea
-          placeholder="Write your post here."
-          value={textarea}
-          onChange={evt => this.handleChange('textarea', evt.target.value)}
-        />
-        <input type="submit" value="Post"
-          onClick={evt => {
-            evt.preventDefault();
-            const author = currentUser || 'Anonymous';
-            onClick(uuidv1(), category, title, textarea, author, Date.now());
-            this.setState({title: '', textarea: ''});
-          }}
-        />
-      </form>
+      <div>
+        <form>
+          <label>Post title :
+            <input
+              ref={input => this.inputs.push(input)}
+              name='title'
+              value={title}
+              onChange={evt => this.checkInvalidity('title', evt.target.value)}
+            />
+            <ul>
+              {this.requirements.title.map(req => (
+                <li key={req.invalidityMsg}
+                  className={classNames({
+                    'invalid': req.invalid,
+                    'valid': req.valid
+                  })}
+                >
+                  {req.invalidityMsg}
+                </li>
+              ))}
+            </ul>
+          </label>
+          <label>Category :
+            <select value={category} onChange={evt => onChange(evt.target.value)}>
+              {categories && categories.map(c => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div>
+            <textarea
+              ref={input => this.inputs.push(input)}
+              name='textarea'
+              placeholder="Write your post here."
+              value={textarea}
+              onChange={evt => this.checkInvalidity('textarea', evt.target.value)}
+            />
+            <ul>
+              {this.requirements.textarea.map(req => (
+                <li key={req.invalidityMsg}
+                  className={classNames({
+                    'invalid': req.invalid,
+                    'valid': req.valid
+                  })}
+                >
+                  {req.invalidityMsg}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </form>
+        <button onClick={() => this.checkValidity()}>
+        Post
+        </button>
+      </div>
     );
   }
 }
