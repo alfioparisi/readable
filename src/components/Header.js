@@ -11,9 +11,9 @@ import { logOut } from '../actions/users';
 */
 const Header = ({ categories, currentUser, onClick }) => (
   <header>
-    <div>
-      <button>Nav button</button>
+    <div className="main-header-title">
       <h1>Readable</h1>
+      <button className="nav-button">Nav button</button>
     </div>
     <nav>
       <ul>

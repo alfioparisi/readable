@@ -25,5 +25,6 @@ registerServiceWorker();
     * connect()
     * polish React state
     * form validation
+    * css
     * README
 */

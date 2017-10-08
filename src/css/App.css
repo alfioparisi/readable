@@ -1,6 +1,48 @@
-  /* ---------
+@import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,700');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: 1px solid red !important;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  line-height: 1.6;
+  font-size: 20px;
+  font-family: 'Josefin Slab', serif;
+}
+
+  /* -----------------
+    Header
+  ----------------- */
+
+.main-header-title {
+  display: flex;
+}
+
+h1 {
+  flex: 3;
+}
+
+.nav-button {
+  flex: 1;
+  max-width: 50px;
+  height: 70px;
+  margin: auto;
+  background-image: url('../icons/button-icon-orange.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px;
+  background-color: #fff;
+  font-size: 0;
+}
+
+  /* -----------------
     Form validation
-  --------- */
+  ----------------- */
 
 .invalid {
   outline: 2px solid red;
