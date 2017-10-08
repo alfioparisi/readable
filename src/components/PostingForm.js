@@ -33,7 +33,9 @@ class PostingForm extends Component {
           isInvalid(value) {
             return value.trim().length === 0;
           },
-          invalidityMsg: `Can't be empty.`
+          invalidityMsg: `Can't be empty.`,
+          invalid: true,
+          valid: false
         }
       ],
       textarea: [
@@ -42,7 +44,9 @@ class PostingForm extends Component {
           isInvalid(value) {
             return value.trim().length === 0;
           },
-          invalidityMsg: `Can't be empty.`
+          invalidityMsg: `Can't be empty.`,
+          invalid: true,
+          valid: false
         }
       ]
     };
@@ -164,8 +168,8 @@ class PostingForm extends Component {
             </ul>
           </div>
         </form>
-        <button onClick={() => this.checkValidity()}>
-        Post
+        <button onClick={this.checkValidity}>
+          Post
         </button>
       </div>
     );

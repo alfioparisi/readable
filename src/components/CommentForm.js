@@ -24,7 +24,9 @@ class CommentForm extends Component {
         isInvalid(value) {
           return value.trim().length === 0;
         },
-        invalidityMsg: `Can't be empty.`
+        invalidityMsg: `Can't be empty.`,
+        invalid: true,
+        valid: false
       }
     ];
     this.addInvalidity = this.addInvalidity.bind(this);
@@ -98,8 +100,8 @@ class CommentForm extends Component {
             </ul>
           </div>
         </form>
-        <button onClick={() => this.checkValidity()}>
-        Comment
+        <button onClick={this.checkValidity}>
+          Comment
         </button>
       </div>
     );
