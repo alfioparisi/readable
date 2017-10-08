@@ -11,18 +11,6 @@ const Footer = ({ categories, currentUser }) => (
     <nav className="footer-nav">
       <ul>
         <li className="nav-list-item">
-          <NavLink to={'/category'} className="nav-link">all categories</NavLink>
-        </li>
-        {categories && categories.map(category => (
-          <li key={category} className="nav-list-item">
-            <NavLink to={`/category/${category}`} className="nav-link">{category}</NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <nav className="footer-nav">
-      <ul>
-        <li className="nav-list-item">
           <NavLink to={'/'} className="nav-link">home</NavLink>
         </li>
         {!currentUser && (
@@ -35,6 +23,18 @@ const Footer = ({ categories, currentUser }) => (
             <NavLink to={'/login'} className="nav-link">login</NavLink>
           </li>
         )}
+      </ul>
+    </nav>
+    <nav className="footer-nav">
+      <ul>
+        <li className="nav-list-item">
+          <NavLink to={'/category'} className="nav-link">all categories</NavLink>
+        </li>
+        {categories && categories.map(category => (
+          <li key={category} className="nav-list-item">
+            <NavLink to={`/category/${category}`} className="nav-link">{category}</NavLink>
+          </li>
+        ))}
       </ul>
     </nav>
   </footer>

@@ -8,12 +8,13 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  outline: 1px solid red !important;
+  /*outline: 1px solid red !important;*/
 }
 
 body {
   width: 100%;
   height: 100%;
+  padding: 0 2%;
   line-height: 1.6;
   font-size: 20px;
   font-family: 'Josefin Slab', serif;
@@ -27,12 +28,14 @@ ul {
     Header
   ----------------- */
 .main-header {
-  padding: 0 6%;
   height: 80px;
+  margin-bottom: 11px;
+  background-color: #ff8b3e;
 }
 
 .main-header-title {
   height: 100%;
+  margin: 0 3%;
   display: flex;
 }
 
@@ -43,20 +46,21 @@ h1 {
 
 .nav-button {
   flex: 1;
-  max-width: 50px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   margin: auto;
   background-image: url('../icons/button-icon-orange.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 40px;
-  background-color: #fff;
+  background-size: 50px;
+  background-color: #ff8b3e;
   font-size: 0;
+  border: none;
 }
 
 .nav-main {
   width: 50vw;
-  background-color: green;
+  background-color: #ffac75;
   position: absolute;
   transform: translateX(-60vw);
   z-index: 999;
@@ -71,25 +75,41 @@ h1 {
 .nav-list-item {
   height: 30px;
   text-align: center;
+  border-bottom: 0.5px solid #ff8b3e;
 }
 
 .nav-link {
   display: block;
   width: 100%;
   height: 100%;
+  text-decoration: none;
+  color: #ff8b3e;
 }
 
   /* -----------------
     Main page
   ----------------- */
 
-  
+  .home-page {
+    text-align: center;
+  }
+
+  .links-container {
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .home-link {
+    margin: auto 0;
+  }
 
   /* -----------------
     Footer
   ---------------- */
 
   .main-footer {
+    margin: 11px 0;
     display: flex;
     align-items: center;
   }
