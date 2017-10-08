@@ -15,21 +15,16 @@ class CommentForm extends Component {
     this.state = {
       textarea: ''
     };
+    // Hold the invalidities messages for form validation.
     this.invalidities = [];
+    // Requirements for each input in the form.
     this.requirements = [
+      // Can't be empty.
       {
         isInvalid(value) {
           return value.trim().length === 0;
         },
         invalidityMsg: `Can't be empty.`
-      },
-      {
-        isInvalid(value) {
-          return value.trim().match(/[^a-zA-Z0-9!?]/g);
-        },
-        invalidityMsg: 'No special characters.',
-        invalid: true,
-        valid: false
       }
     ];
     this.addInvalidity = this.addInvalidity.bind(this);
@@ -38,14 +33,17 @@ class CommentForm extends Component {
     this.checkValidity = this.checkValidity.bind(this);
   }
 
+  // Push a new invalidity message into `this.invalidities`.
   addInvalidity(invalidityMsg) {
     this.invalidities.push(invalidityMsg);
   }
 
+  // Take `this.invalidities` and return a list of messages.
   getInvalidities() {
     return this.invalidities.join('\n');
   }
 
+  // For each requirement, if it's invalid add a new message and set up the classes.
   checkInvalidity(value) {
     this.requirements.forEach(requirement => {
       if (requirement.isInvalid(value)) {
@@ -60,6 +58,7 @@ class CommentForm extends Component {
     this.setState({textarea: value});
   }
 
+  // If there are no invalidities dispatch the comment, else show the messages.
   checkValidity() {
     const { parentId, currentUser, onClick } = this.props;
     const { textarea } = this.state;
