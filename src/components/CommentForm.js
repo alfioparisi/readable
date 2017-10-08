@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import uuidv1 from 'uuid';
 import { connect } from 'react-redux';
 import { addCommentOnServer } from '../actions/comments';
+import classNames from 'classnames';
 
 /**
   @param {string} : the id of the parent post
@@ -12,9 +13,25 @@ class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      textarea: '',
-      invalidities: []
+      textarea: ''
     };
+    this.invalidities = [];
+    this.requirements = [
+      {
+        isInvalid(value) {
+          return value.trim().length === 0;
+        },
+        invalidityMsg: `Can't be empty.`
+      },
+      {
+        isInvalid(value) {
+          return value.trim().match(/[^a-zA-Z0-9!?]/g);
+        },
+        invalidityMsg: 'No special characters.',
+        invalid: true,
+        valid: false
+      }
+    ];
     this.addInvalidity = this.addInvalidity.bind(this);
     this.getInvalidities = this.getInvalidities.bind(this);
     this.checkInvalidity = this.checkInvalidity.bind(this);
@@ -22,33 +39,33 @@ class CommentForm extends Component {
   }
 
   addInvalidity(invalidityMsg) {
-    const { invalidities } = this.state;
-    invalidities.push(invalidityMsg);
+    this.invalidities.push(invalidityMsg);
   }
 
   getInvalidities() {
-    const { invalidities } = this.state;
-    return invalidities.join('\n');
+    return this.invalidities.join('\n');
   }
 
-  checkInvalidity(content) {
-    // Not empty.
-    if (!content.trim().length) {
-      this.addInvalidity(`Can't be empty.`);
-    }
-    // No special characters.
-    if (content.trim().match(/[^a-zA-Z0-9]/g)) {
-      this.addInvalidity('No special characters.')
-    }
-    this.setState({textarea: content});
+  checkInvalidity(value) {
+    this.requirements.forEach(requirement => {
+      if (requirement.isInvalid(value)) {
+        this.addInvalidity(requirement.invalidityMsg);
+        requirement.invalid = true;
+        requirement.valid = false;
+      } else {
+        requirement.invalid = false;
+        requirement.valid = true;
+      }
+    });
+    this.setState({textarea: value});
   }
 
   checkValidity() {
     const { parentId, currentUser, onClick } = this.props;
-    const { textarea, invalidities } = this.state;
-    invalidities.length = 0;
+    const { textarea } = this.state;
+    this.invalidities.length = 0;
     this.checkInvalidity(this.input.value);
-    if (invalidities.length) this.input.setCustomValidity(this.getInvalidities());
+    if (this.invalidities.length) this.input.setCustomValidity(this.getInvalidities());
     else {
       this.input.setCustomValidity('');
       const author = currentUser || 'Anonymous';
@@ -61,11 +78,25 @@ class CommentForm extends Component {
     const { textarea } = this.state;
     return (
       <form>
-        <textarea ref={input => this.input = input}
-          placeholder="Write your comment here."
-          value={textarea}
-          onChange={evt => this.checkInvalidity(evt.target.value)}
-        />
+        <div>
+          <textarea ref={input => this.input = input}
+            placeholder="Write your comment here."
+            value={textarea}
+            onChange={evt => this.checkInvalidity(evt.target.value)}
+          />
+          <ul>
+            {this.requirements.map(requirement => (
+              <li key={requirement.invalidityMsg}
+                className={classNames({
+                  'invalid': requirement.invalid,
+                  'valid': requirement.valid
+                })}
+              >
+                {requirement.invalidityMsg}
+              </li>
+            ))}
+          </ul>
+        </div>
         <input type="submit" value="Comment"
           onClick={evt => {
             this.checkValidity();
