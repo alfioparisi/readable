@@ -12,7 +12,7 @@ class SignUp extends Component {
     this.state = {
       username: '',
       password: ''
-    }
+    };
     // Hold the inputs.
     this.inputs = [];
     // Hold the invalidities messages for form validation.
@@ -122,7 +122,7 @@ class SignUp extends Component {
     this.handleChange(input, value);
   }
 
-  // If there are no invalidities dispatch the post, else show the messages.
+  // If there are no invalidities dispatch the signup, else show the messages.
   checkValidity() {
     const { onClick } = this.props;
     const { username, password } = this.state;
@@ -153,7 +153,10 @@ class SignUp extends Component {
   render() {
     const { username, password } = this.state;
     return (
-      <div>
+      <section>
+        <header>
+          <h3>Create a user</h3>
+        </header>
         <form>
           <label>Username :
             <input autoFocus
@@ -163,7 +166,7 @@ class SignUp extends Component {
               value={username}
               onChange={evt => this.checkInvalidity('username', evt.target.value)}
             />
-            <ul>
+            <ul className="requirements">
               {this.requirements.username.map(req => (
                 <li key={req.invalidityMsg}
                   className={classNames({
@@ -183,7 +186,7 @@ class SignUp extends Component {
               value={password}
               onChange={evt => this.checkInvalidity('password', evt.target.value)}
             />
-            <ul>
+            <ul className="requirements">
               {this.requirements.password.map(req => (
                 <li key={req.invalidityMsg}
                   className={classNames({
@@ -200,7 +203,7 @@ class SignUp extends Component {
         <button onClick={this.checkValidity}>
           SignUp
         </button>
-      </div>
+      </section>
     );
   }
 };

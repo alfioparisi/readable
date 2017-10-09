@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,700');
 
+/*
+  body text : #47B8A2
+  main header background : #ff8b3e
+  main header text : #28A38B
+  nav background : #ffac75
+  nav link text : #4BA392
+*/
+
   /* ------------
     General
   ------------ */
@@ -18,6 +26,7 @@ body {
   line-height: 1.6;
   font-size: 20px;
   font-family: 'Josefin Slab', serif;
+  color: #47B8A2;
 }
 
 ul {
@@ -28,9 +37,12 @@ ul {
     Header
   ----------------- */
 .main-header {
+  width: 100vw;
   height: 80px;
   margin-bottom: 11px;
+  transform: translateX(-2%);
   background-color: #ff8b3e;
+  color: #28A38B;
 }
 
 .main-header-title {
@@ -83,49 +95,88 @@ h1 {
   width: 100%;
   height: 100%;
   text-decoration: none;
-  color: #ff8b3e;
+  color: #4BA392;
 }
 
   /* -----------------
     Main page
   ----------------- */
 
-  .home-page {
-    text-align: center;
-  }
+.home-page {
+  text-align: center;
+}
 
-  .links-container {
-    height: 50px;
-    display: flex;
-    justify-content: space-around;
-  }
+.links-container {
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+}
 
-  .home-link {
-    margin: auto 0;
-  }
+.home-link {
+  margin: auto 0;
+}
 
   /* -----------------
     Footer
   ---------------- */
 
-  .main-footer {
-    margin: 11px 0;
-    display: flex;
-    align-items: center;
-  }
+.main-footer {
+  margin: 11px 0;
+  display: flex;
+  align-items: center;
+}
 
-  .footer-nav {
-    flex: 1;
-  }
+.footer-nav {
+  flex: 1;
+}
+
+  /* -----------------
+    Sign up
+  ----------------- */
+
+  /* -----------------
+    Log in
+  ----------------- */
 
   /* -----------------
     Form validation
   ----------------- */
 
-.invalid {
-  outline: 2px solid red;
+.requirements {
+  visibility: hidden;
+  max-height: 0;
+  transition: all 1s ease-in-out;
+}
+
+input:focus+.requirements {
+  max-height: 1000px;
+  visibility: visible;
+}
+
+input:valid {
+  color: #25a725;
+  outline: 2px solid #3abf3a;
+}
+
+input:focus:invalid {
+  color: #ec1414;
+  outline: 2px solid #ec1414;
 }
 
 .valid {
-  outline: 2px solid green;
+  color: #25a725;
+}
+
+.valid::after {
+  content: " ✓";
+  color: #25a725;
+}
+
+.invalid {
+  color: #ec1414;
+}
+
+.invalid::after {
+  content: " ✗";
+  color: #ec1414;
 }
