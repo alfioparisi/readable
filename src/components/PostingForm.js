@@ -123,6 +123,7 @@ class PostingForm extends Component {
               name='title'
               value={title}
               onChange={evt => this.checkInvalidity('title', evt.target.value)}
+              required
             />
             <ul>
               {this.requirements.title.map(req => (
@@ -153,6 +154,7 @@ class PostingForm extends Component {
               placeholder="Write your post here."
               value={textarea}
               onChange={evt => this.checkInvalidity('textarea', evt.target.value)}
+              required
             />
             <ul>
               {this.requirements.textarea.map(req => (

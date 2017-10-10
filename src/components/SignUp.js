@@ -153,11 +153,11 @@ class SignUp extends Component {
   render() {
     const { username, password } = this.state;
     return (
-      <section>
+      <section className="form-container">
         <header>
           <h3>Create a user</h3>
         </header>
-        <form className="signup-form">
+        <form className="user-form">
           <label>Username :
             <input autoFocus
               ref={input => this.inputs.push(input)}
@@ -165,6 +165,7 @@ class SignUp extends Component {
               name='username'
               value={username}
               onChange={evt => this.checkInvalidity('username', evt.target.value)}
+              required
             />
             <ul className="requirements">
               {this.requirements.username.map(req => (
@@ -185,6 +186,7 @@ class SignUp extends Component {
               name='password'
               value={password}
               onChange={evt => this.checkInvalidity('password', evt.target.value)}
+              required
             />
             <ul className="requirements">
               {this.requirements.password.map(req => (

@@ -85,6 +85,7 @@ class CommentForm extends Component {
               placeholder="Write your comment here."
               value={textarea}
               onChange={evt => this.checkInvalidity(evt.target.value)}
+              required
             />
             <ul>
               {this.requirements.map(requirement => (

@@ -134,15 +134,8 @@ h1 {
     Sign up
   ----------------- */
 
-.signup-form {
+.user-form {
   margin: 15px 0 5px 0;
-}
-
-.btn-container {
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row-reverse;
 }
 
 /* https://openclipart.org/detail/166862/go-next-orange-button-tango-style */
@@ -162,9 +155,29 @@ h1 {
     Log in
   ----------------- */
 
+.login-btn {
+  width: 55px;
+  height: 55px;
+  background-image: url('../icons/log-in-orange.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 55px;
+  background-color: inherit;
+  font-size: 0;
+  border: none;
+}
+
   /* -----------------
     Form
   ----------------- */
+
+.form-container {
+  width: 85vw;
+  padding: 5px;
+  margin: 0 auto;
+  border: 1px solid #ff8b3e;
+  box-shadow: -2px 3px 3px 0px #ffb381;
+}
 
 form {
   display: flex;
@@ -181,11 +194,19 @@ form input, form textarea {
   margin-left: 2vw;
 }
 
+.btn-container {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
   /* -----------------
     Form validation
   ----------------- */
 
 .requirements {
+  font-size: 17px;
   visibility: hidden;
   max-height: 0;
   transition: all 1s ease-in-out;
