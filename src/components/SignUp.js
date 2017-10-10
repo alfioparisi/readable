@@ -157,7 +157,7 @@ class SignUp extends Component {
         <header>
           <h3>Create a user</h3>
         </header>
-        <form>
+        <form className="signup-form">
           <label>Username :
             <input autoFocus
               ref={input => this.inputs.push(input)}
@@ -200,9 +200,11 @@ class SignUp extends Component {
             </ul>
           </label>
         </form>
-        <button onClick={this.checkValidity}>
-          SignUp
-        </button>
+        <div className="btn-container">
+          <button className="signup-btn" onClick={this.checkValidity}>
+            SignUp
+          </button>
+        </div>
       </section>
     );
   }
