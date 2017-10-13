@@ -9,7 +9,7 @@ const isUser = (users, name, password) => users.find(user => user.name === name 
   @param {array} : the registered users
   @param {function} : log in a user
 */
-const LogIn = ({ users, onClick }) => {
+const LogIn = ({ users, currentUser, onClick }) => {
   let name = null;
   let password = null;
   return (
@@ -34,6 +34,7 @@ const LogIn = ({ users, onClick }) => {
             name.value = '';
             password.value = '';
           }}
+          disabled={currentUser}
         >
           LogIn
         </button>
@@ -43,7 +44,8 @@ const LogIn = ({ users, onClick }) => {
 };
 
 const mapStateToProps = state => ({
-  users: Object.keys(state.users).map(name => state.users[name])
+  users: Object.keys(state.users).map(name => state.users[name]),
+  currentUser: state.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({

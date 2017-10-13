@@ -152,6 +152,7 @@ class SignUp extends Component {
 
   render() {
     const { username, password } = this.state;
+    const { currentUser } = this.props;
     return (
       <section className="form-container">
         <header>
@@ -203,7 +204,9 @@ class SignUp extends Component {
           </label>
         </form>
         <div className="btn-container">
-          <button className="signup-btn" onClick={this.checkValidity}>
+          <button className="signup-btn" onClick={this.checkValidity}
+            disabled={currentUser}
+          >
             SignUp
           </button>
         </div>
@@ -212,6 +215,10 @@ class SignUp extends Component {
   }
 };
 
+const mapStateToProps = state => ({
+  currentUser: state.currentUser
+});
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: (username, pass, dateCreated) => {
     dispatch(signUp(username, pass, dateCreated));
@@ -219,4 +226,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

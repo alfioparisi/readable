@@ -45,8 +45,11 @@ class Header extends Component {
               </li>
             ))}
             {currentUser && (
-              <li className="nav-list-item">
-                <button
+              <li className={classNames({
+                'nav-list-item': true,
+                'nav-list-item__logout': true
+              })}>
+                <button className="logout-btn"
                   onClick={() => onClick(currentUser)}
                 >LogOut</button>
               </li>
