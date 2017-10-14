@@ -27,7 +27,8 @@ class Post extends Component {
     super(props);
     this.state = {
       writingComment: false,
-      filter: 'byVoteDec'
+      filter: 'byVoteDec',
+      infoOpen: false
     };
     this.applyFilter = this.applyFilter.bind(this);
   }
@@ -86,16 +87,25 @@ class Post extends Component {
     const { id, category, title, body, author, timestamp, voteScore } = post;
     const date = new Date(timestamp.timeCreated).toLocaleString();
     const { onEdit, onDelete, onVote, isEditing } = this.props;
-    const { writingComment, filter } = this.state;
+    const { writingComment, filter, infoOpen } = this.state;
     return (
       <article>
         <header>
-          <Link to={`/category/${category}/${id}`}>
-            <h3>{title}</h3>
-          </Link>
-          <h5>Category: {category}</h5>
-          <h5>Posted by: {author}</h5>
-          <h5>Time posted: {date}</h5>
+          <h3><Link to={`/category/${category}/${id}`}>
+            {title}
+          </Link></h3>
+          <div className="post-info">
+            <button className="info-btn"
+              onClick={() => this.setState(prevState => ({infoOpen: !prevState.infoOpen}))}
+            >More info</button>
+            {infoOpen && (
+              <div className="post-info__info">
+                <h5>Category: {category}</h5>
+                <h5>Posted by: {author}</h5>
+                <h5>Time posted: {date}</h5>
+              </div>
+            )}
+          </div>
           {viewingPost && <h5>This post has {comments.length} comments.</h5>}
         </header>
         <p>{body}</p>

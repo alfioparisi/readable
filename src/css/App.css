@@ -135,6 +135,49 @@ h1 {
 }
 
   /* -----------------
+    Category
+  ----------------- */
+
+.category {
+  padding: 0 1vw;
+}
+
+.category-filter {
+  margin-left: 2vw;
+}
+
+  /* -----------------
+    PostList
+  ----------------- */
+
+
+
+  /* -----------------
+    Post
+  ----------------- */
+
+.post-info {
+
+}
+
+.info-btn {
+  width: 30px;
+  height: 30px;
+  margin: auto;
+  background-image: url('../icons/info-orange.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
+  background-color: inherit;
+  font-size: 0;
+  border: none;
+}
+
+.post-info__info {
+
+}
+
+  /* -----------------
     Sign up
   ----------------- */
 

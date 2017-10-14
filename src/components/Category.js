@@ -51,11 +51,11 @@ class Category extends Component {
     const { name } = this.props;
     const posts = this.applyFilter();
     return (
-      <main>
+      <main className="category">
         <header>
           <h2>{name || 'All Categories'}</h2>
           {!viewingPost && (
-            <label>Filter by:
+            <label className="category-filter">Filter by:
               <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
                 <option value='byVoteDec'>More Likes</option>
                 <option value='byVoteCre'>Less Likes</option>
