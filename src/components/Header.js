@@ -24,7 +24,10 @@ class Header extends Component {
       <header className="main-header">
         <div className="main-header-title">
           <h1>Readable</h1>
-          <button className="nav-button"
+          <button className={classNames({
+            'btn': true,
+            'nav-button': true
+          })}
             onClick={() => this.setState(prevState => ({showNavBar: !prevState.showNavBar}))}
           >Nav button</button>
         </div>
@@ -49,7 +52,10 @@ class Header extends Component {
                 'nav-list-item': true,
                 'nav-list-item__logout': true
               })}>
-                <button className="logout-btn"
+                <button className={classNames({
+                  'btn': true,
+                  'logout-btn': true
+                })}
                   onClick={() => onClick(currentUser)}
                 >LogOut</button>
               </li>

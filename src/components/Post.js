@@ -7,6 +7,7 @@ import { addComment } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 /**
   @param {object} : the post
@@ -94,8 +95,11 @@ class Post extends Component {
           <h3><Link to={`/category/${category}/${id}`}>
             {title}
           </Link></h3>
-          <div className="post-info">
-            <button className="info-btn"
+          <div>
+            <button className={classNames({
+              'btn': true,
+              'info-btn': true
+            })}
               onClick={() => this.setState(prevState => ({infoOpen: !prevState.infoOpen}))}
             >More info</button>
             {infoOpen && (
@@ -114,10 +118,20 @@ class Post extends Component {
           onEdit(id, textarea, author, timeEdited);
         }} />}
         <footer>
-          <p>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
+          <h5>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</h5>
           <div>
-            <button onClick={() => onVote(id, true)}>Upvote</button>
-            <button onClick={() => onVote(id, false)}>Downvote</button>
+            <button
+              className={classNames({
+                'btn': true,
+                'upvote': true
+              })}
+              onClick={() => onVote(id, true)}>Upvote</button>
+            <button
+              className={classNames({
+                'btn': true,
+                'downvote': true
+              })}
+              onClick={() => onVote(id, false)}>Downvote</button>
           </div>
           {viewingPost && (
             <div>

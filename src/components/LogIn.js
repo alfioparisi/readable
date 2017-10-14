@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { logIn } from '../actions/users';
+import classNames from 'classnames';
 
 // Check if there is a user under the provided credentials.
 const isUser = (users, name, password) => users.find(user => user.name === name && user.password === password);
@@ -26,7 +27,10 @@ const LogIn = ({ users, currentUser, onClick }) => {
         </label>
       </form>
       <div className="btn-container">
-        <button className="login-btn"
+        <button className={classNames({
+          'btn': true,
+          'login-btn': true
+        })}
           onClick={() => {
             if (isUser(users, name.value.trim(), password.value.trim())) {
               onClick(name.value.trim(), password.value.trim());

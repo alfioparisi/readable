@@ -33,6 +33,17 @@ ul {
   list-style-type: none;
 }
 
+.btn {
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px;
+  background-color: inherit;
+  font-size: 0;
+  border: none;
+}
+
   /* -----------------
     Header
   ----------------- */
@@ -58,16 +69,8 @@ h1 {
 
 .nav-button {
   flex: 1;
-  width: 50px;
-  height: 50px;
   margin: auto;
   background-image: url('../icons/button-icon-orange.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 50px;
-  background-color: #ff8b3e;
-  font-size: 0;
-  border: none;
 }
 
 .nav-main {
@@ -156,25 +159,31 @@ h1 {
     Post
   ----------------- */
 
-.post-info {
-
-}
-
 .info-btn {
   width: 30px;
   height: 30px;
-  margin: auto;
   background-image: url('../icons/info-orange.svg');
-  background-repeat: no-repeat;
-  background-position: center;
   background-size: 30px;
-  background-color: inherit;
-  font-size: 0;
-  border: none;
 }
 
 .post-info__info {
+  margin-top: 8px;
+  margin-left: 1.5vw;
+  color: #ff8b3e;
+}
 
+.upvote {
+  width: 40px;
+  height: 40px;
+  background-image: url('../icons/upvote.svg');
+  background-size: 25px;
+}
+
+.downvote {
+  width: 40px;
+  height: 40px;
+  background-image: url('../icons/downvotes.svg');
+  background-size: 80px;
 }
 
   /* -----------------
@@ -190,12 +199,7 @@ h1 {
   width: 65px;
   height: 65px;
   background-image: url('../icons/go-next-orange.svg');
-  background-repeat: no-repeat;
-  background-position: center;
   background-size: 65px;
-  background-color: inherit;
-  font-size: 0;
-  border: none;
 }
 
   /* -----------------
@@ -206,24 +210,14 @@ h1 {
   width: 55px;
   height: 55px;
   background-image: url('../icons/log-in-orange.svg');
-  background-repeat: no-repeat;
-  background-position: center;
   background-size: 55px;
-  background-color: inherit;
-  font-size: 0;
-  border: none;
 }
 
 .logout-btn {
   width: 55px;
   height: 100%;
   background-image: url('../icons/log-out-orange.svg');
-  background-repeat: no-repeat;
-  background-position: center;
   background-size: 55px;
-  background-color: inherit;
-  font-size: 0;
-  border: none;
 }
 
   /* -----------------

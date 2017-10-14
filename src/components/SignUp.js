@@ -204,7 +204,12 @@ class SignUp extends Component {
           </label>
         </form>
         <div className="btn-container">
-          <button className="signup-btn" onClick={this.checkValidity}
+          <button
+            className={classNames({
+              'btn': true,
+              'signup-btn': true
+            })}
+            onClick={this.checkValidity}
             disabled={currentUser}
           >
             SignUp
