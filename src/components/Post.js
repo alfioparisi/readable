@@ -107,10 +107,10 @@ class Post extends Component {
                 <h5>Category: {category}</h5>
                 <h5>Posted by: {author}</h5>
                 <h5>Time posted: {date}</h5>
+                {viewingPost && <h5>This post has {comments.length} comments.</h5>}
               </div>
             )}
           </div>
-          {viewingPost && <h5>This post has {comments.length} comments.</h5>}
         </header>
         <p>{body}</p>
         {editing && <EditingForm body={body} onEdit={(textarea, timeEdited) => {
@@ -118,7 +118,13 @@ class Post extends Component {
           onEdit(id, textarea, author, timeEdited);
         }} />}
         <footer>
-          <h5>This post has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</h5>
+          <small
+            className={classNames({
+              'upvoted': voteScore >= 0,
+              'downvoted': voteScore < 0
+            })}>
+            This post has {Math.abs(voteScore)}
+          </small>
           <div>
             <button
               className={classNames({

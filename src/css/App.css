@@ -49,6 +49,10 @@ textarea {
   height: 17vh;
 }
 
+label {
+  color: #ff8b3e;
+}
+
   /* -----------------
     Header
   ----------------- */
@@ -231,6 +235,16 @@ h1 {
   margin-top: 8px;
   margin-left: 1.5vw;
   color: #ff8b3e;
+}
+
+.upvoted::after {
+  content: ' likes';
+  color: #25a725;
+}
+
+.downvoted::after {
+  content: ' dislikes';
+  color: #ec1414;
 }
 
 .upvote {
