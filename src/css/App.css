@@ -149,6 +149,44 @@ h1 {
   margin-left: 2vw;
 }
 
+.category-footer {
+  margin-top: 2.5vh;
+  padding-top: 1.5vh;
+  display: flex;
+  align-items: center;
+}
+
+.write-post-btn {
+  margin-left: 3vw;
+  padding: 0 2%;
+  background-color: inherit;
+  color: #ff8b3e;
+  border: 1px solid #ff8b3e;
+  border-radius: 20px;
+}
+
+.write-post-text, .cancel-post-text {
+  display: flex;
+  align-items: center;
+  height: 47px;
+}
+
+.write-post-text::after {
+  content: url('../icons/write-post.svg');
+  width: 45px;
+}
+
+.cancel-post-text::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  background-image: url('../icons/cancel.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px;
+  background-color: inherit;
+}
+
   /* -----------------
     PostList
   ----------------- */
@@ -183,7 +221,7 @@ h1 {
   width: 40px;
   height: 40px;
   background-image: url('../icons/downvotes.svg');
-  background-size: 80px;
+  background-size: 70px;
 }
 
   /* -----------------
