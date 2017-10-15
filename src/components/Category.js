@@ -93,13 +93,13 @@ class Category extends Component {
         )}
         {!viewingPost && (
           <footer className="category-footer">
-            <button className="write-post-btn"
+            <button className="post-btn"
               onClick={() => this.setState({writingPost: true})}
             >
-              <span className="write-post-text">Write a new post</span>
+              <span className="post-text">Write a new post</span>
             </button>
             {writingPost && (
-              <button className="write-post-btn"
+              <button className="post-btn"
                 onClick={() => this.setState({writingPost: false})}
               >
                 <span className="cancel-post-text">Cancel</span>

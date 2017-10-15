@@ -170,8 +170,13 @@ class PostingForm extends Component {
             </ul>
           </div>
         </form>
-        <button onClick={this.checkValidity}>
-          Post
+        <button onClick={this.checkValidity}
+          className={classNames({
+            'post-btn': true,
+            'confirm-post': true
+          })}
+        >
+          <span className="confirm-post-text">Post</span>
         </button>
       </div>
     );

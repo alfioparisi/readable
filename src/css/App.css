@@ -44,6 +44,11 @@ ul {
   border: none;
 }
 
+textarea {
+  width: 90%;
+  height: 17vh;
+}
+
   /* -----------------
     Header
   ----------------- */
@@ -156,7 +161,7 @@ h1 {
   align-items: center;
 }
 
-.write-post-btn {
+.post-btn {
   margin-left: 3vw;
   padding: 0 2%;
   background-color: inherit;
@@ -165,13 +170,13 @@ h1 {
   border-radius: 20px;
 }
 
-.write-post-text, .cancel-post-text {
+.post-text, .cancel-post-text, .confirm-post-text {
   display: flex;
   align-items: center;
   height: 47px;
 }
 
-.write-post-text::after {
+.post-text::after {
   content: url('../icons/write-post.svg');
   width: 45px;
 }
@@ -191,7 +196,25 @@ h1 {
     PostList
   ----------------- */
 
+  /* -----------------
+    PostingForm
+  ----------------- */
 
+.confirm-post {
+  color: #28A38B;
+  border: 1px solid #28A38B;
+}
+
+.confirm-post-text::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  background-image: url('../icons/post-blue.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px;
+  background-color: inherit;
+}
 
   /* -----------------
     Post
