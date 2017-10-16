@@ -3,6 +3,7 @@ import EditingForm from './EditingForm';
 import { editCommentOnServer, deleteCommentOnServer, voteCommentOnServer } from '../actions/comments';
 import { isEditing } from '../actions/editing';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 /**
   @param {object} : the comment
@@ -14,11 +15,11 @@ import { connect } from 'react-redux';
   @param {function} : allow for editing
 */
 const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
-  const { id, parentId, body, author, timestamp, voteScore } = comment;
+  const { id, body, author, timestamp, voteScore } = comment;
   const date = new Date(timestamp.timeCreated).toLocaleString();
   return (
     <section>
-      <header>
+      <header className="comment-header">
         <h5>Comment by: {author}</h5>
         <h5>Commented at: {date}</h5>
       </header>
@@ -28,12 +29,36 @@ const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEd
         onEdit(id, textarea, author, timeEdited);
       }} />}
       <footer>
-        <p>This comment has {Math.abs(voteScore)} {voteScore >= 0 ? 'likes' : 'dislikes'}</p>
+        <small
+          className={classNames({
+            'upvoted': voteScore >= 0,
+            'downvoted': voteScore < 0
+          })}>
+          This comment has {Math.abs(voteScore)}
+        </small>
         <div>
-          <button onClick={() => onVote(id, true)}>Upvote</button>
-          <button onClick={() => onVote(id, false)}>Downvote</button>
-          <button onClick={() => isEditing(true)}>Edit</button>
-          <button onClick={() => onDelete(id, parentId, Date.now())}>Delete</button>
+          <button
+            className={classNames({
+              'btn': true,
+              'upvote': true
+            })}
+            onClick={() => onVote(id, true)}>Upvote
+          </button>
+          <button
+            className={classNames({
+              'btn': true,
+              'downvote': true
+            })}
+            onClick={() => onVote(id, false)}>Downvote
+          </button>
+        </div>
+        <div>
+          <button className="comment-btn" onClick={() => isEditing(true)}>
+            <span className="edit-comment-text">Edit</span>
+          </button>
+          <button className="comment-btn" onClick={() => onDelete(id, Date.now())}>
+            <span className="delete-comment-text">Delete</span>
+          </button>
         </div>
       </footer>
     </section>

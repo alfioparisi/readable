@@ -177,7 +177,7 @@ class Post extends Component {
         </footer>
         {showComments && comments && (
           <section>
-            <header>
+            <header className="comments-header">
               <h3>Comments</h3>
               <label>Filter by:
                 <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>
