@@ -261,6 +261,48 @@ h1 {
   background-size: 70px;
 }
 
+.edit-post-text, .delete-post-text, .add-comment-text {
+  display: flex;
+  align-items: center;
+  height: 47px;
+}
+
+.edit-post-text::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  background-image: url('../icons/edit-orange.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px;
+  background-color: inherit;
+}
+
+.delete-post-text::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  background-image: url('../icons/delete-orange.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px;
+  background-color: inherit;
+}
+
+.add-comment-container {
+  margin: 1vh 0;
+}
+
+.add-comment-btn {
+  color: #28A38B;
+  border: 1px solid #28A38B;
+}
+
+.add-comment-text::after {
+  content: url('../icons/add-comment-blue.svg');
+  width: 45px;
+}
+
   /* -----------------
     Sign up
   ----------------- */

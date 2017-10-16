@@ -141,8 +141,12 @@ class Post extends Component {
           </div>
           {viewingPost && (
             <div>
-              <button onClick={() => isEditing(true)}>Edit</button>
-              <button onClick={() => onDelete(id, Date.now())}>Delete</button>
+              <button className="post-btn" onClick={() => isEditing(true)}>
+                <span className="edit-post-text">Edit</span>
+              </button>
+              <button className="post-btn" onClick={() => onDelete(id, Date.now())}>
+                <span className="delete-post-text">Delete</span>
+              </button>
             </div>
           )}
           {writingComment && (
@@ -152,10 +156,15 @@ class Post extends Component {
             />
           )}
           {viewingPost && (
-            <div>
-              <button
+            <div className="add-comment-container">
+              <button className={classNames({
+                'post-btn': true,
+                'add-comment-btn': true
+              })}
                 onClick={() => this.setState({writingComment: true})}
-              >Add a comment</button>
+              >
+                <span className="add-comment-text">Add a comment</span>
+              </button>
             </div>
           )}
         </footer>

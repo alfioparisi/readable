@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 /**
   @param {string} : the comment body
-  @param {function} : edit the comment 
+  @param {function} : edit the comment
 */
 class EditingForm extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class EditingForm extends Component {
     return (
       <form>
         <textarea value={textarea} onChange={evt => this.setState({textarea: evt.target.value})} />
-        <input type="submit" value="Edit" onClick={evt => {
+        <input type="submit" value="Edit" className="confirm-edit" onClick={evt => {
           evt.preventDefault();
           onEdit(textarea, Date.now());
         }} />
