@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,700');
 
-/*
-  body text : #47B8A2
-  main header background : #ff8b3e
-  main header text : #28A38B
-  nav background : #ffac75
-  nav link text : #4BA392
-*/
-
   /* ------------
     General
   ------------ */
@@ -16,7 +8,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /*outline: 1px solid red !important;*/
 }
 
 body {
@@ -61,7 +52,7 @@ label {
   height: 80px;
   margin-bottom: 11px;
   transform: translateX(-2%);
-  background-color: #ff8b3e;
+  background-color: rgba(255, 139, 62, 0.92);
   color: #28A38B;
 }
 
@@ -195,10 +186,6 @@ h1 {
   background-size: 40px;
   background-color: inherit;
 }
-
-  /* -----------------
-    PostList
-  ----------------- */
 
   /* -----------------
     PostingForm
@@ -391,7 +378,6 @@ h1 {
   margin: 15px 0 5px 0;
 }
 
-/* https://openclipart.org/detail/166862/go-next-orange-button-tango-style */
 .signup-btn {
   width: 65px;
   height: 65px;

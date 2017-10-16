@@ -15,7 +15,7 @@ import classNames from 'classnames';
   @param {function} : allow for editing
 */
 const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEditing }) => {
-  const { id, body, author, timestamp, voteScore } = comment;
+  const { id, parentId, body, author, timestamp, voteScore } = comment;
   const date = new Date(timestamp.timeCreated).toLocaleString();
   return (
     <section>
@@ -56,7 +56,7 @@ const Comment = ({ comment, editing, currentUser, onEdit, onDelete, onVote, isEd
           <button className="comment-btn" onClick={() => isEditing(true)}>
             <span className="edit-comment-text">Edit</span>
           </button>
-          <button className="comment-btn" onClick={() => onDelete(id, Date.now())}>
+          <button className="comment-btn" onClick={() => onDelete(id, parentId, Date.now())}>
             <span className="delete-comment-text">Delete</span>
           </button>
         </div>
