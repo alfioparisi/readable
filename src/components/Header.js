@@ -37,14 +37,14 @@ class Header extends Component {
         })}>
           <ul>
             <li className="nav-list-item">
-              <NavLink to="/" className="nav-link">home</NavLink>
+              <NavLink to="/" className="nav-link" activeClassName="active-link">home</NavLink>
             </li>
             <li className="nav-list-item">
-              <NavLink to="/category" className="nav-link">all categories</NavLink>
+              <NavLink to="/category" className="nav-link" activeClassName="active-link">all categories</NavLink>
             </li>
             {categories && categories.map(category => (
               <li key={category} className="nav-list-item">
-                <NavLink to={`/category/${category}`} className="nav-link">{category}</NavLink>
+                <NavLink to={`/category/${category}`} className="nav-link" activeClassName="active-link">{category}</NavLink>
               </li>
             ))}
             {currentUser && (
@@ -62,12 +62,12 @@ class Header extends Component {
             )}
             {!currentUser && (
               <li className="nav-list-item">
-                <NavLink to="/signup" className="nav-link">signup</NavLink>
+                <NavLink to="/signup" className="nav-link" activeClassName="active-link">signup</NavLink>
               </li>
             )}
             {!currentUser && (
               <li className="nav-list-item">
-                <NavLink to="/login" className="nav-link">login</NavLink>
+                <NavLink to="/login" className="nav-link" activeClassName="active-link">login</NavLink>
               </li>
             )}
           </ul>

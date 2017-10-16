@@ -4,6 +4,7 @@ import Post from './Post';
 import PostingForm from './PostingForm';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 /**
   @param {string} : the name of the category (not required)
@@ -48,12 +49,22 @@ class Category extends Component {
 
   render() {
     const { writingPost, viewingPost, category, filter } = this.state;
-    const { name } = this.props;
+    const { history, name } = this.props;
     const posts = this.applyFilter();
     return (
       <main className="category">
         <header>
-          <h2>{name || 'All Categories'}</h2>
+          <div className="category-title">
+            <button className={classNames({
+              'btn': true,
+              'go-back-btn': true
+            })}
+              onClick={() => history.goBack()}
+            >
+              Go back
+            </button>
+            <h2>{name || 'All Categories'}</h2>
+          </div>
           {!viewingPost && (
             <label className="category-filter">Filter by:
               <select value={filter} onChange={evt => this.setState({filter: evt.target.value})}>

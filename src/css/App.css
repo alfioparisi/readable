@@ -121,6 +121,16 @@ h1 {
 
 .home-link {
   margin: auto 0;
+  padding: 5px;
+  color: #f57d2d;
+  border: 1px solid #f57d2d;
+  border-radius: 15px;
+  text-decoration: none;
+}
+
+.active-link {
+  color: #fff;
+  background-color: #47B8A2;
 }
 
   /* -----------------
@@ -143,6 +153,16 @@ h1 {
 
 .category {
   padding: 0 1vw;
+}
+
+.category-title {
+  display: flex;
+}
+
+.go-back-btn {
+  background-image: url('../icons/go-back-blue.svg');
+  background-size: 40px;
+  margin-right: 2vw;
 }
 
 .category-filter {
