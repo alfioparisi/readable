@@ -165,6 +165,13 @@ class Post extends Component {
               >
                 <span className="add-comment-text">Add a comment</span>
               </button>
+              {writingComment && (
+                <button className="cancel-add-comment"
+                  onClick={() => this.setState({writingComment: false})}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
           )}
         </footer>

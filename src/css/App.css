@@ -304,6 +304,31 @@ h1 {
 }
 
   /* -----------------
+    EditingForm, CommentForm
+  ----------------- */
+
+.confirm-edit, .confirm-comment, .cancel-add-comment {
+  margin-left: 3vw;
+  padding: 0 2%;
+  background-color: inherit;
+  color: #28A38B;
+  border: 1px solid #28A38B;
+  border-radius: 20px;
+  min-width: 50px;
+  min-height: 40px;
+  font-size: 15px;
+}
+
+.cancel-add-comment {
+  color: #ec1414;
+  border-color: #ec1414;
+}
+
+.comment-form {
+  margin: 2vh 0;
+}
+
+  /* -----------------
     Sign up
   ----------------- */
 

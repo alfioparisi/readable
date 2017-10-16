@@ -78,7 +78,7 @@ class CommentForm extends Component {
   render() {
     const { textarea } = this.state;
     return (
-      <div>
+      <div className="comment-form">
         <form>
           <div>
             <textarea ref={input => this.input = input}
@@ -101,7 +101,7 @@ class CommentForm extends Component {
             </ul>
           </div>
         </form>
-        <button onClick={this.checkValidity}>
+        <button className="confirm-comment" onClick={this.checkValidity}>
           Comment
         </button>
       </div>

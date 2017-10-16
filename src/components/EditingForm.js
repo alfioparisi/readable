@@ -21,13 +21,14 @@ class EditingForm extends Component {
     const { textarea } = this.state;
     const { onEdit } = this.props;
     return (
-      <form>
-        <textarea value={textarea} onChange={evt => this.setState({textarea: evt.target.value})} />
-        <input type="submit" value="Edit" className="confirm-edit" onClick={evt => {
-          evt.preventDefault();
-          onEdit(textarea, Date.now());
-        }} />
-      </form>
+      <div>
+        <form>
+          <textarea value={textarea} onChange={evt => this.setState({textarea: evt.target.value})} />
+        </form>
+        <button className="confirm-edit" onClick={() => onEdit(textarea, Date.now())}>
+          Edit
+        </button>
+      </div>
     );
   }
 }
