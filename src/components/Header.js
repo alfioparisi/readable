@@ -17,6 +17,7 @@ class Header extends Component {
       showNavBar: false
     }
   }
+
   render() {
     const { categories, currentUser, onClick } = this.props;
     const { showNavBar } = this.state;
@@ -35,7 +36,7 @@ class Header extends Component {
           'nav-main': true,
           'nav-main-active': showNavBar
         })}>
-          <ul>
+          <ul className="nav-main-list">
             <li className="nav-list-item">
               <NavLink to="/" className="nav-link" activeClassName="active-link">home</NavLink>
             </li>
