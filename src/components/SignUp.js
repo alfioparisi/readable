@@ -14,7 +14,7 @@ class SignUp extends Component {
       password: ''
     };
     // Hold the inputs.
-    this.inputs = [];
+    this.inputs = new Set();
     // Hold the invalidities messages for form validation.
     this.invalidities = {
       username: [],
@@ -140,6 +140,7 @@ class SignUp extends Component {
     });
     if (error) return;
     onClick(username, password, Date.now());
+    window.alert(`Successfully looged in as ${username}.`);
     this.setState({username: '', password: ''});
   }
 
@@ -161,7 +162,7 @@ class SignUp extends Component {
         <form className="user-form">
           <label>Username :
             <input autoFocus
-              ref={input => this.inputs.push(input)}
+              ref={input => this.inputs.add(input)}
               placeholder="JonSnow"
               name='username'
               value={username}
@@ -183,7 +184,7 @@ class SignUp extends Component {
           </label>
           <label>Password :
             <input type="password"
-              ref={input => this.inputs.push(input)}
+              ref={input => this.inputs.add(input)}
               name='password'
               value={password}
               onChange={evt => this.checkInvalidity('password', evt.target.value)}

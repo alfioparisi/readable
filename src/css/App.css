@@ -471,6 +471,7 @@ form input, form textarea {
   ----------------- */
 
 .requirements {
+  margin-left: 2vw;
   font-size: 17px;
   visibility: hidden;
   max-height: 0;

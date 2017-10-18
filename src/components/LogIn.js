@@ -33,6 +33,7 @@ const LogIn = ({ users, currentUser, onClick }) => {
         })}
           onClick={() => {
             if (isUser(users, name.value.trim(), password.value.trim())) {
+              window.alert(`Successfully looged in as ${name.value}.`);
               onClick(name.value.trim(), password.value.trim());
             } else window.alert('No user found under those credentials.');
             name.value = '';

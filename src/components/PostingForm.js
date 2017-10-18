@@ -19,7 +19,7 @@ class PostingForm extends Component {
       textarea: ''
     };
     // Hold the inputs.
-    this.inputs = [];
+    this.inputs = new Set();
     // Hold the invalidities messages for form validation.
     this.invalidities = {
       title: [],
@@ -119,7 +119,7 @@ class PostingForm extends Component {
         <form>
           <label>Post title :
             <input
-              ref={input => this.inputs.push(input)}
+              ref={input => this.inputs.add(input)}
               name='title'
               value={title}
               onChange={evt => this.checkInvalidity('title', evt.target.value)}
@@ -149,7 +149,7 @@ class PostingForm extends Component {
           </label>
           <div>
             <textarea
-              ref={input => this.inputs.push(input)}
+              ref={input => this.inputs.add(input)}
               name='textarea'
               placeholder="Write your post here."
               value={textarea}
