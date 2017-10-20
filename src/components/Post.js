@@ -139,16 +139,14 @@ class Post extends Component {
               })}
               onClick={() => onVote(id, false)}>Downvote</button>
           </div>
-          {viewingPost && (
-            <div>
-              <button className="post-btn" onClick={() => isEditing(true)}>
-                <span className="edit-post-text">Edit</span>
-              </button>
-              <button className="post-btn" onClick={() => onDelete(id, Date.now())}>
-                <span className="delete-post-text">Delete</span>
-              </button>
-            </div>
-          )}
+          <div>
+            <button className="post-btn" onClick={() => isEditing(true)}>
+              <span className="edit-post-text">Edit</span>
+            </button>
+            <button className="post-btn" onClick={() => onDelete(id, Date.now())}>
+              <span className="delete-post-text">Delete</span>
+            </button>
+          </div>
           {writingComment && (
             <CommentForm
               parentId={id}
