@@ -8,8 +8,8 @@ import LogIn from './LogIn';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCategoriesFromServer } from '../actions/categories';
-import { addInitialUser } from '../actions/users';
-import { addPost } from '../actions/posts';
+import { addInitialUser, createInitialUsers } from '../actions/users';
+import { getInitialPosts } from '../actions/posts';
 import '../css/App.css';
 
 /**
@@ -24,7 +24,6 @@ class App extends Component {
     this.state = {
       filter: 'byVoteDec'
     };
-    this.getInitialPosts = this.getInitialPosts.bind(this);
     this.addUserToStorage = this.addUserToStorage.bind(this);
   }
 
@@ -33,7 +32,7 @@ class App extends Component {
     to hold the `users` object.
   */
   componentDidMount() {
-    const { getCategories, onUserAdd } = this.props;
+    const { getCategories, onUserAdd, createInitialUsers, getInitialPosts } = this.props;
 
     // Fetch categories from the server.
     getCategories();
@@ -46,74 +45,10 @@ class App extends Component {
       usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
     // If not, create the 'users' object by fetching the initial posts from the server.
     } else {
-      // Make the 'Anonymous' user.
-      const users = {
-        Anonymous: {
-          name: 'Anonymous',
-          password: null,
-          dateCreated: null,
-          posts: [],
-          comments: [],
-          isLoggedIn: false
-        }
-      };
-      // Fetch initial posts from the server.
-      fetch('http://localhost:3001/posts', {
-        headers: {
-          'Authorization': 'let-me-in-please',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      // For each post make a new user.
-      .then(posts => posts.forEach(post => {
-        if (users[post.author]) {
-          users[post.author].posts.push(post.id);
-        } else {
-          users[post.author] = {
-            name: post.author,
-            password: null,
-            dateCreated: null,
-            posts: [post.id],
-            comments: [],
-            isLoggedIn: false
-          };
-        }
-      }))
-      // Finally save the 'users' object on the localStorage, dispatch actions to
-      // add users to Redux.
-      .then(() => {
-        localStorage.setItem('users', JSON.stringify(users));
-        const usersArray = Object.keys(users).map(name => users[name]);
-        usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated, user.posts));
-      })
-      .catch(err => console.error(err));
+      createInitialUsers();
     }
     // Fetch initial posts from the server.
-    this.getInitialPosts();
-  }
-
-  // Fetch posts from the server and add them to Redux.
-  getInitialPosts() {
-    const { onPostAdd } = this.props;
-
-    fetch('http://localhost:3001/posts', {
-      headers: {
-        'Authorization': 'let-me-in-please',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(posts => {
-      posts.forEach(post => {
-        const { id, category, title, body, author, timestamp, voteScore } = post;
-        onPostAdd(id, category, title, body, author, timestamp, voteScore);
-        return posts;
-      });
-    })
-    .catch(err => console.error(err));
+    getInitialPosts();
   }
 
   // Get the 'users' object from localStorage and update it with the new user.
@@ -167,7 +102,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getCategories: () => dispatch(getCategoriesFromServer()),
   onUserAdd: (name, pass, dateCreated) => dispatch(addInitialUser(name, pass, dateCreated)),
-  onPostAdd: (id, category, title, body, author, timestamp, voteScore) => dispatch(addPost(id, category, title, body, author, timestamp, voteScore))
+  createInitialUsers: () => dispatch(createInitialUsers()),
+  getInitialPosts: () => dispatch(getInitialPosts())
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -3,7 +3,7 @@ export const DELETE_POST = 'DELETE_POST';
 export const EDIT_POST = 'EDIT_POST';
 export const VOTE_POST = 'VOTE_POST';
 
-export const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) => ({
+const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_POST,
   id,
   category,
@@ -13,6 +13,25 @@ export const addPost = (id, category, title, body, author, timeCreated, voteScor
   timeCreated,
   voteScore
 });
+
+export const getInitialPosts = () => dispatch => (
+  fetch('http://localhost:3001/posts', {
+    headers: {
+      'Authorization': 'let-me-in-please',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json())
+  .then(posts => {
+    posts.forEach(post => {
+      const { id, category, title, body, author, timestamp, voteScore } = post;
+      dispatch(addPost(id, category, title, body, author, timestamp, voteScore));
+    });
+    return posts;
+  })
+  .catch(err => console.error(err))
+);
 
 // By returning the 'fetch()' call we'll be able to chain '.then()' when we'll call
 // 'store.dispatch(addPostOnServer())'
