@@ -84,7 +84,7 @@ class Post extends Component {
   }
 
   render() {
-    const { post, showComments, viewingPost, currentUser, comments, editing } = this.props;
+    const { post, showComments, viewingPost, currentUser, comments, editing, history } = this.props;
     const { id, category, title, body, author, timestamp, voteScore } = post;
     const date = new Date(timestamp.timeCreated).toLocaleString();
     const { onEdit, onDelete, onVote, isEditing } = this.props;
@@ -143,7 +143,12 @@ class Post extends Component {
             <button className="post-btn" onClick={() => isEditing(true)}>
               <span className="edit-post-text">Edit</span>
             </button>
-            <button className="post-btn" onClick={() => onDelete(id, Date.now())}>
+            <button className="post-btn"
+              onClick={() => {
+                onDelete(id, Date.now());
+                history.push(`/category/${category}`);
+              }}
+            >
               <span className="delete-post-text">Delete</span>
             </button>
           </div>

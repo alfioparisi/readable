@@ -91,6 +91,7 @@ class Category extends Component {
                 showComments={true}
                 isViewingPost={viewingPost => this.setState({viewingPost})}
                 viewingPost={viewingPost}
+                history={history}
               />
             )}
           />
