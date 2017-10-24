@@ -24,6 +24,7 @@ class App extends Component {
     this.state = {
       filter: 'byVoteDec'
     };
+    this.setUsersInStorage = this.setUsersInStorage.bind(this);
     this.addUserToStorage = this.addUserToStorage.bind(this);
   }
 
@@ -32,23 +33,25 @@ class App extends Component {
     to hold the `users` object.
   */
   componentDidMount() {
-    const { getCategories, onUserAdd, createInitialUsers, getInitialPosts } = this.props;
+    const { getCategories } = this.props;
 
     // Fetch categories from the server.
-    getCategories();
+    getCategories().then(() => this.setUsersInStorage());
+  }
 
-    // If there is the 'user' object in the localStorage, populate the Redux state
+  setUsersInStorage() {
+    const { onUserAdd, createInitialUsers, getInitialPosts } = this.props;
+    // If there is the `users` object in the localStorage, populate the Redux state
     // off of it.
     if (localStorage.getItem('users')) {
       const users = JSON.parse(localStorage.getItem('users'));
       const usersArray = Object.keys(users).map(name => users[name]);
-      usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated));
+      Promise.resolve(usersArray.forEach(user => onUserAdd(user.name, user.password, user.dateCreated)))
+      .then(() => getInitialPosts());
     // If not, create the 'users' object by fetching the initial posts from the server.
     } else {
-      createInitialUsers();
+      createInitialUsers().then(() => getInitialPosts());
     }
-    // Fetch initial posts from the server.
-    getInitialPosts();
   }
 
   // Get the 'users' object from localStorage and update it with the new user.

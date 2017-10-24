@@ -24,7 +24,7 @@ export const createInitialUsers = () => dispatch => {
     }
   };
   // Fetch initial posts from the server.
-  fetch('http://localhost:3001/posts', {
+  return fetch('http://localhost:3001/posts', {
     headers: {
       'Authorization': 'let-me-in-please',
       'Accept': 'application/json',
