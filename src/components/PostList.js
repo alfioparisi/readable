@@ -8,7 +8,7 @@ import Post from './Post';
 */
 const PostList = ({ posts, isViewingPost, viewingPost }) => (
   <ul>
-    {posts && posts.map(post => (
+    {posts && posts.filter(post => !post.deleted).map(post => (
       <li key={post.id}>
         <Post
           post={post}

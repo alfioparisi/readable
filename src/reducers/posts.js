@@ -80,3 +80,8 @@ const posts = (state = {}, action) => {
 };
 
 export default posts;
+
+export const getCategoryPosts = (state, name) => Object.keys(state).map(id => state[id]).filter(post => {
+  if (name) return post.category === name ? post : null;
+  return post;
+})

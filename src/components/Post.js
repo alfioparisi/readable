@@ -3,6 +3,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import EditingForm from './EditingForm';
 import { Link } from 'react-router-dom';
+import NotFound from './NotFound';
 import { addComment } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
@@ -90,6 +91,9 @@ class Post extends Component {
     const date = new Date(timestamp.timeCreated).toLocaleString();
     const { onEdit, onDelete, onVote, isEditing } = this.props;
     const { writingComment, filter, infoOpen } = this.state;
+
+    if (post.deleted) return <NotFound />;
+
     return (
       <article>
         <header>

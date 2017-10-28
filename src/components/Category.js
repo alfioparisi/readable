@@ -3,6 +3,7 @@ import PostList from './PostList';
 import Post from './Post';
 import PostingForm from './PostingForm';
 import { Route, withRouter } from 'react-router-dom';
+import { getCategoryPosts } from '../reducers/posts';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
@@ -124,10 +125,7 @@ class Category extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  posts: Object.keys(state.posts).map(id => state.posts[id]).filter(post => {
-    if (ownProps.name) return post.category === ownProps.name;
-    return post;
-  }).filter(post => !post.deleted)
+  posts: getCategoryPosts(state.posts, ownProps.name)
 });
 
 export default withRouter(connect(mapStateToProps)(Category));
