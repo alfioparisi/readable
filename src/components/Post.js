@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { addComment } from '../actions/comments';
 import { editPostOnServer, deletePostOnServer, votePostOnServer } from '../actions/posts';
 import { isEditing } from '../actions/editing';
+import { getCommentsArray } from '../reducers/comments';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
@@ -84,7 +85,7 @@ class Post extends Component {
   }
 
   render() {
-    const { post, showComments, viewingPost, currentUser, comments, editing, history } = this.props;
+    const { post, showComments, viewingPost, currentUser, comments, editing } = this.props;
     const { id, category, title, body, author, timestamp, voteScore } = post;
     const date = new Date(timestamp.timeCreated).toLocaleString();
     const { onEdit, onDelete, onVote, isEditing } = this.props;
@@ -146,7 +147,6 @@ class Post extends Component {
             <button className="post-btn"
               onClick={() => {
                 onDelete(id, Date.now());
-                history.push(`/category/${category}`);
               }}
             >
               <span className="delete-post-text">Delete</span>
@@ -206,7 +206,7 @@ class Post extends Component {
 const mapStateToProps = (state, ownProps) => ({
   currentUser: state.currentUser,
   editing: state.editingPost,
-  comments: ownProps.post.comments.map(commentId => state.comments[commentId]).filter(comment => !comment.deleted)
+  comments: getCommentsArray(state.comments, ownProps.post.comments)
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -62,3 +62,5 @@ const comments = (state = {}, action) => {
 };
 
 export default comments;
+
+export const getCommentsArray = (state, ids) => ids.map(id => state[id]).filter(comment => !comment.deleted);
