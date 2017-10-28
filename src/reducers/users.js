@@ -1,6 +1,6 @@
-import { ADD_INITIAL_USER, SIGN_UP, LOG_IN, LOG_OUT } from '../actions/users';
-import { ADD_POST, EDIT_POST } from '../actions/posts';
-import { ADD_COMMENT, EDIT_COMMENT } from '../actions/comments';
+import { ADD_INITIAL_USER, SIGN_UP, LOG_IN, LOG_OUT } from '../actions/types';
+import { ADD_POST, EDIT_POST } from '../actions/types';
+import { ADD_COMMENT, EDIT_COMMENT } from '../actions/types';
 
 /**
   Handle the single user.

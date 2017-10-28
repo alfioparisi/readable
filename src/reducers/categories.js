@@ -1,4 +1,4 @@
-import { ADD_CATEGORY } from '../actions/categories';
+import { ADD_CATEGORY } from '../actions/types';
 
 const category = (state = '', action) => {
   switch (action.type) {

@@ -1,5 +1,5 @@
-import { ADD_POST, DELETE_POST, EDIT_POST, VOTE_POST } from '../actions/posts';
-import { ADD_COMMENT, DELETE_COMMENT } from '../actions/comments';
+import { ADD_POST, DELETE_POST, EDIT_POST, VOTE_POST } from '../actions/types';
+import { ADD_COMMENT, DELETE_COMMENT } from '../actions/types';
 
 /**
   Handle a single post.

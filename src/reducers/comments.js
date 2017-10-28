@@ -1,4 +1,4 @@
-import { ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT, VOTE_COMMENT } from '../actions/comments';
+import { ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT, VOTE_COMMENT } from '../actions/types';
 
 /**
   Handle a single comment.

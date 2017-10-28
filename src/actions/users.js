@@ -1,7 +1,4 @@
-export const ADD_INITIAL_USER = 'ADD_INITIAL_USER';
-export const SIGN_UP = 'SIGN_UP';
-export const LOG_IN = 'LOG_IN';
-export const LOG_OUT = 'LOG_OUT';
+import { ADD_INITIAL_USER, SIGN_UP, LOG_IN, LOG_OUT } from './types';
 
 export const addInitialUser = (name, password = null, dateCreated = null, posts = []) => ({
   type: ADD_INITIAL_USER,

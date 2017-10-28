@@ -1,4 +1,4 @@
-export const ADD_CATEGORY = 'ADD_CATEGORY';
+import { ADD_CATEGORY } from './types';
 
 const addCategory = (name) => ({
   type: ADD_CATEGORY,

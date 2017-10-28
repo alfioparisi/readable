@@ -1,4 +1,4 @@
-import { EDITING } from '../actions/editing';
+import { EDITING } from '../actions/types';
 
 const editingComment = (state = false, action) => {
   switch(action.type) {

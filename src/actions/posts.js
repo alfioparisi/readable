@@ -1,7 +1,4 @@
-export const ADD_POST = 'ADD_POST';
-export const DELETE_POST = 'DELETE_POST';
-export const EDIT_POST = 'EDIT_POST';
-export const VOTE_POST = 'VOTE_POST';
+import { ADD_POST, EDIT_POST, DELETE_POST, VOTE_POST } from './types';
 
 const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_POST,

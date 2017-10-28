@@ -1,4 +1,4 @@
-import { EDITING } from '../actions/editing';
+import { EDITING } from '../actions/types';
 
 const editingPost = (state = false, action) => {
   switch(action.type) {

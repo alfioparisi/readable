@@ -1,4 +1,4 @@
-import { SIGN_UP, LOG_IN, LOG_OUT } from '../actions/users';
+import { SIGN_UP, LOG_IN, LOG_OUT } from '../actions/types';
 
 const currentUser = (state = '', action) => {
   switch(action.type) {
