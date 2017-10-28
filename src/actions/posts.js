@@ -1,5 +1,13 @@
 import { ADD_POST, EDIT_POST, DELETE_POST, VOTE_POST } from './types';
 
+const url = 'http://localhost:3001/posts/';
+
+const headers = {
+  'Authorization': 'let-me-in-please',
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
 const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_POST,
   id,
@@ -12,13 +20,7 @@ const addPost = (id, category, title, body, author, timeCreated, voteScore = 1) 
 });
 
 export const getInitialPosts = () => dispatch => (
-  fetch('http://localhost:3001/posts', {
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
+  fetch(url, { headers })
   .then(res => res.json())
   .then(posts => {
     posts.forEach(post => {
@@ -33,13 +35,9 @@ export const getInitialPosts = () => dispatch => (
 // By returning the 'fetch()' call we'll be able to chain '.then()' when we'll call
 // 'store.dispatch(addPostOnServer())'
 export const addPostOnServer = (id, category, title, body, author, timeCreated) => dispatch => (
-  fetch('http://localhost:3001/posts', {
+  fetch(url, {
     method: 'POST',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       timestamp: timeCreated,
@@ -63,13 +61,9 @@ const deletePost = (id, timeDeleted) => ({
 });
 
 export const deletePostOnServer = (id, timeDeleted) => dispatch => (
-  fetch(`http://localhost:3001/posts/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'DELETE',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({ id })
   })
   .then(post => {
@@ -88,13 +82,9 @@ const editPost = (id, body, author, timeEdited) => ({
 });
 
 export const editPostOnServer = (id, body, author, timeEdited) => dispatch => (
-  fetch(`http://localhost:3001/posts/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'PUT',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       body,
@@ -117,13 +107,9 @@ const votePost = (id, upvote) => ({
 });
 
 export const votePostOnServer = (id, upvote) => dispatch => (
-  fetch(`http://localhost:3001/posts/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'POST',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       option: upvote ? 'upVote' : 'downVote'

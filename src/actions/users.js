@@ -1,5 +1,13 @@
 import { ADD_INITIAL_USER, SIGN_UP, LOG_IN, LOG_OUT } from './types';
 
+const url = 'http://localhost:3001/posts';
+
+const headers = {
+  'Authorization': 'let-me-in-please',
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
 export const addInitialUser = (name, password = null, dateCreated = null, posts = []) => ({
   type: ADD_INITIAL_USER,
   name,
@@ -21,13 +29,7 @@ export const createInitialUsers = () => dispatch => {
     }
   };
   // Fetch initial posts from the server.
-  return fetch('http://localhost:3001/posts', {
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
+  return fetch(url, { headers })
   .then(res => res.json())
   // For each post make a new user.
   .then(posts => posts.forEach(post => {

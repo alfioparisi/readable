@@ -5,11 +5,13 @@ const addCategory = (name) => ({
   name
 });
 
+const fetchCategories = () => fetch('http://localhost:3001/categories', {
+  headers: {'Authorization': 'let-me-in-please'}
+})
+.then(res => res.json());
+
 export const getCategoriesFromServer = () => dispatch => (
-  fetch('http://localhost:3001/categories', {
-    headers: {'Authorization': 'let-me-in-please'}
-  })
-  .then(res => res.json())
+  fetchCategories()
   .then(res => res.categories.forEach(cat => dispatch(addCategory(cat.name))))
   .catch(err => {
     console.error(err);

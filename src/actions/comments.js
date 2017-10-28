@@ -1,5 +1,13 @@
 import { ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from './types';
 
+const url = 'http://localhost:3001/comments/';
+
+const headers = {
+  'Authorization': 'let-me-in-please',
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
 export const addComment = (id, parentId, body, author, timeCreated, voteScore = 1) => ({
   type: ADD_COMMENT,
   id,
@@ -11,13 +19,9 @@ export const addComment = (id, parentId, body, author, timeCreated, voteScore = 
 });
 
 export const addCommentOnServer = (id, parentId, body, author, timeCreated, voteScore) => dispatch => (
-  fetch('http://localhost:3001/comments', {
+  fetch(url, {
     method: 'POST',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       parentId,
@@ -43,13 +47,9 @@ const deleteComment = (id, parentId, timeDeleted) => ({
 });
 
 export const deleteCommentOnServer = (id, parentId, timeDeleted) => dispatch => (
-  fetch(`http://localhost:3001/comments/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'DELETE',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({ id })
   })
   .then(comment => {
@@ -68,13 +68,9 @@ const editComment = (id, body, author, timeEdited) => ({
 });
 
 export const editCommentOnServer = (id, body, author, timeEdited) => dispatch => (
-  fetch(`http://localhost:3001/comments/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'PUT',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       body,
@@ -97,13 +93,9 @@ const voteComment = (id, upvote) => ({
 });
 
 export const voteCommentOnServer = (id, upvote) => dispatch => (
-  fetch(`http://localhost:3001/comments/${id}`, {
+  fetch(`${url}${id}`, {
     method: 'POST',
-    headers: {
-      'Authorization': 'let-me-in-please',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       id,
       option: upvote ? 'upVote' : 'downVote'
