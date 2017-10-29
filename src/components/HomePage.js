@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Paper from 'material-ui/Paper';
 
 // Component rendered on first load.
 const HomePage = () => (
-  <main className="home-page">
+  <Paper className="home-page"
+    zDepth={2}
+  >
     <header>
       <h2>Web app for Udacity React Nanodegree</h2>
     </header>
@@ -13,7 +16,7 @@ const HomePage = () => (
       <Link to="login" className="home-link">Log In</Link>
       <Link to="category" className="home-link">Anonymous</Link>
     </div>
-  </main>
+  </Paper>
 );
 
 export default HomePage;
