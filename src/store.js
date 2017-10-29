@@ -8,6 +8,7 @@ import currentUser from './reducers/currentUser';
 import categories from './reducers/categories';
 import editingComment from './reducers/editingComment';
 import editingPost from './reducers/editingPost';
+import drawer from './reducers/drawer';
 
 // If Redux DevTools extension is available, use it.
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -23,7 +24,8 @@ const reducer = combineReducers({
   currentUser,
   categories,
   editingComment,
-  editingPost
+  editingPost,
+  drawer
 });
 
 const store = createStore(

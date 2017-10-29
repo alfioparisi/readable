@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header';
+import DrawerUndocked from './DrawerUndocked';
 import HomePage from './HomePage';
 import Footer from './Footer';
 import Category from './Category';
@@ -10,7 +11,7 @@ import { connect } from 'react-redux';
 import { getCategoriesFromServer } from '../actions/categories';
 import { addInitialUser, createInitialUsers } from '../actions/users';
 import { getInitialPosts } from '../actions/posts';
-import '../css/App.css';
+// import '../css/App.css';
 
 /**
   @param {array} : the available categories
@@ -75,6 +76,7 @@ class App extends Component {
     const { categories, location } = this.props;
     return (
       <div>
+        <DrawerUndocked />
         <Header location={location} />
         <Route exact path="/" component={HomePage} />
         <Route exact path="/category" component={Category} />

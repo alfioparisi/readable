@@ -21,3 +21,6 @@ export const LOG_OUT = 'LOG_OUT';
 
 // editing
 export const EDITING = 'EDITING';
+
+// drawer
+export const CHANGE_DRAWER_STATE = 'CHANGE_DRAWER_STATE';
