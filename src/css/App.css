@@ -512,6 +512,16 @@ input:focus:invalid {
 }
 
   /* -----------------
+    NotFound
+  ----------------- */
+
+.not-found {
+  border: 1px solid #ec1414;
+  padding: 2vw;
+  color: #ec1414;
+}
+
+  /* -----------------
     @media
   ----------------- */
 
