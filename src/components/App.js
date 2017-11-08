@@ -5,7 +5,8 @@ import Footer from './Footer';
 import Category from './Category';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
-import { Route, withRouter } from 'react-router-dom';
+import NotFound from './NotFound';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCategoriesFromServer } from '../actions/categories';
 import { addInitialUser, createInitialUsers } from '../actions/users';
@@ -76,22 +77,25 @@ class App extends Component {
     return (
       <div>
         <Header location={location} />
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/category" component={Category} />
-        {categories && categories.map(category => (
-            <Route key={category} path={`/category/${category}`}
-              render={() => (
-                <Category
-                  name={category}
-                />
-              )}
-            />
-          )
-        )}
-        <Route path="/signup" render={() => (
-          <SignUp onClick={(name, pass, dateCreated) => this.addUserToStorage(name, pass, dateCreated)} />
-        )} />
-        <Route path="/login" component={LogIn} />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/category" component={Category} />
+          {categories && categories.map(category => (
+              <Route key={category} path={`/category/${category}`}
+                render={() => (
+                  <Category
+                    name={category}
+                  />
+                )}
+              />
+            )
+          )}
+          <Route path="/signup" render={() => (
+            <SignUp onClick={(name, pass, dateCreated) => this.addUserToStorage(name, pass, dateCreated)} />
+          )} />
+          <Route path="/login" component={LogIn} />
+          <Route path="*" component={NotFound} />
+        </Switch>
         <Footer />
       </div>
     );
@@ -111,4 +115,5 @@ const mapDispatchToProps = dispatch => ({
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
 
+// https://stackoverflow.com/questions/42929472/react-router-v4-default-pagenot-found-page
 // https://github.com/ReactTraining/react-router/issues/4671
