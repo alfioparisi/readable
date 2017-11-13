@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PostList from './PostList';
 import Post from './Post';
 import PostingForm from './PostingForm';
+import NotFound from './NotFound';
 import { Route, withRouter } from 'react-router-dom';
 import { getCategoryPosts } from '../reducers/posts';
 import { connect } from 'react-redux';
@@ -18,16 +19,29 @@ class Category extends Component {
       writingPost: false,
       viewingPost: false,
       category: '',
-      filter: 'byVoteDec'
+      filter: 'byVoteDec',
+      notfound: false
     };
     this.applyFilter = this.applyFilter.bind(this);
   }
 
   componentDidMount() {
-    const { name } = this.props;
+    const { name, posts, location } = this.props;
+    const postId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
+    const matchedId = posts.find(post => post.id === postId);
     // Category showing all the posts doesn't receive a 'name' prop, so set 'react'
     // as default.
-    this.setState({category: name || 'react'});
+    if (postId !== 'category' && postId !== name && !matchedId) {
+      this.setState({
+        category: name || 'react',
+        notfound: true
+      });
+    } else {
+      this.setState({
+        category: name || 'react',
+        notfound: false
+      });
+    }
   }
 
   applyFilter() {
@@ -49,7 +63,7 @@ class Category extends Component {
   }
 
   render() {
-    const { writingPost, viewingPost, category, filter } = this.state;
+    const { writingPost, viewingPost, category, filter, notfound } = this.state;
     const { history, name } = this.props;
     const posts = this.applyFilter();
     return (
@@ -77,6 +91,7 @@ class Category extends Component {
             </label>
           )}
         </header>
+        {notfound && <NotFound />}
         <Route exact path={`/category/${name || ''}`}
           render={() => <PostList
             posts={posts}
